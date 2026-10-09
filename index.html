@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#edf5e9">
     <title>Keep Stewart Happy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
       :root {
         color-scheme: light;
-        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: "Pixelify Sans", "Courier New", monospace;
         background: #edf5e9;
         color: #183c2d;
         font-synthesis: none;
@@ -26,6 +29,8 @@
         min-height: 100vh;
         min-height: 100svh;
         margin: 0;
+        text-transform: uppercase;
+        position: relative;
         display: grid;
         place-items: center;
         overflow: hidden;
@@ -43,42 +48,131 @@
           url("pictrues/background2.jpg");
       }
 
+      body.transition-impact::after {
+        position: fixed;
+        z-index: 9;
+        inset: -20%;
+        background: radial-gradient(circle, rgb(246 255 226 / 92%), rgb(164 224 133 / 38%) 20%, transparent 58%);
+        content: "";
+        pointer-events: none;
+        animation: impact-flash 1s cubic-bezier(.16, 1, .3, 1) both;
+      }
+
       .welcome {
         position: relative;
         width: min(92vw, 640px);
         padding: clamp(3rem, 9vw, 5.5rem) 2rem;
         overflow: hidden;
-        border: 1px solid rgb(255 255 255 / 75%);
-        border-radius: 1.25rem;
-        background: rgb(255 255 255 / 88%);
-        box-shadow: 0 24px 70px rgb(31 76 49 / 12%), 0 3px 12px rgb(31 76 49 / 5%);
+        border: 1px solid rgb(255 255 255 / 62%);
+        border-radius: 1rem;
+        background: rgb(255 255 255 / 82%);
+        box-shadow: 0 14px 40px rgb(31 76 49 / 10%), 0 2px 8px rgb(31 76 49 / 4%);
         text-align: center;
-        animation: welcome-in 1.6s cubic-bezier(.2, .75, .25, 1) both;
+        animation: none;
       }
 
-      .brand {
-        margin: 0 0 1.25rem;
-        color: #52765a;
-        font-size: .76rem;
-        font-weight: 700;
-        letter-spacing: .19em;
-        text-transform: uppercase;
+      #welcome-screen {
+        animation: welcome-in 1.9s cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      #welcome-screen > *,
+      #next-screen.is-entering > * {
+        animation: arcade-content-in 750ms cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      #welcome-screen > :nth-child(1),
+      #next-screen.is-entering > :nth-child(1) {
+        animation-delay: 100ms;
+      }
+
+      #welcome-screen > :nth-child(2),
+      #next-screen.is-entering > :nth-child(2) {
+        animation-delay: 240ms;
+      }
+
+      #welcome-screen > :nth-child(3),
+      #next-screen.is-entering > :nth-child(3) {
+        animation-delay: 360ms;
+      }
+
+      #welcome-screen > :nth-child(4),
+      #next-screen.is-entering > :nth-child(4) {
+        animation-delay: 460ms;
+      }
+
+      #next-screen.is-entering {
+        animation: screen-fade-in 1.05s cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      #welcome-screen,
+      #next-screen {
+        width: min(92vw, 700px);
+        padding: clamp(1rem, 4vw, 2rem);
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
       }
 
       h1 {
         margin: 0;
         color: #234e38;
         font-size: clamp(3.5rem, 12vw, 5.5rem);
-        font-weight: 650;
+        font-family: "Pixelify Sans", "Courier New", monospace;
+        font-weight: 800;
         letter-spacing: -.065em;
         line-height: 1;
       }
 
+      #welcome-title {
+        display: block;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: .4rem .65rem;
+        border: 1px solid rgb(255 255 255 / 85%);
+        border-radius: .85rem;
+        background: rgb(255 255 255 / 88%);
+        box-shadow: 0 5px 16px rgb(31 76 49 / 10%);
+        font-size: clamp(2.2rem, 6.5vw, 3.8rem);
+        letter-spacing: -.04em;
+        line-height: 1.06;
+        text-wrap: balance;
+      }
+
+      #next-title {
+        display: table;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: .5rem .85rem;
+        border: 1px solid rgb(255 255 255 / 85%);
+        border-radius: .85rem;
+        background: rgb(255 255 255 / 88%);
+        box-shadow: 0 5px 16px rgb(31 76 49 / 10%);
+        font-size: clamp(2rem, 6vw, 3.25rem);
+        letter-spacing: -.025em;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+
       .message {
-        margin: 1.35rem 0 0;
+        display: table;
+        max-width: 100%;
+        margin: 1rem auto 0;
+        padding: .55rem .85rem;
+        border: 1px solid rgb(255 255 255 / 75%);
+        border-radius: .7rem;
+        background: rgb(255 255 255 / 78%);
+        box-shadow: 0 3px 12px rgb(31 76 49 / 7%);
         color: #526b5a;
         font-size: clamp(1rem, 3vw, 1.2rem);
         line-height: 1.6;
+      }
+
+      #welcome-screen .accent,
+      #next-screen .accent {
+        display: none;
       }
 
       .accent {
@@ -98,20 +192,96 @@
         background: #376b4b;
         color: #fff;
         font: inherit;
+        font-family: "Pixelify Sans", "Courier New", monospace;
         font-size: 1rem;
         font-weight: 650;
         cursor: pointer;
-        transition: background-color 160ms ease, transform 160ms ease;
+        box-shadow: 0 5px 0 #204a32, 0 8px 18px rgb(31 76 49 / 18%);
+        transition: background-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
       }
 
       .start-button:hover {
-        transform: translateY(-2px);
+        transform: translateY(-3px) scale(1.03);
         background: #28583c;
+        box-shadow: 0 7px 0 #204a32, 0 12px 24px rgb(31 76 49 / 24%);
+      }
+
+      .start-button:active {
+        transform: translateY(2px) scale(.98);
+        box-shadow: 0 2px 0 #204a32, 0 4px 10px rgb(31 76 49 / 18%);
       }
 
       .start-button:focus-visible {
         outline: 3px solid #91b991;
         outline-offset: 4px;
+      }
+
+      .sign-in-options {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .75rem;
+        margin-top: 1.75rem;
+      }
+
+      .sign-in-options .start-button {
+        min-width: 130px;
+        margin-top: 0;
+        border: 1px solid #7fa487;
+        background: rgb(255 255 255 / 46%);
+        color: #28583c;
+        box-shadow: 0 3px 10px rgb(31 76 49 / 8%);
+      }
+
+      .sign-in-options .start-button:hover {
+        background: rgb(255 255 255 / 82%);
+      }
+
+      .care-counts {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .65rem;
+        width: fit-content;
+        margin: 1.5rem auto 0;
+      }
+
+      .care-count {
+        min-width: 135px;
+        padding: .65rem 1.1rem;
+        border: 1px solid rgb(255 255 255 / 80%);
+        border-radius: .7rem;
+        background: rgb(255 255 255 / 82%);
+        box-shadow: 0 4px 14px rgb(31 76 49 / 8%);
+        color: #365641;
+        font-size: .9rem;
+        font-weight: 600;
+      }
+
+      .care-count + .care-count {
+        border-left: 0;
+      }
+
+      #care-count-status {
+        display: table;
+        max-width: 100%;
+        margin: .9rem auto 0;
+        padding: .35rem .65rem;
+        border-radius: .55rem;
+        background: rgb(255 255 255 / 70%);
+      }
+
+      #game-button {
+        box-shadow: 0 5px 14px rgb(31 76 49 / 18%);
+      }
+
+      .care-count strong {
+        display: block;
+        margin-top: .1rem;
+        color: #28583c;
+        font-size: 1.65rem;
+        font-weight: 750;
+        text-shadow: 0 2px 12px rgb(55 107 75 / 16%);
       }
 
       .welcome[hidden] {
@@ -121,11 +291,79 @@
       .game-screen {
         width: min(94vw, 900px);
         padding: clamp(1.25rem, 3vw, 2rem);
+        animation: none;
+      }
+
+      #next-screen.is-transitioning-out {
+        animation: screen-fade-out 850ms ease-in both;
+      }
+
+      .game-screen.is-transitioning-in {
+        animation: screen-fade-in 1.2s cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .game-screen.is-transitioning-in::after {
+        position: absolute;
+        z-index: 5;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(circle at 50% 45%, rgb(241 255 221 / 75%), transparent 68%);
+        content: "";
+        pointer-events: none;
+        animation: screen-flare 1.15s ease-out both;
+      }
+
+      .page-wipe {
+        position: fixed;
+        z-index: 10;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        overflow: visible;
+        pointer-events: none;
+        transform: translateX(-100%);
+      }
+
+      .page-wipe[hidden] {
+        display: none;
+      }
+
+      .page-wipe.is-moving {
+        animation: page-wipe-across 1.8s cubic-bezier(.65, 0, .35, 1) both;
+      }
+
+      .page-wipe img {
+        width: min(88vmin, 820px);
+        height: min(88vmin, 820px);
+        object-fit: contain;
+        filter: drop-shadow(0 18px 32px rgb(20 54 32 / 42%)) drop-shadow(0 0 20px rgb(179 240 129 / 50%));
+      }
+
+      .page-wipe.is-moving img {
+        animation: stewart-spin 1.8s cubic-bezier(.18, .7, .3, 1) both;
       }
 
       .game-screen h1 {
         font-size: clamp(2rem, 5vw, 3rem);
         letter-spacing: -.04em;
+      }
+
+      .test-mode-banner {
+        width: fit-content;
+        max-width: 100%;
+        margin: .65rem auto 0;
+        padding: .45rem .8rem;
+        border: 1px solid #b78a24;
+        border-radius: .6rem;
+        background: #fff4ca;
+        color: #5e4514;
+        font-size: .9rem;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      .test-mode-banner[hidden] {
+        display: none;
       }
 
       .game-dashboard {
@@ -137,19 +375,21 @@
       }
 
       .game-stat {
-        min-width: 105px;
-        padding: .55rem .8rem;
-        border: 1px solid rgb(255 255 255 / 90%);
-        border-radius: .7rem;
-        background: rgb(255 255 255 / 75%);
+        min-width: 110px;
+        padding: .25rem .8rem;
         color: #526b5a;
         font-size: .85rem;
+      }
+
+      .game-stat + .game-stat {
+        border-left: 1px solid rgb(55 107 75 / 24%);
       }
 
       .game-stat strong {
         display: block;
         color: #28583c;
         font-size: 1.05rem;
+        text-shadow: 0 2px 10px rgb(55 107 75 / 16%);
       }
 
       .goal {
@@ -188,8 +428,8 @@
 
       .stewart-picture {
         display: block;
-        width: 100%;
-        max-height: 380px;
+        width: min(100%, 350px);
+        max-height: 320px;
         object-fit: contain;
         filter: drop-shadow(0 16px 20px rgb(20 54 32 / 28%)) brightness(1.08) contrast(1.06);
       }
@@ -198,40 +438,54 @@
         position: relative;
         display: grid;
         justify-items: center;
-        gap: .5rem;
+        gap: 0;
       }
 
       .thought-button {
         position: relative;
+        z-index: 1;
         display: grid;
         justify-items: center;
         gap: .35rem;
         width: min(100%, 220px);
         padding: .8rem 1rem;
         border: 1px solid rgb(255 255 255 / 90%);
-        border-radius: 1rem;
+        border-radius: 48% / 42%;
         background: rgb(255 255 255 / 92%);
         box-shadow: 0 8px 22px rgb(31 76 49 / 12%);
         color: #365641;
         font: inherit;
+        font-family: "Pixelify Sans", "Courier New", monospace;
         font-size: .9rem;
         font-weight: 650;
         text-align: center;
         cursor: pointer;
         transition: transform 160ms ease, box-shadow 160ms ease;
+        margin-bottom: -.65rem;
       }
 
       .thought-button::after {
         position: absolute;
-        bottom: -.45rem;
-        left: calc(50% - .4rem);
-        width: .8rem;
-        height: .8rem;
-        border-right: 1px solid rgb(255 255 255 / 90%);
-        border-bottom: 1px solid rgb(255 255 255 / 90%);
-        background: #fff;
+        bottom: -.85rem;
+        left: 57%;
+        width: .65rem;
+        height: .65rem;
+        border: 1px solid rgb(255 255 255 / 90%);
+        border-radius: 50%;
+        background: rgb(255 255 255 / 92%);
         content: "";
-        transform: rotate(45deg);
+      }
+
+      .thought-button::before {
+        position: absolute;
+        bottom: -1.35rem;
+        left: 61%;
+        width: .38rem;
+        height: .38rem;
+        border: 1px solid rgb(255 255 255 / 90%);
+        border-radius: 50%;
+        background: rgb(255 255 255 / 92%);
+        content: "";
       }
 
       .thought-button:hover {
@@ -291,6 +545,10 @@
         transition: width 350ms ease;
       }
 
+      .need-fill[data-critical="true"] {
+        background: #d52323;
+      }
+
       .care-actions {
         display: flex;
         flex-wrap: wrap;
@@ -336,6 +594,469 @@
         display: none;
       }
 
+      .soccer-game[hidden] {
+        display: none;
+      }
+
+      .soccer-game {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+        overflow: auto;
+        padding: clamp(1rem, 3vw, 2rem);
+        background:
+          linear-gradient(rgb(13 49 29 / 34%), rgb(13 49 29 / 50%)),
+          url("pictrues/stadium.jpg") center / cover no-repeat;
+        color: #fff;
+      }
+
+      .soccer-game.is-entering,
+      .food-game.is-entering {
+        animation: arcade-overlay-in 760ms cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .soccer-header {
+        width: min(100%, 960px);
+        margin: 0 auto;
+        text-align: center;
+        text-shadow: 0 2px 8px rgb(0 0 0 / 45%);
+      }
+
+      .soccer-header h1 {
+        color: #fff;
+        font-size: clamp(1.6rem, 4vw, 2.7rem);
+        letter-spacing: -.04em;
+        line-height: 1.15;
+      }
+
+      .soccer-header p {
+        margin: .45rem 0 0;
+      }
+
+      .playtime-track {
+        width: min(100%, 640px);
+        height: 14px;
+        margin: .85rem auto .35rem;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 80%);
+        border-radius: .5rem;
+        background: rgb(0 0 0 / 30%);
+      }
+
+      .playtime-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #b6eb7a, #fff38a);
+        transition: none;
+      }
+
+      .soccer-arena {
+        position: relative;
+        width: min(100%, 1100px);
+        min-height: min(56vh, 500px);
+        flex: 1 0 260px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 3px solid rgb(255 255 255 / 86%);
+        border-radius: 1rem;
+        background:
+          linear-gradient(90deg, transparent 49.8%, rgb(255 255 255 / 48%) 50%, transparent 50.2%),
+          linear-gradient(rgb(31 116 55 / 30%), rgb(31 116 55 / 30%));
+        box-shadow: 0 16px 40px rgb(0 0 0 / 30%);
+        touch-action: none;
+        user-select: none;
+      }
+
+      .soccer-toast {
+        position: absolute;
+        z-index: 5;
+        top: 1rem;
+        left: 50%;
+        max-width: calc(100% - 2rem);
+        padding: .55rem 1rem;
+        border: 1px solid rgb(255 255 255 / 85%);
+        border-radius: 999px;
+        background: rgb(20 48 29 / 88%);
+        box-shadow: 0 5px 18px rgb(0 0 0 / 28%);
+        color: #fff;
+        font-size: clamp(.9rem, 2vw, 1.1rem);
+        font-weight: 800;
+        text-align: center;
+        text-shadow: 0 1px 3px rgb(0 0 0 / 45%);
+        transform: translateX(-50%);
+        animation: soccer-toast-in 220ms ease-out both;
+        pointer-events: none;
+      }
+
+      .soccer-toast[hidden] {
+        display: none;
+      }
+
+      @keyframes soccer-toast-in {
+        from {
+          opacity: 0;
+          transform: translate(-50%, -8px) scale(.96);
+        }
+        to {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
+        }
+      }
+
+      .soccer-arena[hidden] {
+        display: none;
+      }
+
+      .soccer-arena::before {
+        position: absolute;
+        inset: 8% 5%;
+        border: 2px solid rgb(255 255 255 / 48%);
+        border-radius: 50%;
+        content: "";
+        pointer-events: none;
+      }
+
+      .soccer-goal {
+        position: absolute;
+        top: 33%;
+        width: 7%;
+        height: 34%;
+        border: 3px solid rgb(255 255 255 / 78%);
+        background: rgb(255 255 255 / 10%);
+      }
+
+      .soccer-goal.player-goal {
+        left: -2px;
+        border-left: 0;
+      }
+
+      .soccer-goal.stewart-goal {
+        right: -2px;
+        border-right: 0;
+      }
+
+      .soccer-player,
+      .soccer-stewart,
+      .soccer-ball {
+        position: absolute;
+        z-index: 1;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .soccer-player {
+        z-index: 2;
+        width: 48px;
+        height: 48px;
+        border: 4px solid #fff;
+        border-radius: 50%;
+        background: #ffe56d;
+        box-shadow: 0 4px 14px rgb(0 0 0 / 38%);
+        cursor: grab;
+        touch-action: none;
+      }
+
+      .soccer-player:active {
+        cursor: grabbing;
+      }
+
+      .soccer-stewart {
+        width: clamp(90px, 16vw, 155px);
+        max-height: 38%;
+        object-fit: contain;
+        filter: drop-shadow(0 6px 8px rgb(0 0 0 / 40%));
+        pointer-events: none;
+      }
+
+      .soccer-ball {
+        width: clamp(42px, 7vw, 68px);
+        height: clamp(42px, 7vw, 68px);
+        object-fit: contain;
+        filter: drop-shadow(0 4px 5px rgb(0 0 0 / 45%));
+        pointer-events: none;
+      }
+
+      .soccer-score {
+        position: absolute;
+        z-index: 3;
+        top: .75rem;
+        left: 50%;
+        padding: .4rem .8rem;
+        border-radius: .5rem;
+        background: rgb(0 0 0 / 48%);
+        font-weight: 700;
+        transform: translateX(-50%);
+      }
+
+      .soccer-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .75rem;
+        text-align: center;
+      }
+
+      .soccer-footer p {
+        flex: 1 1 100%;
+        margin: 0;
+        text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+      }
+
+      .soccer-footer .start-button {
+        margin-top: 0;
+        background: #fff;
+        color: #28583c;
+      }
+
+      .soccer-footer .start-button:hover {
+        background: #edf5e9;
+      }
+
+      .food-game[hidden] {
+        display: none;
+      }
+
+      .food-game {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .8rem;
+        overflow: auto;
+        padding: clamp(1rem, 3vw, 2rem);
+        background:
+          linear-gradient(rgb(28 47 25 / 38%), rgb(28 47 25 / 46%)),
+          url("pictrues/kitchen.avif") center / cover no-repeat;
+        color: #fff;
+      }
+
+      .food-header {
+        text-align: center;
+        text-shadow: 0 2px 8px rgb(0 0 0 / 55%);
+      }
+
+      .food-header h1 {
+        color: #fff;
+        font-size: clamp(1.8rem, 5vw, 3rem);
+        letter-spacing: -.04em;
+      }
+
+      .food-header p {
+        margin: .45rem 0 0;
+      }
+
+      .food-craving {
+        display: block;
+        width: fit-content;
+        max-width: min(100%, 760px);
+        margin: .8rem auto 0;
+        padding: .7rem 1.2rem;
+        border: 2px solid #fff;
+        border-radius: 1rem;
+        background: #f3f9ed;
+        box-shadow: 0 6px 22px rgb(0 0 0 / 38%);
+        color: #23452f;
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        font-weight: 700;
+        line-height: 1.45;
+        text-shadow: none;
+      }
+
+      .food-craving::before {
+        display: block;
+        margin-bottom: .15rem;
+        color: #47724e;
+        content: "STEWART'S CRAVING";
+        font-size: .72rem;
+        font-weight: 900;
+        letter-spacing: .12em;
+      }
+
+      .kitchen-layout {
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        gap: clamp(1rem, 3vw, 2rem);
+        width: min(100%, 1100px);
+        flex: 1;
+        min-height: 300px;
+        margin: 0 auto;
+        align-items: stretch;
+      }
+
+      .food-tray {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-content: center;
+        gap: .65rem;
+        padding: .85rem;
+        border: 1px solid rgb(255 255 255 / 65%);
+        border-radius: .8rem;
+        background: rgb(255 255 255 / 83%);
+        box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+      }
+
+      .food-item {
+        display: grid;
+        justify-items: center;
+        gap: .25rem;
+        min-width: 0;
+        padding: .45rem;
+        border: 1px solid rgb(55 107 75 / 18%);
+        border-radius: .55rem;
+        background: rgb(255 255 255 / 68%);
+        color: #28583c;
+        font: inherit;
+        font-size: .82rem;
+        font-weight: 650;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .food-item:active {
+        cursor: grabbing;
+      }
+
+      .food-item:focus-visible {
+        outline: 3px solid #77a578;
+        outline-offset: 2px;
+      }
+
+      .food-item img {
+        width: 68px;
+        height: 58px;
+        object-fit: contain;
+        pointer-events: none;
+        filter: drop-shadow(0 3px 5px rgb(0 0 0 / 16%));
+      }
+
+      .food-item.is-used {
+        opacity: .42;
+        cursor: default;
+      }
+
+      .kitchen-pet-area {
+        position: relative;
+        display: grid;
+        place-items: center;
+        min-height: 300px;
+        overflow: hidden;
+        border: 2px dashed rgb(255 255 255 / 74%);
+        border-radius: 1rem;
+        background: rgb(255 255 255 / 12%);
+        transition: background-color 180ms ease, border-color 180ms ease;
+      }
+
+      .kitchen-pet-area.is-drop-target {
+        border-color: #fff39a;
+        background: rgb(255 255 255 / 28%);
+      }
+
+      .kitchen-stewart {
+        width: min(78%, 390px);
+        max-height: 48vh;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 16px rgb(0 0 0 / 38%));
+        transition: transform 220ms ease;
+      }
+
+      .kitchen-stewart.is-refusing {
+        animation: stewart-refusal 520ms ease-in-out;
+      }
+
+      @keyframes stewart-refusal {
+        0%,
+        100% {
+          transform: translateX(0) rotate(0);
+        }
+
+        18%,
+        58% {
+          transform: translateX(-9px) rotate(-4deg);
+        }
+
+        38%,
+        78% {
+          transform: translateX(9px) rotate(4deg);
+        }
+      }
+
+      .urgent-feed {
+        position: absolute;
+        z-index: 2;
+        top: 8%;
+        left: 50%;
+        margin: 0;
+        color: #d52323;
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-shadow: 0 2px 6px #fff, 0 0 14px rgb(255 255 255 / 90%);
+        transform: translateX(-50%);
+        animation: feed-warning 650ms steps(2, jump-none) infinite;
+        white-space: nowrap;
+      }
+
+      .urgent-feed[hidden] {
+        display: none;
+      }
+
+      .pet-display .urgent-feed {
+        top: 14%;
+      }
+
+      @keyframes feed-warning {
+        50% {
+          opacity: .25;
+        }
+      }
+
+      .kitchen-pet-area.is-drop-target .kitchen-stewart {
+        transform: scale(1.06);
+      }
+
+      .food-message {
+        position: absolute;
+        right: .75rem;
+        bottom: .75rem;
+        left: .75rem;
+        margin: 0;
+        padding: .55rem .8rem;
+        border-radius: .5rem;
+        background: rgb(0 0 0 / 48%);
+        text-align: center;
+        text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+      }
+
+      .food-drag-ghost {
+        position: fixed;
+        z-index: 30;
+        width: 96px;
+        height: 96px;
+        object-fit: contain;
+        pointer-events: none;
+        filter: drop-shadow(0 8px 12px rgb(0 0 0 / 38%));
+        transform: translate(-50%, -50%);
+      }
+
+      .food-footer {
+        display: flex;
+        justify-content: center;
+      }
+
+      .food-footer .start-button {
+        margin-top: 0;
+        background: #fff;
+        color: #28583c;
+      }
+
       @media (max-width: 600px) {
         .game-layout {
           grid-template-columns: 1fr;
@@ -345,25 +1066,211 @@
 
         .stewart-picture {
           width: min(65%, 240px);
-          max-height: 210px;
+          max-height: 190px;
           margin: 0 auto;
         }
 
         .mood-picture {
-          width: 132px;
-          height: 132px;
+          width: 108px;
+          height: 108px;
+        }
+
+        .thought-button {
+          width: min(100%, 200px);
+          padding: .55rem .8rem;
+          margin-bottom: -.75rem;
+        }
+
+        .soccer-game {
+          gap: .5rem;
+          padding: .75rem;
+        }
+
+        .soccer-arena {
+          min-height: 42vh;
+        }
+
+        .food-game {
+          gap: .55rem;
+          padding: .75rem;
+        }
+
+        .kitchen-layout {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto minmax(190px, 1fr);
+          gap: .6rem;
+          min-height: 0;
+        }
+
+        .food-tray {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: .35rem;
+          padding: .45rem;
+        }
+
+        .food-item {
+          gap: .1rem;
+          padding: .25rem;
+          font-size: .75rem;
+        }
+
+        .food-item img {
+          width: 48px;
+          height: 42px;
+        }
+
+        .kitchen-pet-area {
+          min-height: 190px;
+        }
+
+        .kitchen-stewart {
+          width: min(58%, 230px);
+          max-height: 28vh;
+        }
+      }
+
+      @keyframes page-wipe-across {
+        0% {
+          transform: translateX(-115%) scale(.8);
+          opacity: 0;
+        }
+
+        18%,
+        72% {
+          opacity: 1;
+        }
+
+        100% {
+          transform: translateX(115%) scale(1.08);
+          opacity: 0;
+        }
+      }
+
+      @keyframes stewart-spin {
+        0% {
+          transform: rotate(-18deg) scale(.7);
+        }
+
+        48% {
+          transform: rotate(390deg) scale(1.08);
+        }
+
+        100% {
+          transform: rotate(738deg) scale(.82);
+        }
+      }
+
+      @keyframes screen-fade-out {
+        0% {
+          opacity: 1;
+          filter: brightness(1);
+          transform: scale(1) rotate(0);
+        }
+
+        100% {
+          opacity: 0;
+          filter: brightness(1.25);
+          transform: scale(1.06) rotate(-1.5deg);
+        }
+      }
+
+      @keyframes screen-fade-in {
+        from {
+          opacity: 0;
+          filter: brightness(1.45) saturate(1.25);
+          transform: scale(.82) translateY(30px);
+        }
+
+        68% {
+          opacity: 1;
+          transform: scale(1.025) translateY(-4px);
+        }
+
+        to {
+          opacity: 1;
+          filter: brightness(1) saturate(1);
+          transform: scale(1) translateY(0);
         }
       }
 
       @keyframes welcome-in {
         from {
           opacity: 0;
-          transform: translateY(14px) scale(.94);
+          filter: brightness(1.5) saturate(1.25);
+          transform: translateY(38px) scale(.78) rotate(-2deg);
+        }
+
+        72% {
+          opacity: 1;
+          transform: translateY(-5px) scale(1.025) rotate(.4deg);
+        }
+
+        to {
+          opacity: 1;
+          filter: brightness(1) saturate(1);
+          transform: translateY(0) scale(1) rotate(0);
+        }
+      }
+
+      @keyframes arcade-content-in {
+        from {
+          opacity: 0;
+          transform: translateY(20px) scale(.86);
+        }
+
+        75% {
+          opacity: 1;
+          transform: translateY(-3px) scale(1.025);
         }
 
         to {
           opacity: 1;
           transform: translateY(0) scale(1);
+        }
+      }
+
+      @keyframes arcade-overlay-in {
+        from {
+          opacity: 0;
+          filter: brightness(1.5) saturate(1.35);
+          transform: scale(.92);
+        }
+
+        72% {
+          opacity: 1;
+          transform: scale(1.015);
+        }
+
+        to {
+          opacity: 1;
+          filter: brightness(1) saturate(1);
+          transform: scale(1);
+        }
+      }
+
+      @keyframes screen-flare {
+        from {
+          opacity: 1;
+        }
+
+        to {
+          opacity: 0;
+        }
+      }
+
+      @keyframes impact-flash {
+        0% {
+          opacity: 0;
+          transform: scale(.5);
+        }
+
+        28% {
+          opacity: 1;
+        }
+
+        100% {
+          opacity: 0;
+          transform: scale(1.3);
         }
       }
 
@@ -380,20 +1287,28 @@
   </head>
   <body>
     <main class="welcome" id="welcome-screen" aria-labelledby="welcome-title">
-      <p class="brand">Keep Stewart Happy</p>
-      <h1 id="welcome-title">Welcome</h1>
-      <p class="message">Are you ready to help Stewart today?</p>
+      <h1 id="welcome-title">Keep Stewart Happy</h1>
+      <p class="message">Sign in to help Stewart today</p>
       <span class="accent" aria-hidden="true"></span>
-      <button class="start-button" id="start-button" type="button">Yes, let's start</button>
+      <div class="sign-in-options" aria-label="Choose who is playing">
+        <button class="start-button" type="button" data-player="Emily">Emily</button>
+        <button class="start-button" type="button" data-player="Evan">Evan</button>
+      </div>
     </main>
     <main class="welcome" id="next-screen" aria-labelledby="next-title" hidden>
-      <p class="brand">Keep Stewart Happy</p>
-      <h1 id="next-title" tabindex="-1">Let's make Stewart happy!</h1>
+      <h1 id="next-title" tabindex="-1">Welcome, <span id="player-name">friend</span>!</h1>
+      <p class="message">Here’s how many times everyone has cared for Stewart.</p>
+      <div class="care-counts" aria-label="Care visits">
+        <div class="care-count">Emily<strong id="emily-care-count">—</strong></div>
+        <div class="care-count">Evan<strong id="evan-care-count">—</strong></div>
+      </div>
+      <p class="sync-status" id="care-count-status" role="status" aria-live="polite">Loading shared care counts…</p>
       <span class="accent" aria-hidden="true"></span>
       <button class="start-button" id="game-button" type="button">Let's go!</button>
     </main>
     <main class="welcome game-screen" id="game-screen" aria-labelledby="game-title" hidden>
       <h1 id="game-title" tabindex="-1">Stewart is feeling</h1>
+      <p class="test-mode-banner" id="test-mode-banner" role="status" hidden>LOW-MOOD TEST PREVIEW: Needs are simulated in this browser only. Care actions won't change the shared save.</p>
       <div class="game-dashboard" aria-label="Game progress">
         <div class="game-stat">Level<strong id="level-value">1</strong></div>
         <div class="game-stat">Happy points<strong id="points-value">0</strong></div>
@@ -408,14 +1323,14 @@
       </div>
       <div class="game-layout">
         <div class="pet-display">
-          <button class="thought-button" id="thought-button" type="button" aria-controls="needs-panel" aria-expanded="false">
+          <p class="urgent-feed" id="care-urgent-feed" hidden>FEED ME!!!</p>
+          <button class="thought-button" id="thought-button" type="button" aria-controls="needs-panel" aria-expanded="true">
             <img class="mood-picture" id="mood-picture" src="pictrues/hungry.png" alt="Stewart looks hungry">
-            <span id="thought-prompt">Tap here to see what's wrong.</span>
           </button>
           <img class="stewart-picture" src="pictrues/stewart.png" alt="Stewart, waiting for some care">
         </div>
         <section aria-label="Stewart's mood and needs">
-          <div class="needs-panel" id="needs-panel" hidden>
+          <div class="needs-panel" id="needs-panel">
             <p class="pet-status" id="pet-status" aria-live="polite">Hungry</p>
             <div class="need">
               <div class="need-label"><span>Fullness</span><span id="fullness-value">20%</span></div>
@@ -447,15 +1362,68 @@
         </section>
       </div>
     </main>
+    <div class="page-wipe" id="page-wipe" aria-hidden="true" hidden>
+      <img src="pictrues/stewart.png" alt="">
+    </div>
+    <section class="soccer-game" id="soccer-game" aria-labelledby="soccer-title" hidden>
+      <header class="soccer-header">
+        <h1 id="soccer-title">Play soccer with Stewart!</h1>
+        <p>Drag the dot to kick the ball. Don't let him score!</p>
+        <div class="playtime-track" role="progressbar" aria-label="Playtime" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0">
+          <div class="playtime-fill" id="playtime-fill"></div>
+        </div>
+        <span id="playtime-label">Playtime: 0 seconds</span>
+      </header>
+      <div class="soccer-arena" id="soccer-arena" aria-label="Soccer field. Drag the yellow dot to return the ball to Stewart.">
+        <p class="soccer-toast" id="soccer-toast" role="status" aria-live="polite" hidden></p>
+        <div class="soccer-goal player-goal" aria-hidden="true"></div>
+        <div class="soccer-goal stewart-goal" aria-hidden="true"></div>
+        <span class="soccer-score" id="soccer-score" aria-live="polite">You 0 - 0 Stewart</span>
+        <div class="soccer-player" id="soccer-player" role="slider" aria-label="Your soccer dot" aria-valuemin="5" aria-valuemax="48" aria-valuenow="18" tabindex="0"></div>
+        <img class="soccer-stewart" id="soccer-stewart" src="pictrues/soccerstewart.png" alt="Stewart moving to return the ball">
+        <img class="soccer-ball" id="soccer-ball" src="pictrues/soccerball.webp" alt="">
+      </div>
+      <footer class="soccer-footer">
+        <p id="soccer-message" aria-live="polite">Drag the yellow dot around the left side to kick the ball back!</p>
+        <button class="start-button" id="finish-soccer" type="button">Back to Stewart</button>
+      </footer>
+    </section>
+    <section class="food-game" id="food-game" aria-labelledby="food-title" hidden>
+      <header class="food-header">
+        <h1 id="food-title">What should Stewart eat?</h1>
+        <p>Drag a treat from the tray onto Stewart to serve it.</p>
+        <div class="food-craving" id="food-craving-prompt" aria-live="polite">Stewart is craving something sweet.</div>
+      </header>
+      <div class="kitchen-layout">
+        <div class="food-tray" aria-label="Food tray">
+          <button class="food-item" type="button" data-food="Galbi" data-food-key="galbi"><img src="pictrues/galbi.webp" alt="">Galbi</button>
+          <button class="food-item" type="button" data-food="Fish" data-food-key="fish"><img src="pictrues/fish.png" alt="">Fish</button>
+          <button class="food-item" type="button" data-food="Steak" data-food-key="steak"><img src="pictrues/meat.webp" alt="">Steak</button>
+          <button class="food-item" type="button" data-food="Mango sticky rice" data-food-key="msr"><img src="pictrues/msr.png" alt="">Mango sticky rice</button>
+          <button class="food-item" type="button" data-food="Thai tea" data-food-key="thai_tea"><img src="pictrues/thaitea.png" alt="">Thai tea</button>
+          <button class="food-item" type="button" data-food="Cinnamon roll" data-food-key="roll"><img src="pictrues/roll.png" alt="">Cinnamon roll</button>
+          <button class="food-item" type="button" data-food="Beet juice" data-food-key="beet_juice"><img src="pictrues/beet.png" alt="">Beet juice</button>
+          <button class="food-item" type="button" data-food="Ice cream" data-food-key="ice_cream"><img src="pictrues/ice cream.webp" alt="">Ice cream</button>
+        </div>
+        <div class="kitchen-pet-area" id="kitchen-pet-area" aria-label="Drop food here to feed Stewart">
+          <p class="urgent-feed" id="kitchen-urgent-feed" hidden>FEED ME!!!</p>
+          <img class="kitchen-stewart" id="kitchen-stewart" src="pictrues/stewart.png" alt="Stewart, ready for a snack">
+          <p class="food-message" id="food-message" aria-live="polite">Pick something tasty for Stewart!</p>
+        </div>
+      </div>
+      <footer class="food-footer">
+        <button class="start-button" id="leave-kitchen" type="button">Back to Stewart</button>
+      </footer>
+    </section>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const SUPABASE_URL = "https://xbpngswyyjrdbonexfxy.supabase.co";
       const SUPABASE_ANON_KEY = "sb_publishable_O06OF-pRhlmjYEVTfGg7pQ_rqfMxbuQ";
-      const startButton = document.querySelector("#start-button");
       const gameButton = document.querySelector("#game-button");
       const welcomeScreen = document.querySelector("#welcome-screen");
       const nextScreen = document.querySelector("#next-screen");
       const gameScreen = document.querySelector("#game-screen");
+      const pageWipe = document.querySelector("#page-wipe");
       const nextTitle = document.querySelector("#next-title");
       const gameTitle = document.querySelector("#game-title");
       const thoughtButton = document.querySelector("#thought-button");
@@ -471,25 +1439,119 @@
       const syncStatus = document.querySelector("#sync-status");
       const retryButton = document.querySelector("#retry-sync");
       const careButtons = [...document.querySelectorAll("[data-care]")];
+      const soccerGame = document.querySelector("#soccer-game");
+      const soccerArena = document.querySelector("#soccer-arena");
+      const soccerBall = document.querySelector("#soccer-ball");
+      const soccerPlayer = document.querySelector("#soccer-player");
+      const soccerStewart = document.querySelector("#soccer-stewart");
+      const soccerScore = document.querySelector("#soccer-score");
+      const soccerMessage = document.querySelector("#soccer-message");
+      const soccerToast = document.querySelector("#soccer-toast");
+      const playtimeFill = document.querySelector("#playtime-fill");
+      const playtimeTrack = playtimeFill.parentElement;
+      const playtimeLabel = document.querySelector("#playtime-label");
+      const finishSoccerButton = document.querySelector("#finish-soccer");
+      const foodGame = document.querySelector("#food-game");
+      const foodItems = [...document.querySelectorAll(".food-item")];
+      const kitchenPetArea = document.querySelector("#kitchen-pet-area");
+      const foodMessage = document.querySelector("#food-message");
+      const leaveKitchenButton = document.querySelector("#leave-kitchen");
+      const careStewartPicture = document.querySelector(".stewart-picture");
+      const kitchenStewartPicture = document.querySelector("#kitchen-stewart");
+      const careUrgentFeed = document.querySelector("#care-urgent-feed");
+      const kitchenUrgentFeed = document.querySelector("#kitchen-urgent-feed");
+      const foodCravingPrompt = document.querySelector("#food-craving-prompt");
+      const testModeBanner = document.querySelector("#test-mode-banner");
+      const playerName = document.querySelector("#player-name");
+      const careCountStatus = document.querySelector("#care-count-status");
+      const playerSignInButtons = [...document.querySelectorAll("[data-player]")];
+      const lowMoodTestMode = new URLSearchParams(window.location.search).get("testMood") === "low";
+      testModeBanner.hidden = !lowMoodTestMode;
+      let currentPlayer = "";
       let supabaseClient;
       let syncChannel;
       let refreshTimer;
       let refreshInProgress = false;
       let refreshQueued = false;
+      let soccerFrame = 0;
+      let soccerStartedAt = 0;
+      let soccerLastFrameAt = 0;
+      let soccerToastTimer = 0;
+      let soccerStage = 0;
+      let soccerActive = false;
+      let ballX = 76;
+      let ballY = 50;
+      let ballDirection = -1;
+      let playerX = 18;
+      let playerY = 50;
+      let stewartX = 84;
+      let playerGoals = 0;
+      let stewartGoals = 0;
+      let lastPlayerHitAt = 0;
+      let foodDrag = null;
+      let currentFoodCraving = "sweet";
+      let currentFullness = 20;
 
-      startButton.addEventListener("click", () => {
-        welcomeScreen.hidden = true;
-        nextScreen.hidden = false;
-        nextTitle.focus();
+      playerSignInButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          currentPlayer = button.dataset.player;
+          playerName.textContent = currentPlayer;
+          welcomeScreen.hidden = true;
+          nextScreen.hidden = false;
+          if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            nextScreen.classList.add("is-entering");
+            window.setTimeout(() => nextScreen.classList.remove("is-entering"), 1100);
+          }
+          nextTitle.focus();
+          await loadSharedCareCounts();
+        });
       });
 
-      gameButton.addEventListener("click", async () => {
+      gameButton.addEventListener("click", () => {
+        gameButton.disabled = true;
+        nextScreen.inert = true;
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reducedMotion) {
+          showGameScreen();
+          connectSharedGame();
+          return;
+        }
+
+        transitionFinished = false;
+        document.body.classList.add("transition-impact");
+        window.setTimeout(() => document.body.classList.remove("transition-impact"), 1000);
+        nextScreen.classList.add("is-transitioning-out");
+        pageWipe.hidden = false;
+        pageWipe.addEventListener("animationend", finishPageWipe, { once: true });
+        pageWipe.classList.add("is-moving");
+        window.setTimeout(() => showGameScreen(true), 820);
+        window.setTimeout(finishPageWipe, 2050);
+      });
+
+      function showGameScreen(animate = false) {
         nextScreen.hidden = true;
+        nextScreen.inert = false;
+        nextScreen.classList.remove("is-transitioning-out");
         gameScreen.hidden = false;
+        if (animate) {
+          gameScreen.classList.add("is-transitioning-in");
+          window.setTimeout(() => gameScreen.classList.remove("is-transitioning-in"), 1250);
+        }
         document.body.classList.add("playing");
         gameTitle.focus();
-        await connectSharedGame();
-      });
+      }
+
+      let transitionFinished = false;
+      function finishPageWipe() {
+        if (transitionFinished) {
+          return;
+        }
+        transitionFinished = true;
+        pageWipe.hidden = true;
+        pageWipe.classList.remove("is-moving");
+        gameButton.disabled = false;
+        connectSharedGame();
+      }
 
       thoughtButton.addEventListener("click", () => {
         needsPanel.hidden = false;
@@ -501,11 +1563,76 @@
         syncStatus.dataset.error = String(isError);
       }
 
+      function setCareCountStatus(message, isError = false) {
+        careCountStatus.textContent = message;
+        careCountStatus.dataset.error = String(isError);
+      }
+
+      function shouldUseSharedSave() {
+        if (lowMoodTestMode) {
+          setSyncStatus("Preview mode active: shared save is disabled while testing low moods.");
+          setCareCountStatus("Preview mode active: care counts stay local only.");
+          return false;
+        }
+        return true;
+      }
+
+      async function loadSharedCareCounts() {
+        if (!shouldUseSharedSave()) {
+          return;
+        }
+
+        setCareCountStatus("Loading shared care counts…");
+        try {
+          if (!window.supabase || typeof window.supabase.createClient !== "function") {
+            throw new Error("Supabase could not load. Check your internet connection.");
+          }
+          if (!supabaseClient) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          }
+          const { error: stateError } = await supabaseClient.rpc("get_stewart_state");
+          if (stateError) {
+            throw stateError;
+          }
+          const { data, error } = await supabaseClient
+            .from("stewart_game")
+            .select("emily_care_count, evan_care_count")
+            .eq("id", 1)
+            .single();
+          if (error) {
+            throw error;
+          }
+          updateCareCounts(data);
+          setCareCountStatus(`Signed in as ${currentPlayer}.`);
+        } catch (error) {
+          console.error("Could not load Stewart's shared care counts:", error);
+          setCareCountStatus("Couldn't load shared care counts. Check the Supabase setup.", true);
+        }
+      }
+
+      function updateCareCounts(counts) {
+        if (counts.emily_care_count !== undefined) {
+          document.querySelector("#emily-care-count").textContent = String(counts.emily_care_count);
+        }
+        if (counts.evan_care_count !== undefined) {
+          document.querySelector("#evan-care-count").textContent = String(counts.evan_care_count);
+        }
+      }
+
       async function connectSharedGame() {
         gameButton.disabled = true;
         retryButton.hidden = true;
 
-        if (SUPABASE_URL === "https://xbpngswyyjrdbonexfxy.supabase.co" || SUPABASE_ANON_KEY === "sb_publishable_O06OF-pRhlmjYEVTfGg7pQ_rqfMxbuQ") {
+        if (lowMoodTestMode) {
+          setSyncStatus("Preview mode active: shared save is disabled while testing low moods.");
+          gameButton.disabled = false;
+          careButtons.forEach((button) => {
+            button.disabled = false;
+          });
+          return;
+        }
+
+        if (SUPABASE_URL.startsWith("YOUR_") || SUPABASE_ANON_KEY.startsWith("YOUR_")) {
           setSyncStatus("Add your Supabase project URL and anon key to connect the shared game.", true);
           retryButton.hidden = false;
           gameButton.disabled = false;
@@ -562,6 +1689,11 @@
       }
 
       async function refreshSharedState() {
+        if (lowMoodTestMode) {
+          setSyncStatus("Preview mode active: shared save is disabled while testing low moods.");
+          return;
+        }
+
         if (!supabaseClient) {
           return;
         }
@@ -588,12 +1720,58 @@
 
       function showSyncError(error) {
         console.error("Could not sync Stewart's shared game:", error);
-        setSyncStatus("Couldn't sync with Supabase. Check the setup and connection, then retry.", true);
+        // Friendly summary for users
+        let userMsg = "Couldn't sync with Supabase. Check the setup and connection, then retry.";
+        // Build a detailed debug string to show on the page
+        let details = "";
+        try {
+          if (!error) {
+            details = "No error details provided.";
+          } else if (typeof error === 'string') {
+            details = error;
+          } else if (error.message) {
+            details = error.message + (error.details ? " — " + error.details : "");
+          } else {
+            details = JSON.stringify(error, Object.getOwnPropertyNames(error), 2);
+          }
+        } catch (e) {
+          details = String(error);
+        }
+
+        setSyncStatus(userMsg + " — " + (details || 'No details'), true);
+
+        // Add or update a debug <pre> element with the full error payload
+        let pre = document.querySelector('#sync-debug');
+        if (!pre) {
+          pre = document.createElement('pre');
+          pre.id = 'sync-debug';
+          pre.style.maxWidth = '720px';
+          pre.style.marginTop = '.5rem';
+          pre.style.padding = '.6rem';
+          pre.style.background = 'rgba(255,255,255,0.95)';
+          pre.style.border = '1px solid rgba(0,0,0,0.06)';
+          pre.style.borderRadius = '.5rem';
+          pre.style.overflow = 'auto';
+          pre.style.fontSize = '.82rem';
+          pre.style.color = '#0b2a16';
+          document.querySelector('#sync-status').insertAdjacentElement('afterend', pre);
+        }
+        pre.textContent = details;
+
         retryButton.hidden = false;
       }
 
       function updateNeeds(state) {
+        if (lowMoodTestMode) {
+          state = {
+            ...state,
+            needs: { fullness: 4, energy: 8, fun: 6 },
+            food_craving: "hungry"
+          };
+        }
         const needs = state.needs;
+        currentFullness = Number(needs.fullness);
+        currentFoodCraving = state.food_craving || currentFoodCraving;
         for (const [need, value] of Object.entries(needs)) {
           const bar = document.querySelector(`#${need}-bar`);
           const label = document.querySelector(`#${need}-value`);
@@ -602,11 +1780,24 @@
           bar.style.width = `${roundedValue}%`;
           label.textContent = `${roundedValue}%`;
           progress.setAttribute("aria-valuenow", String(roundedValue));
+          if (need === "fullness") {
+            bar.dataset.critical = String(roundedValue <= 5);
+          }
         }
+
+        const isOverfull = Math.round(currentFullness) >= 100;
+        const petImage = isOverfull ? "pictrues/fullstewart.png" : "pictrues/stewart.png";
+        careStewartPicture.src = petImage;
+        kitchenStewartPicture.src = petImage;
+        careStewartPicture.alt = isOverfull ? "Stewart is too full" : "Stewart, waiting for some care";
+        kitchenStewartPicture.alt = isOverfull ? "Stewart is too full to eat more" : "Stewart, ready for a snack";
+        updateFoodCravingUI();
 
         const average = (Number(needs.fullness) + Number(needs.energy) + Number(needs.fun)) / 3;
         let mood;
-        if (needs.fullness < 35) {
+        if (isOverfull) {
+          mood = { name: "Too full", image: "fullstewart.png", alt: "Stewart is too full" };
+        } else if (needs.fullness < 35) {
           mood = { name: "Hungry", image: "hungry.png", alt: "Stewart looks hungry" };
         } else if (needs.energy < 35 || needs.fun < 35) {
           mood = { name: "Grumpy", image: "grumpy.png", alt: "Stewart looks grumpy" };
@@ -637,22 +1828,376 @@
 
       careButtons.forEach((button) => {
         button.addEventListener("click", async () => {
+          if (button.dataset.care === "play") {
+            startSoccerGame();
+            return;
+          }
+          if (button.dataset.care === "food") {
+            openKitchen();
+            return;
+          }
+          await performCareAction(button);
+        });
+      });
+
+      function openKitchen() {
+        foodGame.hidden = false;
+        foodGame.inert = false;
+        foodGame.classList.add("is-entering");
+        window.setTimeout(() => foodGame.classList.remove("is-entering"), 800);
+        gameScreen.inert = true;
+        foodMessage.textContent = "Drag something tasty onto Stewart!";
+        updateFoodCravingUI();
+        foodItems.forEach((item) => {
+          item.disabled = false;
+          item.classList.remove("is-used");
+        });
+      }
+
+      function closeKitchen() {
+        foodGame.hidden = true;
+        foodGame.inert = true;
+        gameScreen.inert = false;
+        careButtons.find((button) => button.dataset.care === "food").focus();
+      }
+
+      async function serveFood(item) {
+        if (item.disabled || !currentPlayer) {
+          return;
+        }
+        if (lowMoodTestMode) {
+          foodMessage.textContent = "Low-mood preview only: feeding won't change the shared save.";
+          return;
+        }
+
+        foodItems.forEach((foodItem) => {
+          foodItem.disabled = true;
+        });
+        foodMessage.textContent = `Offering Stewart ${item.dataset.food}…`;
+        try {
+          const { data, error } = await supabaseClient.rpc("care_for_stewart_by_player", {
+            p_action: "food",
+            p_player: currentPlayer,
+            p_food: item.dataset.foodKey
+          });
+          if (error) {
+            throw error;
+          }
+          if (data.accepted) {
+            updateNeeds(data);
+          } else if (data.food_craving) {
+            currentFoodCraving = data.food_craving;
+            currentFullness = Number(data.fullness ?? currentFullness);
+            updateFoodCravingUI();
+          }
+          if (!data.accepted) {
+            playStewartRefusal();
+          }
+          if (data.care_counts) {
+            updateCareCounts(data.care_counts);
+          }
+          if (data.accepted) {
+            item.classList.add("is-used");
+          }
+          foodItems.forEach((foodItem) => {
+            if (!foodItem.classList.contains("is-used")) {
+              foodItem.disabled = false;
+            }
+          });
+          foodMessage.textContent = data.message;
+          if (data.accepted) {
+            document.querySelector("#care-note").textContent = `${currentPlayer} fed Stewart ${item.dataset.food}.`;
+          }
+        } catch (error) {
+          console.error("Could not feed Stewart:", error);
+          foodMessage.textContent = "Couldn't feed Stewart. Check the connection and try again.";
+          showSyncError(error);
+          foodItems.forEach((foodItem) => {
+            if (!foodItem.classList.contains("is-used")) {
+              foodItem.disabled = false;
+            }
+          });
+        }
+      }
+
+      function playStewartRefusal() {
+        kitchenStewartPicture.classList.remove("is-refusing");
+        void kitchenStewartPicture.offsetWidth;
+        kitchenStewartPicture.classList.add("is-refusing");
+        kitchenStewartPicture.addEventListener("animationend", () => {
+          kitchenStewartPicture.classList.remove("is-refusing");
+        }, { once: true });
+      }
+
+      foodItems.forEach((item) => {
+        item.addEventListener("pointerdown", (event) => {
+          if (item.disabled || event.button !== 0) {
+            return;
+          }
+          item.setPointerCapture(event.pointerId);
+          foodDrag = {
+            item,
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            moved: false,
+            ghost: null
+          };
+        });
+
+        item.addEventListener("pointermove", (event) => {
+          if (!foodDrag || foodDrag.item !== item || foodDrag.pointerId !== event.pointerId) {
+            return;
+          }
+          if (!foodDrag.moved && Math.hypot(event.clientX - foodDrag.startX, event.clientY - foodDrag.startY) > 8) {
+            foodDrag.moved = true;
+            foodDrag.ghost = item.querySelector("img").cloneNode();
+            foodDrag.ghost.className = "food-drag-ghost";
+            document.body.append(foodDrag.ghost);
+            kitchenPetArea.classList.add("is-drop-target");
+          }
+          if (foodDrag.ghost) {
+            foodDrag.ghost.style.left = `${event.clientX}px`;
+            foodDrag.ghost.style.top = `${event.clientY}px`;
+          }
+        });
+
+        item.addEventListener("pointerup", (event) => {
+          if (!foodDrag || foodDrag.item !== item || foodDrag.pointerId !== event.pointerId) {
+            return;
+          }
+          const drag = foodDrag;
+          foodDrag = null;
+          kitchenPetArea.classList.remove("is-drop-target");
+          drag.ghost?.remove();
+          if (drag.moved) {
+            const target = document.elementFromPoint(event.clientX, event.clientY);
+            if (target && kitchenPetArea.contains(target)) {
+              serveFood(item);
+            }
+          }
+        });
+
+        item.addEventListener("pointercancel", () => {
+          if (foodDrag?.item === item) {
+            foodDrag.ghost?.remove();
+            foodDrag = null;
+            kitchenPetArea.classList.remove("is-drop-target");
+          }
+        });
+      });
+
+      leaveKitchenButton.addEventListener("click", closeKitchen);
+
+      function updateFoodCravingUI() {
+        const cravingCopy = {
+          sweet: "Stewart is craving something sweet. Drag over ice cream, mango sticky rice, a cinnamon roll, or Thai tea.",
+          thirsty: "Stewart is thirsty. Drag over beet juice or Thai tea.",
+          hungry: "Stewart is so hungry! Drag over Galbi, fish, or steak."
+        };
+        foodCravingPrompt.textContent = cravingCopy[currentFoodCraving] || cravingCopy.sweet;
+        const urgent = currentFoodCraving === "hungry" && Math.round(currentFullness) <= 5;
+        careUrgentFeed.hidden = !urgent;
+        kitchenUrgentFeed.hidden = !urgent;
+      }
+
+      async function performCareAction(button) {
+        if (!button) {
+          return;
+        }
+        if (lowMoodTestMode) {
+          document.querySelector("#care-note").textContent =
+            "Low-mood preview only: care actions won't change the shared save.";
+          return;
+        }
           button.disabled = true;
           try {
-            const { data, error } = await supabaseClient.rpc("care_for_stewart", {
-              p_action: button.dataset.care
+            const { data, error } = await supabaseClient.rpc("care_for_stewart_by_player", {
+              p_action: button.dataset.care,
+              p_player: currentPlayer,
+              p_food: null
             });
             if (error) {
               throw error;
             }
             updateNeeds(data);
+            if (data.care_counts) {
+              updateCareCounts(data.care_counts);
+            }
             document.querySelector("#care-note").textContent = data.message;
           } catch (error) {
             showSyncError(error);
           } finally {
             button.disabled = false;
           }
+      }
+
+      function placeSoccerPieces() {
+        soccerBall.style.left = `${ballX}%`;
+        soccerBall.style.top = `${ballY}%`;
+        soccerPlayer.style.left = `${playerX}%`;
+        soccerPlayer.style.top = `${playerY}%`;
+        soccerPlayer.setAttribute("aria-valuenow", String(Math.round(playerX)));
+        soccerStewart.style.left = `${stewartX}%`;
+        soccerStewart.style.top = `${ballDirection > 0 ? ballY : 50}%`;
+        soccerScore.textContent = `You ${playerGoals} - ${stewartGoals} Stewart`;
+      }
+
+      function startSoccerGame() {
+        soccerStartedAt = performance.now();
+        soccerLastFrameAt = soccerStartedAt;
+        soccerStage = 0;
+        window.clearTimeout(soccerToastTimer);
+        soccerToast.hidden = true;
+        soccerActive = true;
+        ballX = 76;
+        ballY = 50;
+        ballDirection = -1;
+        playerX = 18;
+        playerY = 50;
+        stewartX = 84;
+        playerGoals = 0;
+        stewartGoals = 0;
+        lastPlayerHitAt = 0;
+        playtimeFill.style.width = "0%";
+        playtimeTrack.setAttribute("aria-valuenow", "0");
+        playtimeLabel.textContent = "Playtime: 0 seconds";
+        soccerMessage.textContent = "Drag the yellow dot to meet the ball and kick it back!";
+        soccerGame.hidden = false;
+        soccerGame.inert = false;
+        soccerGame.classList.add("is-entering");
+        window.setTimeout(() => soccerGame.classList.remove("is-entering"), 800);
+        gameScreen.inert = true;
+        careButtons.forEach((button) => {
+          button.disabled = true;
         });
+        placeSoccerPieces();
+        soccerFrame = requestAnimationFrame(updateSoccerGame);
+        finishSoccerButton.focus();
+      }
+
+      function updateSoccerGame(now) {
+        const elapsedSeconds = (now - soccerStartedAt) / 1000;
+        const deltaSeconds = Math.min((now - soccerLastFrameAt) / 1000, .05);
+        soccerLastFrameAt = now;
+        const playSeconds = Math.min(30, Math.floor(elapsedSeconds));
+        playtimeFill.style.width = `${(elapsedSeconds / 30) * 100}%`;
+        playtimeTrack.setAttribute("aria-valuenow", String(playSeconds));
+        playtimeLabel.textContent = `Playtime: ${playSeconds} seconds`;
+
+        if (elapsedSeconds >= 30) {
+          endSoccerGame("Full time! Great game with Stewart.");
+          return;
+        }
+
+        if (elapsedSeconds >= 20 && soccerStage < 2) {
+          soccerStage = 2;
+          showSoccerToast("Stewart really wants to win!");
+        } else if (elapsedSeconds >= 10 && soccerStage < 1) {
+          soccerStage = 1;
+          showSoccerToast("Stewart is now warmed up!");
+        }
+
+        const ballSpeed = soccerStage === 0 ? 32 : soccerStage === 1 ? 44 : 56;
+        ballX += ballDirection * ballSpeed * deltaSeconds;
+        ballY += Math.sin(now / 420) * 10 * deltaSeconds;
+        ballY = Math.max(14, Math.min(86, ballY));
+
+        if (ballDirection > 0 && ballX >= 86) {
+          ballDirection = -1;
+          ballX = 86;
+          soccerMessage.textContent = "Stewart blocks the shot and kicks it back!";
+        }
+
+        if (ballDirection < 0) {
+          const arenaRect = soccerArena.getBoundingClientRect();
+          const horizontalDistance = (playerX - ballX) * arenaRect.width / 100;
+          const verticalDistance = (playerY - ballY) * arenaRect.height / 100;
+          const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 52;
+          if (closeEnough && now - lastPlayerHitAt > 500) {
+            lastPlayerHitAt = now;
+            ballDirection = 1;
+            playerGoals += 1;
+            soccerMessage.textContent = "Nice kick! Stewart is chasing the ball!";
+          }
+        }
+
+        if (ballDirection < 0 && ballX <= 5) {
+          stewartGoals += 1;
+          ballX = 76;
+          ballY = 28 + Math.random() * 44;
+          ballDirection = -1;
+          soccerMessage.textContent = "Stewart scored! Drag the dot to block the next shot!";
+        }
+
+        const stewartTarget = Math.max(60, Math.min(84, ballX + 7));
+        stewartX += (stewartTarget - stewartX) * Math.min(1, deltaSeconds * 5);
+        stewartX = Math.min(88, stewartX);
+        placeSoccerPieces();
+        soccerFrame = requestAnimationFrame(updateSoccerGame);
+      }
+
+      function showSoccerToast(message) {
+        window.clearTimeout(soccerToastTimer);
+        soccerToast.textContent = message;
+        soccerToast.hidden = false;
+        soccerToastTimer = window.setTimeout(() => {
+          soccerToast.hidden = true;
+        }, 2600);
+      }
+
+      async function endSoccerGame(message) {
+        if (!soccerActive) {
+          return;
+        }
+        soccerActive = false;
+        cancelAnimationFrame(soccerFrame);
+        window.clearTimeout(soccerToastTimer);
+        soccerToast.hidden = true;
+        soccerGame.hidden = true;
+        soccerGame.inert = true;
+        gameScreen.inert = false;
+        careButtons.forEach((button) => {
+          button.disabled = false;
+        });
+        document.querySelector("#care-note").textContent =
+          `${message} You returned the ball ${playerGoals} ${playerGoals === 1 ? "time" : "times"}.`;
+        const playButton = careButtons.find((button) => button.dataset.care === "play");
+        await performCareAction(playButton);
+        gameTitle.focus();
+      }
+
+      soccerPlayer.addEventListener("pointerdown", (event) => {
+        soccerPlayer.setPointerCapture(event.pointerId);
+        moveSoccerPlayer(event);
+      });
+
+      soccerPlayer.addEventListener("pointermove", (event) => {
+        if (soccerPlayer.hasPointerCapture(event.pointerId)) {
+          moveSoccerPlayer(event);
+        }
+      });
+
+      function moveSoccerPlayer(event) {
+        const bounds = soccerArena.getBoundingClientRect();
+        playerX = Math.max(5, Math.min(48, ((event.clientX - bounds.left) / bounds.width) * 100));
+        playerY = Math.max(8, Math.min(92, ((event.clientY - bounds.top) / bounds.height) * 100));
+        placeSoccerPieces();
+      }
+
+      soccerPlayer.addEventListener("keydown", (event) => {
+        const step = event.shiftKey ? 8 : 3;
+        if (event.key === "ArrowLeft") playerX = Math.max(5, playerX - step);
+        else if (event.key === "ArrowRight") playerX = Math.min(48, playerX + step);
+        else if (event.key === "ArrowUp") playerY = Math.max(8, playerY - step);
+        else if (event.key === "ArrowDown") playerY = Math.min(92, playerY + step);
+        else return;
+        event.preventDefault();
+        placeSoccerPieces();
+      });
+
+      finishSoccerButton.addEventListener("click", () => {
+        endSoccerGame("Nice job playing soccer!");
       });
     </script>
   </body>
