@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#edf5e9">
+    <title>Keep Stewart Happy</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #edf5e9;
+        color: #183c2d;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        min-height: 100svh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background-image:
+          linear-gradient(rgb(225 240 216 / 25%), rgb(225 240 216 / 25%)),
+          url("pictrues/background.jpg");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      body.playing {
+        background-image:
+          linear-gradient(rgb(225 240 216 / 18%), rgb(225 240 216 / 18%)),
+          url("pictrues/background2.jpg");
+      }
+
+      .welcome {
+        position: relative;
+        width: min(92vw, 640px);
+        padding: clamp(3rem, 9vw, 5.5rem) 2rem;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 75%);
+        border-radius: 1.25rem;
+        background: rgb(255 255 255 / 88%);
+        box-shadow: 0 24px 70px rgb(31 76 49 / 12%), 0 3px 12px rgb(31 76 49 / 5%);
+        text-align: center;
+        animation: welcome-in 1.6s cubic-bezier(.2, .75, .25, 1) both;
+      }
+
+      .brand {
+        margin: 0 0 1.25rem;
+        color: #52765a;
+        font-size: .76rem;
+        font-weight: 700;
+        letter-spacing: .19em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        color: #234e38;
+        font-size: clamp(3.5rem, 12vw, 5.5rem);
+        font-weight: 650;
+        letter-spacing: -.065em;
+        line-height: 1;
+      }
+
+      .message {
+        margin: 1.35rem 0 0;
+        color: #526b5a;
+        font-size: clamp(1rem, 3vw, 1.2rem);
+        line-height: 1.6;
+      }
+
+      .accent {
+        display: block;
+        width: 42px;
+        height: 3px;
+        margin: 2rem auto 0;
+        border-radius: 99px;
+        background: #77a578;
+      }
+
+      .start-button {
+        margin-top: 2rem;
+        padding: .85rem 1.4rem;
+        border: 0;
+        border-radius: .75rem;
+        background: #376b4b;
+        color: #fff;
+        font: inherit;
+        font-size: 1rem;
+        font-weight: 650;
+        cursor: pointer;
+        transition: background-color 160ms ease, transform 160ms ease;
+      }
+
+      .start-button:hover {
+        transform: translateY(-2px);
+        background: #28583c;
+      }
+
+      .start-button:focus-visible {
+        outline: 3px solid #91b991;
+        outline-offset: 4px;
+      }
+
+      .welcome[hidden] {
+        display: none;
+      }
+
+      .game-screen {
+        width: min(94vw, 900px);
+        padding: clamp(1.25rem, 3vw, 2rem);
+      }
+
+      .game-screen h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        letter-spacing: -.04em;
+      }
+
+      .game-dashboard {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .65rem;
+        margin: 1rem auto 0;
+      }
+
+      .game-stat {
+        min-width: 105px;
+        padding: .55rem .8rem;
+        border: 1px solid rgb(255 255 255 / 90%);
+        border-radius: .7rem;
+        background: rgb(255 255 255 / 75%);
+        color: #526b5a;
+        font-size: .85rem;
+      }
+
+      .game-stat strong {
+        display: block;
+        color: #28583c;
+        font-size: 1.05rem;
+      }
+
+      .goal {
+        width: min(100%, 460px);
+        margin: 1rem auto 0;
+        color: #365641;
+        font-size: .9rem;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      .goal-track {
+        height: 9px;
+        margin-top: .45rem;
+        overflow: hidden;
+        border-radius: .4rem;
+        background: #edf3ea;
+      }
+
+      .goal-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: #77a578;
+        transition: width 350ms ease;
+      }
+
+      .game-layout {
+        display: grid;
+        grid-template-columns: minmax(180px, .9fr) minmax(240px, 1.1fr);
+        gap: clamp(1.5rem, 5vw, 3rem);
+        align-items: center;
+        margin-top: 1.25rem;
+        text-align: left;
+      }
+
+      .stewart-picture {
+        display: block;
+        width: 100%;
+        max-height: 380px;
+        object-fit: contain;
+        filter: drop-shadow(0 16px 20px rgb(20 54 32 / 28%)) brightness(1.08) contrast(1.06);
+      }
+
+      .pet-display {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: .5rem;
+      }
+
+      .thought-button {
+        position: relative;
+        display: grid;
+        justify-items: center;
+        gap: .35rem;
+        width: min(100%, 220px);
+        padding: .8rem 1rem;
+        border: 1px solid rgb(255 255 255 / 90%);
+        border-radius: 1rem;
+        background: rgb(255 255 255 / 92%);
+        box-shadow: 0 8px 22px rgb(31 76 49 / 12%);
+        color: #365641;
+        font: inherit;
+        font-size: .9rem;
+        font-weight: 650;
+        text-align: center;
+        cursor: pointer;
+        transition: transform 160ms ease, box-shadow 160ms ease;
+      }
+
+      .thought-button::after {
+        position: absolute;
+        bottom: -.45rem;
+        left: calc(50% - .4rem);
+        width: .8rem;
+        height: .8rem;
+        border-right: 1px solid rgb(255 255 255 / 90%);
+        border-bottom: 1px solid rgb(255 255 255 / 90%);
+        background: #fff;
+        content: "";
+        transform: rotate(45deg);
+      }
+
+      .thought-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 11px 25px rgb(31 76 49 / 16%);
+      }
+
+      .thought-button:focus-visible {
+        outline: 3px solid #91b991;
+        outline-offset: 4px;
+      }
+
+      .mood-picture {
+        width: 116px;
+        height: 116px;
+        object-fit: contain;
+        filter: drop-shadow(0 5px 8px rgb(20 54 32 / 22%)) brightness(1.08) contrast(1.08);
+      }
+
+      .needs-panel[hidden] {
+        display: none;
+      }
+
+      .pet-status {
+        margin: 0 0 1rem;
+        color: #376b4b;
+        font-size: 1.15rem;
+        font-weight: 700;
+      }
+
+      .need {
+        margin: 1rem 0;
+      }
+
+      .need-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: .4rem;
+        color: #365641;
+        font-size: .95rem;
+        font-weight: 600;
+      }
+
+      .need-track {
+        height: 12px;
+        overflow: hidden;
+        border-radius: .4rem;
+        background: #edf3ea;
+      }
+
+      .need-fill {
+        width: 50%;
+        height: 100%;
+        border-radius: inherit;
+        background: #8fb791;
+        transition: width 350ms ease;
+      }
+
+      .care-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .75rem;
+        margin-top: 1.1rem;
+      }
+
+      .care-actions .start-button {
+        flex: 1 1 100px;
+        margin-top: 0;
+      }
+
+      .care-note {
+        min-height: 1.6em;
+        margin-top: .75rem;
+        color: #526b5a;
+        font-size: .95rem;
+      }
+
+      .sync-status {
+        margin: .75rem 0 0;
+        color: #526b5a;
+        font-size: .85rem;
+      }
+
+      .sync-status[data-error="true"] {
+        color: #9b382f;
+        font-weight: 600;
+      }
+
+      .retry-sync {
+        margin-top: .5rem;
+        padding: .45rem .8rem;
+        border: 1px solid #8fb791;
+        border-radius: .5rem;
+        background: #fff;
+        color: #28583c;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      .retry-sync[hidden] {
+        display: none;
+      }
+
+      @media (max-width: 600px) {
+        .game-layout {
+          grid-template-columns: 1fr;
+          gap: .5rem;
+          margin-top: .75rem;
+        }
+
+        .stewart-picture {
+          width: min(65%, 240px);
+          max-height: 210px;
+          margin: 0 auto;
+        }
+
+        .mood-picture {
+          width: 132px;
+          height: 132px;
+        }
+      }
+
+      @keyframes welcome-in {
+        from {
+          opacity: 0;
+          transform: translateY(14px) scale(.94);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: .01ms !important;
+          animation-iteration-count: 1 !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="welcome" id="welcome-screen" aria-labelledby="welcome-title">
+      <p class="brand">Keep Stewart Happy</p>
+      <h1 id="welcome-title">Welcome</h1>
+      <p class="message">Are you ready to help Stewart today?</p>
+      <span class="accent" aria-hidden="true"></span>
+      <button class="start-button" id="start-button" type="button">Yes, let's start</button>
+    </main>
+    <main class="welcome" id="next-screen" aria-labelledby="next-title" hidden>
+      <p class="brand">Keep Stewart Happy</p>
+      <h1 id="next-title" tabindex="-1">Let's make Stewart happy!</h1>
+      <span class="accent" aria-hidden="true"></span>
+      <button class="start-button" id="game-button" type="button">Let's go!</button>
+    </main>
+    <main class="welcome game-screen" id="game-screen" aria-labelledby="game-title" hidden>
+      <h1 id="game-title" tabindex="-1">Stewart is feeling</h1>
+      <div class="game-dashboard" aria-label="Game progress">
+        <div class="game-stat">Level<strong id="level-value">1</strong></div>
+        <div class="game-stat">Happy points<strong id="points-value">0</strong></div>
+        <div class="game-stat">Care turns<strong id="turns-value">0</strong></div>
+      </div>
+      <div class="goal">
+        <span id="goal-label" aria-live="polite">Care goal: get every need to 60%</span>
+        <div class="goal-track" role="progressbar" aria-label="Care goal progress" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+          <div class="goal-fill" id="goal-fill"></div>
+        </div>
+        <span id="goal-count">0 of 3 needs ready</span>
+      </div>
+      <div class="game-layout">
+        <div class="pet-display">
+          <button class="thought-button" id="thought-button" type="button" aria-controls="needs-panel" aria-expanded="false">
+            <img class="mood-picture" id="mood-picture" src="pictrues/hungry.png" alt="Stewart looks hungry">
+            <span id="thought-prompt">Tap here to see what's wrong.</span>
+          </button>
+          <img class="stewart-picture" src="pictrues/stewart.png" alt="Stewart, waiting for some care">
+        </div>
+        <section aria-label="Stewart's mood and needs">
+          <div class="needs-panel" id="needs-panel" hidden>
+            <p class="pet-status" id="pet-status" aria-live="polite">Hungry</p>
+            <div class="need">
+              <div class="need-label"><span>Fullness</span><span id="fullness-value">20%</span></div>
+              <div class="need-track" role="progressbar" aria-label="Fullness" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20">
+                <div class="need-fill" id="fullness-bar"></div>
+              </div>
+            </div>
+            <div class="need">
+              <div class="need-label"><span>Energy</span><span id="energy-value">35%</span></div>
+              <div class="need-track" role="progressbar" aria-label="Energy" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35">
+                <div class="need-fill" id="energy-bar"></div>
+              </div>
+            </div>
+            <div class="need">
+              <div class="need-label"><span>Fun</span><span id="fun-value">25%</span></div>
+              <div class="need-track" role="progressbar" aria-label="Fun" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25">
+                <div class="need-fill" id="fun-bar"></div>
+              </div>
+            </div>
+          </div>
+          <div class="care-actions" aria-label="Care for Stewart">
+            <button class="start-button" type="button" data-care="food" disabled>Food</button>
+            <button class="start-button" type="button" data-care="play" disabled>Play</button>
+            <button class="start-button" type="button" data-care="poppo" disabled>Poppo</button>
+          </div>
+          <p class="care-note" id="care-note" aria-live="polite">Choose an action to take care of Stewart.</p>
+          <p class="sync-status" id="sync-status" role="status" aria-live="polite">Connect to the shared game to begin.</p>
+          <button class="retry-sync" id="retry-sync" type="button" hidden>Retry connection</button>
+        </section>
+      </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://xbpngswyyjrdbonexfxy.supabase.co";
+      const SUPABASE_ANON_KEY = "sb_publishable_O06OF-pRhlmjYEVTfGg7pQ_rqfMxbuQ";
+      const startButton = document.querySelector("#start-button");
+      const gameButton = document.querySelector("#game-button");
+      const welcomeScreen = document.querySelector("#welcome-screen");
+      const nextScreen = document.querySelector("#next-screen");
+      const gameScreen = document.querySelector("#game-screen");
+      const nextTitle = document.querySelector("#next-title");
+      const gameTitle = document.querySelector("#game-title");
+      const thoughtButton = document.querySelector("#thought-button");
+      const moodPicture = document.querySelector("#mood-picture");
+      const needsPanel = document.querySelector("#needs-panel");
+      const goalFill = document.querySelector("#goal-fill");
+      const goalTrack = goalFill.parentElement;
+      const goalLabel = document.querySelector("#goal-label");
+      const goalCount = document.querySelector("#goal-count");
+      const levelValue = document.querySelector("#level-value");
+      const pointsValue = document.querySelector("#points-value");
+      const turnsValue = document.querySelector("#turns-value");
+      const syncStatus = document.querySelector("#sync-status");
+      const retryButton = document.querySelector("#retry-sync");
+      const careButtons = [...document.querySelectorAll("[data-care]")];
+      let supabaseClient;
+      let syncChannel;
+      let refreshTimer;
+      let refreshInProgress = false;
+      let refreshQueued = false;
+
+      startButton.addEventListener("click", () => {
+        welcomeScreen.hidden = true;
+        nextScreen.hidden = false;
+        nextTitle.focus();
+      });
+
+      gameButton.addEventListener("click", async () => {
+        nextScreen.hidden = true;
+        gameScreen.hidden = false;
+        document.body.classList.add("playing");
+        gameTitle.focus();
+        await connectSharedGame();
+      });
+
+      thoughtButton.addEventListener("click", () => {
+        needsPanel.hidden = false;
+        thoughtButton.setAttribute("aria-expanded", "true");
+      });
+
+      function setSyncStatus(message, isError = false) {
+        syncStatus.textContent = message;
+        syncStatus.dataset.error = String(isError);
+      }
+
+      async function connectSharedGame() {
+        gameButton.disabled = true;
+        retryButton.hidden = true;
+
+        if (SUPABASE_URL === "https://xbpngswyyjrdbonexfxy.supabase.co" || SUPABASE_ANON_KEY === "sb_publishable_O06OF-pRhlmjYEVTfGg7pQ_rqfMxbuQ") {
+          setSyncStatus("Add your Supabase project URL and anon key to connect the shared game.", true);
+          retryButton.hidden = false;
+          gameButton.disabled = false;
+          return;
+        }
+
+        if (!window.supabase || typeof window.supabase.createClient !== "function") {
+          setSyncStatus("Supabase could not load. Check your internet connection and try again.", true);
+          retryButton.hidden = false;
+          gameButton.disabled = false;
+          return;
+        }
+
+        try {
+          if (!supabaseClient) {
+            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+          }
+          setSyncStatus("Connecting to Stewart's shared save...");
+          await refreshSharedState();
+
+          if (!syncChannel) {
+            syncChannel = supabaseClient
+              .channel("stewart-shared-game")
+              .on("postgres_changes", {
+                event: "*",
+                schema: "public",
+                table: "stewart_game",
+                filter: "id=1"
+              }, () => refreshSharedState().catch(showSyncError))
+              .subscribe((status) => {
+                if (status === "SUBSCRIBED") {
+                  setSyncStatus("Shared save connected. Changes sync for everyone.");
+                } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+                  setSyncStatus("Live sync is reconnecting. Periodic shared updates are still enabled.", true);
+                }
+              });
+          }
+
+          if (!refreshTimer) {
+            refreshTimer = window.setInterval(() => {
+              refreshSharedState().catch(showSyncError);
+            }, 30000);
+          }
+          gameButton.disabled = false;
+          retryButton.hidden = true;
+          careButtons.forEach((button) => {
+            button.disabled = false;
+          });
+        } catch (error) {
+          showSyncError(error);
+          retryButton.hidden = false;
+          gameButton.disabled = false;
+        }
+      }
+
+      async function refreshSharedState() {
+        if (!supabaseClient) {
+          return;
+        }
+
+        if (refreshInProgress) {
+          refreshQueued = true;
+          return;
+        }
+
+        refreshInProgress = true;
+        try {
+          do {
+            refreshQueued = false;
+            const { data, error } = await supabaseClient.rpc("get_stewart_state");
+            if (error) {
+              throw error;
+            }
+            updateNeeds(data);
+          } while (refreshQueued);
+        } finally {
+          refreshInProgress = false;
+        }
+      }
+
+      function showSyncError(error) {
+        console.error("Could not sync Stewart's shared game:", error);
+        setSyncStatus("Couldn't sync with Supabase. Check the setup and connection, then retry.", true);
+        retryButton.hidden = false;
+      }
+
+      function updateNeeds(state) {
+        const needs = state.needs;
+        for (const [need, value] of Object.entries(needs)) {
+          const bar = document.querySelector(`#${need}-bar`);
+          const label = document.querySelector(`#${need}-value`);
+          const progress = bar.parentElement;
+          const roundedValue = Math.round(Number(value));
+          bar.style.width = `${roundedValue}%`;
+          label.textContent = `${roundedValue}%`;
+          progress.setAttribute("aria-valuenow", String(roundedValue));
+        }
+
+        const average = (Number(needs.fullness) + Number(needs.energy) + Number(needs.fun)) / 3;
+        let mood;
+        if (needs.fullness < 35) {
+          mood = { name: "Hungry", image: "hungry.png", alt: "Stewart looks hungry" };
+        } else if (needs.energy < 35 || needs.fun < 35) {
+          mood = { name: "Grumpy", image: "grumpy.png", alt: "Stewart looks grumpy" };
+        } else if (average < 45) {
+          mood = { name: "Sad", image: "sad.png", alt: "Stewart looks sad" };
+        } else if (average >= 70) {
+          mood = { name: "Happy", image: "happy.png", alt: "Stewart looks happy" };
+        } else {
+          mood = { name: "Ready", image: "ready.png", alt: "Stewart looks ready" };
+        }
+        moodPicture.src = `pictrues/${mood.image}`;
+        moodPicture.alt = mood.alt;
+        document.querySelector("#pet-status").textContent = mood.name;
+
+        const readyNeeds = Object.values(needs).filter((value) => Number(value) >= state.goal_target).length;
+        goalFill.style.width = `${(readyNeeds / Object.keys(needs).length) * 100}%`;
+        goalTrack.setAttribute("aria-valuenow", String(readyNeeds));
+        goalCount.textContent = `${readyNeeds} of 3 needs ready`;
+        levelValue.textContent = String(state.level);
+        pointsValue.textContent = String(state.points);
+        turnsValue.textContent = String(state.turns);
+        goalLabel.textContent = state.complete
+          ? "Amazing! Stewart is thriving — you completed every care goal!"
+          : `Level ${state.level} goal: get every need to ${state.goal_target}%`;
+      }
+
+      retryButton.addEventListener("click", connectSharedGame);
+
+      careButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          try {
+            const { data, error } = await supabaseClient.rpc("care_for_stewart", {
+              p_action: button.dataset.care
+            });
+            if (error) {
+              throw error;
+            }
+            updateNeeds(data);
+            document.querySelector("#care-note").textContent = data.message;
+          } catch (error) {
+            showSyncError(error);
+          } finally {
+            button.disabled = false;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
