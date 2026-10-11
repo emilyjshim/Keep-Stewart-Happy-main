@@ -16,19 +16,25 @@ The soccer game lasts up to 30 seconds. Stewart starts at the current ball speed
 gets faster at 10 seconds ("Stewart is now warmed up!") and again at 20 seconds
 ("Stewart really wants to win!"); each brief message appears over the field.
 
+Accepted food lowers cleanliness by 15 points. Below 50%, Stewart's teeth become dirty;
+open the bathroom, drag toothpaste onto the toothbrush, then scrub back and forth over
+his teeth until they're clean. Brushing restores cleanliness to 100%.
+
 ## Preview low moods without changing the shared save
 
 To preview Stewart with critical needs and the **FEED ME** warning, open the page with
 `?testMood=low` appended to its URL (for example, `index.html?testMood=low`). This
-browser-only preview displays fullness at 4%, energy at 8%, fun at 6%, and a hungry
-craving. Care actions and feeding are prevented from updating Supabase while the preview
-is active. Remove the query parameter to return to the actual shared game state.
+browser-only preview displays fullness at 4%, energy at 8%, fun at 6%, cleanliness at
+35%, and a hungry craving. Brushing works locally in the preview, while other care
+actions and feeding are prevented from updating Supabase. Remove the query parameter to
+return to the actual shared game state.
 
 ## Connect the shared game
 
 1. Use your existing Supabase project at [supabase.com](https://supabase.com/); no second project is needed.
 2. In the Supabase dashboard, open **SQL Editor**, create a query, paste the SQL below,
-   and run it.
+   and run it. Then run the **Add shared cleanliness and dental care** migration at the
+   end of this document in a separate query.
 3. In **Project Settings → API**, copy the **Project URL** and the **anon/public key**.
    Never use or publish the `service_role` key in this website.
 4. Ensure `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `index.html` contain that project's
@@ -518,4 +524,204 @@ revoke all on function public.get_stewart_state() from public, anon, authenticat
 revoke all on function public.care_for_stewart_by_player(text, text, text) from public, anon, authenticated;
 grant execute on function public.get_stewart_state() to anon, authenticated;
 grant execute on function public.care_for_stewart_by_player(text, text, text) to anon, authenticated;
+```
+
+## Add shared cleanliness and dental care
+
+Run this migration after the shared food cravings migration. Existing saves start at
+100% cleanliness. Each accepted food serving reduces it by 15 points; refused food does
+not affect cleanliness. When cleanliness falls below 50%, players can brush Stewart's
+teeth in the bathroom. Cleaning restores it to 100% and counts as a care action.
+
+```sql
+alter table public.stewart_game
+  add column if not exists cleanliness numeric not null default 100
+    check (cleanliness between 0 and 100);
+
+create or replace function public.get_stewart_state()
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_game public.stewart_game%rowtype;
+  v_elapsed_hours numeric;
+begin
+  insert into public.stewart_game
+    (id, fullness, energy, fun, level, points, turns, goal_target, is_complete, updated_at)
+  values (1, 20, 35, 25, 1, 0, 0, 60, false, clock_timestamp())
+  on conflict (id) do nothing;
+
+  select * into v_game from public.stewart_game where id = 1;
+  v_elapsed_hours := greatest(
+    extract(epoch from (clock_timestamp() - v_game.updated_at)),
+    0
+  ) / 3600.0;
+
+  return jsonb_build_object(
+    'needs', jsonb_build_object(
+      'fullness', round(greatest(0::numeric, v_game.fullness - 12 * v_elapsed_hours), 1),
+      'energy', round(greatest(0::numeric, v_game.energy - 10 * v_elapsed_hours), 1),
+      'fun', round(greatest(0::numeric, v_game.fun - 14 * v_elapsed_hours), 1),
+      'cleanliness', round(v_game.cleanliness, 1)
+    ),
+    'level', v_game.level,
+    'points', v_game.points,
+    'turns', v_game.turns,
+    'food_craving', v_game.food_craving,
+    'goal_target', v_game.goal_target,
+    'complete', v_game.is_complete
+  );
+end;
+$$;
+
+create or replace function public.care_for_stewart_by_player(
+  p_action text,
+  p_player text,
+  p_food text default null
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_result jsonb;
+  v_game public.stewart_game%rowtype;
+  v_elapsed_hours numeric;
+  v_fullness numeric;
+  v_next_craving text;
+  v_cleanliness numeric;
+  v_emily_count integer;
+  v_evan_count integer;
+begin
+  if p_player is null or p_player not in ('Emily', 'Evan') then
+    raise exception 'Unknown player';
+  end if;
+
+  if p_action = 'food' then
+    select * into v_game from public.stewart_game where id = 1 for update;
+    v_elapsed_hours := greatest(
+      extract(epoch from (clock_timestamp() - v_game.updated_at)),
+      0
+    ) / 3600.0;
+    v_fullness := round(greatest(0::numeric, v_game.fullness - 12 * v_elapsed_hours), 1);
+
+    if round(v_fullness) >= 100 then
+      return jsonb_build_object(
+        'accepted', false,
+        'food_craving', v_game.food_craving,
+        'message', 'Stewart is too full to eat right now.'
+      );
+    end if;
+
+    if p_food is null or p_food not in ('galbi', 'fish', 'steak', 'msr', 'thai_tea', 'roll', 'beet_juice', 'ice_cream') then
+      raise exception 'Unknown food item';
+    end if;
+
+    if (v_game.food_craving = 'sweet' and p_food not in ('ice_cream', 'msr', 'roll', 'thai_tea'))
+      or (v_game.food_craving = 'thirsty' and p_food not in ('thai_tea', 'beet_juice'))
+      or (v_game.food_craving = 'hungry' and p_food not in ('galbi', 'fish', 'steak')) then
+      return jsonb_build_object(
+        'accepted', false,
+        'food_craving', v_game.food_craving,
+        'message', case v_game.food_craving
+          when 'sweet' then 'Stewart wants something sweet. Try ice cream, mango sticky rice, a cinnamon roll, or Thai tea.'
+          when 'thirsty' then 'Stewart is thirsty. Try beet juice or Thai tea.'
+          else 'Stewart is hungry. Try Galbi, fish, or steak.'
+        end
+      );
+    end if;
+
+    v_next_craving := case v_game.food_craving
+      when 'sweet' then 'thirsty'
+      when 'thirsty' then 'hungry'
+      else 'sweet'
+    end;
+  end if;
+
+  v_result := public.care_for_stewart(p_action);
+
+  update public.stewart_game
+  set emily_care_count = emily_care_count + case when p_player = 'Emily' then 1 else 0 end,
+      evan_care_count = evan_care_count + case when p_player = 'Evan' then 1 else 0 end,
+      food_craving = coalesce(v_next_craving, food_craving),
+      cleanliness = case when p_action = 'food' then greatest(0::numeric, cleanliness - 15) else cleanliness end
+  where id = 1
+  returning emily_care_count, evan_care_count, cleanliness
+  into v_emily_count, v_evan_count, v_cleanliness;
+
+  return v_result || jsonb_build_object(
+    'needs', (v_result->'needs') || jsonb_build_object('cleanliness', round(v_cleanliness, 1)),
+    'accepted', true,
+    'food_craving', (select food_craving from public.stewart_game where id = 1),
+    'care_counts', jsonb_build_object(
+      'emily_care_count', v_emily_count,
+      'evan_care_count', v_evan_count
+    )
+  );
+end;
+$$;
+
+create or replace function public.clean_stewart_teeth_by_player(p_player text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_game public.stewart_game%rowtype;
+  v_state jsonb;
+  v_emily_count integer;
+  v_evan_count integer;
+begin
+  if p_player is null or p_player not in ('Emily', 'Evan') then
+    raise exception 'Unknown player';
+  end if;
+
+  select * into v_game from public.stewart_game where id = 1 for update;
+  if not found then
+    raise exception 'Shared Stewart game is not initialized';
+  end if;
+  v_state := public.get_stewart_state();
+
+  if v_game.cleanliness >= 50 then
+    return v_state || jsonb_build_object(
+      'accepted', false,
+      'message', 'Stewart''s teeth are already clean.'
+    );
+  end if;
+
+  update public.stewart_game
+  set fullness = coalesce((v_state #>> '{needs,fullness}')::numeric, fullness),
+      energy = coalesce((v_state #>> '{needs,energy}')::numeric, energy),
+      fun = coalesce((v_state #>> '{needs,fun}')::numeric, fun),
+      cleanliness = 100,
+      points = points + 5,
+      turns = turns + 1,
+      emily_care_count = emily_care_count + case when p_player = 'Emily' then 1 else 0 end,
+      evan_care_count = evan_care_count + case when p_player = 'Evan' then 1 else 0 end,
+      updated_at = clock_timestamp()
+  where id = 1
+  returning emily_care_count, evan_care_count
+  into v_emily_count, v_evan_count;
+
+  return public.get_stewart_state() || jsonb_build_object(
+    'accepted', true,
+    'message', 'Sparkling! Stewart''s teeth are all clean. +5 happy points.',
+    'care_counts', jsonb_build_object(
+      'emily_care_count', v_emily_count,
+      'evan_care_count', v_evan_count
+    )
+  );
+end;
+$$;
+
+revoke all on function public.get_stewart_state() from public, anon, authenticated;
+revoke all on function public.care_for_stewart_by_player(text, text, text) from public, anon, authenticated;
+revoke all on function public.clean_stewart_teeth_by_player(text) from public, anon, authenticated;
+grant execute on function public.get_stewart_state() to anon, authenticated;
+grant execute on function public.care_for_stewart_by_player(text, text, text) to anon, authenticated;
+grant execute on function public.clean_stewart_teeth_by_player(text) to anon, authenticated;
 ```

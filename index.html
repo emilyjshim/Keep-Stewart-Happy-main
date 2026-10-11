@@ -1057,75 +1057,552 @@
         color: #28583c;
       }
 
+      .bathroom-game[hidden] {
+        display: none;
+      }
+
+      .bathroom-game {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .8rem;
+        overflow: auto;
+        padding: clamp(1rem, 3vw, 2rem);
+        background:
+          linear-gradient(rgb(28 47 25 / 34%), rgb(28 47 25 / 44%)),
+          url("pictrues/bathroom.jpg") center / cover no-repeat;
+        color: #fff;
+      }
+
+      .bathroom-game.is-entering {
+        animation: arcade-overlay-in 760ms cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .bathroom-header {
+        text-align: center;
+        text-shadow: 0 2px 8px rgb(0 0 0 / 55%);
+      }
+
+      .bathroom-header h1 {
+        color: #fff;
+        font-size: clamp(1.8rem, 5vw, 3rem);
+      }
+
+      .bathroom-header p {
+        margin: .45rem 0 0;
+      }
+
+      .cleaning-progress {
+        width: min(100%, 420px);
+        margin: .65rem auto 0;
+        text-shadow: 0 1px 4px rgb(0 0 0 / 55%);
+      }
+
+      .cleaning-progress .need-track {
+        height: 16px;
+        border: 1px solid rgb(255 255 255 / 80%);
+        background: rgb(0 0 0 / 30%);
+      }
+
+      .cleaning-progress .need-fill {
+        background: linear-gradient(90deg, #b6eb7a, #fff38a);
+      }
+
+      .bathroom-layout {
+        display: grid;
+        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        gap: clamp(1rem, 3vw, 2rem);
+        align-items: stretch;
+        width: min(100%, 1100px);
+        flex: 1;
+        min-height: 300px;
+        margin: 0 auto;
+      }
+
+      .bathroom-tools {
+        display: grid;
+        align-content: center;
+        gap: .7rem;
+        padding: .85rem;
+        border: 1px solid rgb(255 255 255 / 70%);
+        border-radius: .8rem;
+        background: rgb(255 255 255 / 85%);
+        box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
+        color: #28583c;
+      }
+
+      .bathroom-tool {
+        display: grid;
+        justify-items: center;
+        gap: .25rem;
+        min-height: 130px;
+        padding: .55rem;
+        border: 2px solid rgb(55 107 75 / 24%);
+        border-radius: .7rem;
+        background: rgb(255 255 255 / 82%);
+        color: inherit;
+        font: inherit;
+        font-weight: 700;
+        text-align: center;
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .bathroom-tool:active {
+        cursor: grabbing;
+      }
+
+      .bathroom-tool:focus-visible {
+        outline: 3px solid #77a578;
+        outline-offset: 2px;
+      }
+
+      .bathroom-tool img {
+        width: 90px;
+        height: 82px;
+        object-fit: contain;
+        pointer-events: none;
+      }
+
+      .bathroom-tool[aria-disabled="true"] {
+        opacity: .5;
+        cursor: not-allowed;
+      }
+
+      .toothbrush-dropzone.is-ready {
+        border-color: #69a544;
+        box-shadow: 0 0 0 3px rgb(105 165 68 / 22%);
+      }
+
+      .toothbrush-dropzone.is-drop-target {
+        border-color: #f1d94b;
+        box-shadow: 0 0 0 4px rgb(241 217 75 / 28%);
+      }
+
+      .bathroom-pet-area {
+        display: grid;
+        place-items: center;
+        min-height: 300px;
+        overflow: hidden;
+        border: 2px dashed rgb(255 255 255 / 74%);
+        border-radius: 1rem;
+        background: rgb(255 255 255 / 12%);
+      }
+
+      .dental-scene {
+        position: relative;
+        width: min(78%, 480px);
+        aspect-ratio: 1;
+      }
+
+      .bathroom-stewart {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 10px 16px rgb(0 0 0 / 38%));
+        pointer-events: none;
+      }
+
+      .teeth-target {
+        position: absolute;
+        top: 35%;
+        left: 39%;
+        width: 32%;
+        height: 14%;
+        border: 2px dashed rgb(255 255 255 / 75%);
+        border-radius: 50%;
+        background: rgb(255 244 154 / 16%);
+        box-shadow: 0 0 14px rgb(255 244 154 / 45%);
+        pointer-events: none;
+        transition: background-color 150ms ease, box-shadow 150ms ease;
+      }
+
+      .teeth-target.is-brushing {
+        background: rgb(255 244 154 / 52%);
+        box-shadow: 0 0 22px rgb(255 255 255 / 85%);
+      }
+
+      .bathroom-message {
+        min-height: 1.4em;
+        margin: 0;
+        padding: .55rem .8rem;
+        border-radius: .55rem;
+        background: rgb(0 0 0 / 50%);
+        text-align: center;
+        text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+      }
+
+      .dental-drag-ghost {
+        position: fixed;
+        z-index: 30;
+        width: 96px;
+        height: 96px;
+        object-fit: contain;
+        pointer-events: none;
+        filter: drop-shadow(0 8px 12px rgb(0 0 0 / 38%));
+        transform: translate(-50%, -50%);
+      }
+
+      .bathroom-footer {
+        display: flex;
+        justify-content: center;
+      }
+
+      .bathroom-footer .start-button {
+        width: min(100%, 280px);
+        margin-top: 0;
+        background: #fff;
+        color: #28583c;
+      }
+
       @media (max-width: 600px) {
+        body {
+          display: block;
+          min-height: 100vh;
+          min-height: 100svh;
+          overflow-x: hidden;
+          overflow-y: auto;
+          padding: max(.5rem, env(safe-area-inset-top)) max(.5rem, env(safe-area-inset-right))
+            max(.75rem, env(safe-area-inset-bottom)) max(.5rem, env(safe-area-inset-left));
+        }
+
+        .welcome,
+        #welcome-screen,
+        #next-screen,
+        .game-screen {
+          width: 100%;
+          margin: clamp(.5rem, 3svh, 1.25rem) auto;
+        }
+
+        #welcome-screen,
+        #next-screen {
+          padding: clamp(.75rem, 4vw, 1.25rem);
+        }
+
+        #welcome-title {
+          font-size: clamp(2rem, 10vw, 3.1rem);
+        }
+
+        #next-title {
+          font-size: clamp(1.7rem, 8vw, 2.6rem);
+        }
+
+        .message {
+          display: block;
+          width: fit-content;
+          font-size: 1rem;
+          line-height: 1.4;
+        }
+
+        .start-button {
+          min-height: 46px;
+          padding: .7rem 1rem;
+          touch-action: manipulation;
+        }
+
+        .sign-in-options {
+          gap: .65rem;
+          margin-top: 1.25rem;
+        }
+
+        .sign-in-options .start-button {
+          flex: 1 1 120px;
+          min-height: 48px;
+        }
+
+        .care-counts {
+          width: 100%;
+        }
+
+        .care-count {
+          flex: 1 1 120px;
+        }
+
+        .game-screen {
+          max-width: 560px;
+          padding: .9rem;
+        }
+
+        .game-screen h1 {
+          font-size: clamp(1.8rem, 8vw, 2.5rem);
+        }
+
+        .game-dashboard {
+          gap: .25rem;
+          margin-top: .6rem;
+        }
+
+        .game-stat {
+          min-width: 0;
+          flex: 1 1 30%;
+          padding: .3rem .35rem;
+          font-size: .78rem;
+        }
+
+        .goal {
+          margin-top: .7rem;
+          font-size: .85rem;
+        }
+
         .game-layout {
           grid-template-columns: 1fr;
-          gap: .5rem;
-          margin-top: .75rem;
+          gap: .35rem;
+          margin-top: .6rem;
         }
 
         .stewart-picture {
-          width: min(65%, 240px);
-          max-height: 190px;
+          width: min(60%, 220px);
+          max-height: 160px;
           margin: 0 auto;
         }
 
         .mood-picture {
-          width: 108px;
-          height: 108px;
+          width: 88px;
+          height: 88px;
         }
 
         .thought-button {
-          width: min(100%, 200px);
-          padding: .55rem .8rem;
-          margin-bottom: -.75rem;
+          width: min(100%, 180px);
+          padding: .4rem .65rem;
+          margin-bottom: -.65rem;
+        }
+
+        .pet-status {
+          margin-bottom: .5rem;
+        }
+
+        .need {
+          margin: .7rem 0;
+        }
+
+        .need-track {
+          height: 14px;
+        }
+
+        .care-actions {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: .45rem;
+          margin-top: .8rem;
+        }
+
+        .care-actions .start-button {
+          min-width: 0;
+          padding: .6rem .35rem;
+          font-size: .9rem;
+        }
+
+        .care-note,
+        .sync-status {
+          line-height: 1.35;
         }
 
         .soccer-game {
           gap: .5rem;
-          padding: .75rem;
+          padding: max(.6rem, env(safe-area-inset-top)) max(.6rem, env(safe-area-inset-right))
+            max(.6rem, env(safe-area-inset-bottom)) max(.6rem, env(safe-area-inset-left));
+        }
+
+        .soccer-header h1 {
+          font-size: clamp(1.5rem, 7vw, 2.2rem);
+        }
+
+        .soccer-header p {
+          font-size: .9rem;
+        }
+
+        .playtime-track {
+          height: 16px;
+          margin-top: .55rem;
         }
 
         .soccer-arena {
-          min-height: 42vh;
+          width: 100%;
+          min-height: clamp(220px, 43dvh, 440px);
+          flex: 0 0 clamp(220px, 43dvh, 440px);
+          border-width: 2px;
+          border-radius: .75rem;
+        }
+
+        .soccer-player {
+          width: 56px;
+          height: 56px;
+        }
+
+        .soccer-score {
+          top: .45rem;
+          padding: .4rem .65rem;
+          font-size: .88rem;
+          white-space: nowrap;
+        }
+
+        .soccer-footer {
+          gap: .4rem;
+        }
+
+        .soccer-footer p {
+          font-size: .9rem;
         }
 
         .food-game {
           gap: .55rem;
-          padding: .75rem;
+          padding: max(.6rem, env(safe-area-inset-top)) max(.6rem, env(safe-area-inset-right))
+            max(.6rem, env(safe-area-inset-bottom)) max(.6rem, env(safe-area-inset-left));
+        }
+
+        .food-header h1 {
+          font-size: clamp(1.6rem, 7.5vw, 2.35rem);
+          line-height: 1.1;
+        }
+
+        .food-header p {
+          font-size: .88rem;
+        }
+
+        .food-craving {
+          margin-top: .5rem;
+          padding: .5rem .7rem;
+          font-size: .9rem;
+          line-height: 1.3;
         }
 
         .kitchen-layout {
           grid-template-columns: 1fr;
-          grid-template-rows: auto minmax(190px, 1fr);
-          gap: .6rem;
+          grid-template-rows: auto clamp(200px, 30dvh, 290px);
+          gap: .5rem;
+          flex: 0 0 auto;
           min-height: 0;
         }
 
         .food-tray {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-          gap: .35rem;
-          padding: .45rem;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: .3rem;
+          padding: .4rem;
         }
 
         .food-item {
+          min-height: 72px;
           gap: .1rem;
-          padding: .25rem;
-          font-size: .75rem;
+          padding: .2rem .1rem;
+          border-radius: .5rem;
+          font-size: clamp(.62rem, 2.8vw, .76rem);
+          line-height: 1.05;
         }
 
         .food-item img {
-          width: 48px;
-          height: 42px;
+          width: min(100%, 44px);
+          height: 38px;
         }
 
         .kitchen-pet-area {
-          min-height: 190px;
+          min-height: 0;
         }
 
         .kitchen-stewart {
-          width: min(58%, 230px);
-          max-height: 28vh;
+          width: min(58%, 210px);
+          max-height: 24dvh;
+        }
+
+        .food-message {
+          right: .4rem;
+          bottom: .4rem;
+          left: .4rem;
+          padding: .45rem .55rem;
+          font-size: .88rem;
+        }
+
+        .food-footer .start-button {
+          width: min(100%, 280px);
+        }
+
+        .bathroom-game {
+          gap: .55rem;
+          padding: max(.6rem, env(safe-area-inset-top)) max(.6rem, env(safe-area-inset-right))
+            max(.6rem, env(safe-area-inset-bottom)) max(.6rem, env(safe-area-inset-left));
+        }
+
+        .bathroom-header h1 {
+          font-size: clamp(1.6rem, 7.5vw, 2.35rem);
+          line-height: 1.1;
+        }
+
+        .bathroom-header p {
+          font-size: .88rem;
+        }
+
+        .bathroom-layout {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto clamp(200px, 30dvh, 290px);
+          gap: .5rem;
+          flex: 0 0 auto;
+          min-height: 0;
+        }
+
+        .bathroom-tools {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: .4rem;
+          padding: .4rem;
+        }
+
+        .bathroom-tool {
+          min-height: 82px;
+          gap: .1rem;
+          padding: .2rem;
+          font-size: .8rem;
+        }
+
+        .bathroom-tool img {
+          width: 54px;
+          height: 48px;
+        }
+
+        .bathroom-pet-area {
+          min-height: 0;
+        }
+
+        .dental-scene {
+          width: min(70%, 230px);
+        }
+
+        .bathroom-message {
+          font-size: .88rem;
+        }
+      }
+
+      @media (max-width: 380px) {
+        .care-actions .start-button {
+          font-size: .8rem;
+        }
+
+        .food-item {
+          font-size: .62rem;
+        }
+      }
+
+      @media (max-width: 600px) and (max-height: 700px) {
+        .soccer-arena {
+          min-height: 38dvh;
+          flex-basis: 38dvh;
+        }
+
+        .kitchen-pet-area {
+          min-height: 0;
+        }
+
+        .kitchen-layout {
+          grid-template-rows: auto 150px;
+        }
+
+        .kitchen-stewart {
+          max-height: 20dvh;
+        }
+
+        .bathroom-layout {
+          grid-template-rows: auto 150px;
         }
       }
 
@@ -1350,11 +1827,18 @@
                 <div class="need-fill" id="fun-bar"></div>
               </div>
             </div>
+            <div class="need">
+              <div class="need-label"><span>Cleanliness</span><span id="cleanliness-value">100%</span></div>
+              <div class="need-track" role="progressbar" aria-label="Cleanliness" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                <div class="need-fill" id="cleanliness-bar" data-critical="false" style="width: 100%"></div>
+              </div>
+            </div>
           </div>
           <div class="care-actions" aria-label="Care for Stewart">
             <button class="start-button" type="button" data-care="food" disabled>Food</button>
             <button class="start-button" type="button" data-care="play" disabled>Play</button>
             <button class="start-button" type="button" data-care="poppo" disabled>Poppo</button>
+            <button class="start-button" type="button" data-care="bathroom" disabled>Bathroom</button>
           </div>
           <p class="care-note" id="care-note" aria-live="polite">Choose an action to take care of Stewart.</p>
           <p class="sync-status" id="sync-status" role="status" aria-live="polite">Connect to the shared game to begin.</p>
@@ -1415,6 +1899,40 @@
         <button class="start-button" id="leave-kitchen" type="button">Back to Stewart</button>
       </footer>
     </section>
+    <section class="bathroom-game" id="bathroom-game" aria-labelledby="bathroom-title" hidden>
+      <header class="bathroom-header">
+        <h1 id="bathroom-title">Time to brush Stewart's teeth!</h1>
+        <p id="brush-instruction">Drag toothpaste onto the toothbrush, then scrub his teeth back and forth.</p>
+        <div class="cleaning-progress">
+          <div class="need-label"><span>Tooth brushing</span><span id="brush-progress-value">0%</span></div>
+          <div class="need-track" role="progressbar" aria-label="Tooth brushing progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="need-fill" id="brush-progress-fill"></div>
+          </div>
+        </div>
+      </header>
+      <div class="bathroom-layout">
+        <div class="bathroom-tools" aria-label="Toothbrush and toothpaste">
+          <button class="bathroom-tool" id="toothpaste-tool" type="button" aria-label="Drag toothpaste onto the toothbrush">
+            <img src="pictrues/toothpaste.png" alt="">
+            <span>Toothpaste</span>
+          </button>
+          <button class="bathroom-tool toothbrush-dropzone" id="toothbrush-tool" type="button" aria-label="Toothbrush. Drag toothpaste here first, then brush Stewart's teeth." aria-disabled="true">
+            <img src="pictrues/toothbrush.png" alt="">
+            <span id="toothbrush-tool-label">Toothbrush</span>
+          </button>
+        </div>
+        <div class="bathroom-pet-area" id="bathroom-pet-area">
+          <div class="dental-scene">
+            <img class="bathroom-stewart" id="bathroom-stewart" src="pictrues/dirtystewie.png" alt="Stewart with dirty teeth">
+            <div class="teeth-target" id="teeth-target" aria-label="Stewart's teeth. Brush back and forth here." role="img"></div>
+          </div>
+        </div>
+      </div>
+      <p class="bathroom-message" id="bathroom-message" role="status" aria-live="polite">Drag the toothpaste onto the toothbrush to get started.</p>
+      <footer class="bathroom-footer">
+        <button class="start-button" id="leave-bathroom" type="button">Back to Stewart</button>
+      </footer>
+    </section>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const SUPABASE_URL = "https://xbpngswyyjrdbonexfxy.supabase.co";
@@ -1456,6 +1974,19 @@
       const kitchenPetArea = document.querySelector("#kitchen-pet-area");
       const foodMessage = document.querySelector("#food-message");
       const leaveKitchenButton = document.querySelector("#leave-kitchen");
+      const bathroomGame = document.querySelector("#bathroom-game");
+      const toothpasteTool = document.querySelector("#toothpaste-tool");
+      const toothbrushTool = document.querySelector("#toothbrush-tool");
+      const toothbrushToolLabel = document.querySelector("#toothbrush-tool-label");
+      const teethTarget = document.querySelector("#teeth-target");
+      const bathroomStewartPicture = document.querySelector("#bathroom-stewart");
+      const bathroomMessage = document.querySelector("#bathroom-message");
+      const brushInstruction = document.querySelector("#brush-instruction");
+      const brushProgressFill = document.querySelector("#brush-progress-fill");
+      const brushProgressValue = document.querySelector("#brush-progress-value");
+      const leaveBathroomButton = document.querySelector("#leave-bathroom");
+      const mainCleanlinessBar = document.querySelector("#cleanliness-bar");
+      const mainCleanlinessValue = document.querySelector("#cleanliness-value");
       const careStewartPicture = document.querySelector(".stewart-picture");
       const kitchenStewartPicture = document.querySelector("#kitchen-stewart");
       const careUrgentFeed = document.querySelector("#care-urgent-feed");
@@ -1489,8 +2020,14 @@
       let stewartGoals = 0;
       let lastPlayerHitAt = 0;
       let foodDrag = null;
+      let dentalDrag = null;
+      let toothpasteApplied = false;
+      let brushProgress = 0;
+      let brushLastX = null;
+      let brushSaving = false;
       let currentFoodCraving = "sweet";
       let currentFullness = 20;
+      let currentCleanliness = 100;
 
       playerSignInButtons.forEach((button) => {
         button.addEventListener("click", async () => {
@@ -1625,6 +2162,15 @@
 
         if (lowMoodTestMode) {
           setSyncStatus("Preview mode active: shared save is disabled while testing low moods.");
+          updateNeeds({
+            needs: { fullness: 4, energy: 8, fun: 6, cleanliness: 35 },
+            level: 1,
+            points: 0,
+            turns: 0,
+            goal_target: 60,
+            complete: false,
+            food_craving: "hungry"
+          });
           gameButton.disabled = false;
           careButtons.forEach((button) => {
             button.disabled = false;
@@ -1765,12 +2311,13 @@
         if (lowMoodTestMode) {
           state = {
             ...state,
-            needs: { fullness: 4, energy: 8, fun: 6 },
+            needs: { fullness: 4, energy: 8, fun: 6, cleanliness: 35 },
             food_craving: "hungry"
           };
         }
         const needs = state.needs;
         currentFullness = Number(needs.fullness);
+        currentCleanliness = Number(needs.cleanliness ?? currentCleanliness);
         currentFoodCraving = state.food_craving || currentFoodCraving;
         for (const [need, value] of Object.entries(needs)) {
           const bar = document.querySelector(`#${need}-bar`);
@@ -1780,17 +2327,13 @@
           bar.style.width = `${roundedValue}%`;
           label.textContent = `${roundedValue}%`;
           progress.setAttribute("aria-valuenow", String(roundedValue));
-          if (need === "fullness") {
-            bar.dataset.critical = String(roundedValue <= 5);
+          if (need === "fullness" || need === "cleanliness") {
+            bar.dataset.critical = String(need === "fullness" ? roundedValue <= 5 : roundedValue < 50);
           }
         }
 
         const isOverfull = Math.round(currentFullness) >= 100;
-        const petImage = isOverfull ? "pictrues/fullstewart.png" : "pictrues/stewart.png";
-        careStewartPicture.src = petImage;
-        kitchenStewartPicture.src = petImage;
-        careStewartPicture.alt = isOverfull ? "Stewart is too full" : "Stewart, waiting for some care";
-        kitchenStewartPicture.alt = isOverfull ? "Stewart is too full to eat more" : "Stewart, ready for a snack";
+        updatePetArtwork(isOverfull);
         updateFoodCravingUI();
 
         const average = (Number(needs.fullness) + Number(needs.energy) + Number(needs.fun)) / 3;
@@ -1812,16 +2355,44 @@
         moodPicture.alt = mood.alt;
         document.querySelector("#pet-status").textContent = mood.name;
 
-        const readyNeeds = Object.values(needs).filter((value) => Number(value) >= state.goal_target).length;
-        goalFill.style.width = `${(readyNeeds / Object.keys(needs).length) * 100}%`;
-        goalTrack.setAttribute("aria-valuenow", String(readyNeeds));
-        goalCount.textContent = `${readyNeeds} of 3 needs ready`;
+        const careGoals = Object.entries(needs).filter(([need]) => need !== "cleanliness");
+        const readyCareGoals = careGoals.filter(([, value]) => Number(value) >= state.goal_target).length;
+        goalFill.style.width = `${(readyCareGoals / careGoals.length) * 100}%`;
+        goalTrack.setAttribute("aria-valuenow", String(readyCareGoals));
+        goalCount.textContent = `${readyCareGoals} of ${careGoals.length} needs ready`;
         levelValue.textContent = String(state.level);
         pointsValue.textContent = String(state.points);
         turnsValue.textContent = String(state.turns);
         goalLabel.textContent = state.complete
           ? "Amazing! Stewart is thriving — you completed every care goal!"
           : `Level ${state.level} goal: get every need to ${state.goal_target}%`;
+      }
+
+      function updatePetArtwork(isOverfull = Math.round(currentFullness) >= 100) {
+        const baseImage = currentCleanliness < 50
+          ? "pictrues/dirtystewie.png"
+          : currentCleanliness >= 100
+            ? "pictrues/cleanstewie.png"
+            : "pictrues/stewart.png";
+        const careImage = isOverfull ? "pictrues/fullstewart.png" : baseImage;
+        careStewartPicture.src = careImage;
+        kitchenStewartPicture.src = careImage;
+        careStewartPicture.alt = isOverfull
+          ? "Stewart is too full"
+          : currentCleanliness < 50
+            ? "Stewart has dirty teeth"
+            : "Stewart, waiting for some care";
+        kitchenStewartPicture.alt = isOverfull
+          ? "Stewart is too full to eat more"
+          : currentCleanliness < 50
+            ? "Stewart has dirty teeth"
+            : "Stewart, ready for a snack";
+        bathroomStewartPicture.src = currentCleanliness < 50
+          ? "pictrues/dirtystewie.png"
+          : "pictrues/cleanstewie.png";
+        bathroomStewartPicture.alt = currentCleanliness < 50
+          ? "Stewart needs his teeth brushed"
+          : "Stewart's teeth are clean";
       }
 
       retryButton.addEventListener("click", connectSharedGame);
@@ -1834,6 +2405,10 @@
           }
           if (button.dataset.care === "food") {
             openKitchen();
+            return;
+          }
+          if (button.dataset.care === "bathroom") {
+            openBathroom();
             return;
           }
           await performCareAction(button);
@@ -1860,6 +2435,230 @@
         gameScreen.inert = false;
         careButtons.find((button) => button.dataset.care === "food").focus();
       }
+
+      function openBathroom() {
+        bathroomGame.hidden = false;
+        bathroomGame.inert = false;
+        bathroomGame.classList.add("is-entering");
+        window.setTimeout(() => bathroomGame.classList.remove("is-entering"), 800);
+        gameScreen.inert = true;
+        toothpasteApplied = currentCleanliness >= 50;
+        brushProgress = 0;
+        brushSaving = false;
+        updateBrushProgress();
+        updateBathroomTools();
+        updatePetArtwork();
+        bathroomMessage.textContent = currentCleanliness >= 50
+          ? "Stewart's teeth are already sparkling clean!"
+          : "Drag the toothpaste onto the toothbrush to get started.";
+        leaveBathroomButton.focus();
+      }
+
+      function closeBathroom() {
+        clearDentalDrag();
+        bathroomGame.hidden = true;
+        bathroomGame.inert = true;
+        gameScreen.inert = false;
+        careButtons.find((button) => button.dataset.care === "bathroom").focus();
+      }
+
+      function updateBathroomTools() {
+        const alreadyClean = currentCleanliness >= 50;
+        toothpasteTool.setAttribute("aria-disabled", String(alreadyClean || toothpasteApplied));
+        toothpasteTool.classList.toggle("is-used", toothpasteApplied);
+        toothbrushTool.setAttribute("aria-disabled", String(alreadyClean || !toothpasteApplied || brushSaving));
+        toothbrushTool.classList.toggle("is-ready", toothpasteApplied && !alreadyClean);
+        toothbrushToolLabel.textContent = alreadyClean
+          ? "All clean!"
+          : toothpasteApplied
+            ? "Toothpaste ready!"
+            : "Toothbrush";
+        brushInstruction.textContent = alreadyClean
+          ? "Stewart's teeth are clean! Come back after he has had a few more treats."
+          : toothpasteApplied
+            ? "Scrub back and forth over his teeth until the brushing bar is full."
+            : "Drag toothpaste onto the toothbrush, then scrub his teeth back and forth.";
+      }
+
+      function updateBrushProgress() {
+        const roundedProgress = Math.round(brushProgress);
+        brushProgressFill.style.width = `${roundedProgress}%`;
+        brushProgressValue.textContent = `${roundedProgress}%`;
+        brushProgressFill.parentElement.setAttribute("aria-valuenow", String(roundedProgress));
+      }
+
+      function isPointInside(element, clientX, clientY) {
+        const bounds = element.getBoundingClientRect();
+        return clientX >= bounds.left && clientX <= bounds.right
+          && clientY >= bounds.top && clientY <= bounds.bottom;
+      }
+
+      function startDentalDrag(tool, event) {
+        if (event.button !== 0 || brushSaving) {
+          return;
+        }
+        if (tool === toothbrushTool && (!toothpasteApplied || currentCleanliness >= 50)) {
+          bathroomMessage.textContent = "Put toothpaste on the toothbrush first!";
+          return;
+        }
+        if (tool === toothpasteTool && (toothpasteApplied || currentCleanliness >= 50)) {
+          return;
+        }
+        dentalDrag = {
+          tool,
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startY: event.clientY,
+          moved: false,
+          ghost: null
+        };
+        tool.setPointerCapture(event.pointerId);
+      }
+
+      function clearDentalDrag() {
+        dentalDrag?.ghost?.remove();
+        dentalDrag = null;
+        brushLastX = null;
+        teethTarget.classList.remove("is-brushing");
+        toothbrushTool.classList.remove("is-drop-target");
+      }
+
+      function moveDentalDrag(event) {
+        if (!dentalDrag || dentalDrag.pointerId !== event.pointerId) {
+          return;
+        }
+        const drag = dentalDrag;
+        if (!drag.moved && Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) > 8) {
+          drag.moved = true;
+          drag.ghost = drag.tool.querySelector("img").cloneNode();
+          drag.ghost.className = "dental-drag-ghost";
+          document.body.append(drag.ghost);
+        }
+        if (!drag.ghost) {
+          return;
+        }
+        drag.ghost.style.left = `${event.clientX}px`;
+        drag.ghost.style.top = `${event.clientY}px`;
+        if (drag.tool === toothpasteTool) {
+          toothbrushTool.classList.toggle(
+            "is-drop-target",
+            isPointInside(toothbrushTool, event.clientX, event.clientY)
+          );
+          return;
+        }
+
+        const overTeeth = isPointInside(teethTarget, event.clientX, event.clientY);
+        teethTarget.classList.toggle("is-brushing", overTeeth);
+        if (!overTeeth) {
+          brushLastX = null;
+          return;
+        }
+        if (brushLastX !== null) {
+          const bounds = teethTarget.getBoundingClientRect();
+          brushProgress = Math.min(100, brushProgress + Math.abs(event.clientX - brushLastX) / bounds.width * 12.5);
+          updateBrushProgress();
+        }
+        brushLastX = event.clientX;
+        if (brushProgress > 0 && brushProgress < 100) {
+          bathroomMessage.textContent = `Keep brushing back and forth! ${Math.round(brushProgress)}% clean.`;
+        }
+      }
+
+      function endDentalDrag(event) {
+        if (!dentalDrag || dentalDrag.pointerId !== event.pointerId) {
+          return;
+        }
+        const drag = dentalDrag;
+        const droppedOnBrush = drag.tool === toothpasteTool
+          && isPointInside(toothbrushTool, event.clientX, event.clientY);
+        const reachedClean = drag.tool === toothbrushTool && brushProgress >= 100;
+        const wasMoved = drag.moved;
+        clearDentalDrag();
+        if (!wasMoved) {
+          return;
+        }
+        if (drag.tool === toothpasteTool) {
+          if (droppedOnBrush) {
+            toothpasteApplied = true;
+            updateBathroomTools();
+            bathroomMessage.textContent = "Nice! Now scrub back and forth over Stewart's teeth.";
+          } else {
+            bathroomMessage.textContent = "Drop the toothpaste onto the toothbrush.";
+          }
+          return;
+        }
+        if (reachedClean) {
+          saveToothBrushing();
+        } else {
+          bathroomMessage.textContent = `Keep brushing back and forth over his teeth. ${Math.round(brushProgress)}% clean.`;
+        }
+      }
+
+      async function saveToothBrushing() {
+        if (brushSaving || currentCleanliness >= 50 || brushProgress < 100) {
+          return;
+        }
+        brushSaving = true;
+        updateBathroomTools();
+        bathroomMessage.textContent = "Stewart's teeth are sparkling! Saving the clean...";
+        if (lowMoodTestMode) {
+          currentCleanliness = 100;
+          mainCleanlinessBar.style.width = "100%";
+          mainCleanlinessValue.textContent = "100%";
+          mainCleanlinessBar.parentElement.setAttribute("aria-valuenow", "100");
+          mainCleanlinessBar.dataset.critical = "false";
+          updatePetArtwork();
+          document.querySelector("#care-note").textContent =
+            "Low-mood preview only: Stewart's teeth are clean in this browser.";
+          bathroomMessage.textContent = "Sparkling! Stewart's teeth are all clean!";
+          brushSaving = false;
+          updateBathroomTools();
+          return;
+        }
+        try {
+          const { data, error } = await supabaseClient.rpc("clean_stewart_teeth_by_player", {
+            p_player: currentPlayer
+          });
+          if (error) {
+            throw error;
+          }
+          if (data.needs) {
+            updateNeeds(data);
+          }
+          if (data.accepted) {
+            document.querySelector("#care-note").textContent = data.message;
+            if (data.care_counts) {
+              updateCareCounts(data.care_counts);
+            }
+          }
+          bathroomMessage.textContent = data.message;
+        } catch (error) {
+          console.error("Could not save Stewart's tooth brushing:", error);
+          bathroomMessage.textContent = "Couldn't save the brushing. Drag the toothbrush over his teeth again to retry.";
+          showSyncError(error);
+        } finally {
+          brushSaving = false;
+          updateBathroomTools();
+        }
+      }
+
+      [toothpasteTool, toothbrushTool].forEach((tool) => {
+        tool.addEventListener("pointerdown", (event) => startDentalDrag(tool, event));
+        tool.addEventListener("pointermove", moveDentalDrag);
+        tool.addEventListener("pointerup", endDentalDrag);
+        tool.addEventListener("pointercancel", () => {
+          if (dentalDrag?.tool === tool) {
+            clearDentalDrag();
+          }
+        });
+        tool.addEventListener("lostpointercapture", () => {
+          if (dentalDrag?.tool === tool) {
+            clearDentalDrag();
+          }
+        });
+      });
+
+      leaveBathroomButton.addEventListener("click", closeBathroom);
 
       async function serveFood(item) {
         if (item.disabled || !currentPlayer) {
@@ -1929,12 +2728,23 @@
         }, { once: true });
       }
 
+      function isOverKitchenPetArea(clientX, clientY) {
+        const bounds = kitchenPetArea.getBoundingClientRect();
+        return clientX >= bounds.left && clientX <= bounds.right
+          && clientY >= bounds.top && clientY <= bounds.bottom;
+      }
+
+      function clearFoodDrag() {
+        foodDrag?.ghost?.remove();
+        foodDrag = null;
+        kitchenPetArea.classList.remove("is-drop-target");
+      }
+
       foodItems.forEach((item) => {
         item.addEventListener("pointerdown", (event) => {
           if (item.disabled || event.button !== 0) {
             return;
           }
-          item.setPointerCapture(event.pointerId);
           foodDrag = {
             item,
             pointerId: event.pointerId,
@@ -1943,6 +2753,7 @@
             moved: false,
             ghost: null
           };
+          item.setPointerCapture(event.pointerId);
         });
 
         item.addEventListener("pointermove", (event) => {
@@ -1954,11 +2765,14 @@
             foodDrag.ghost = item.querySelector("img").cloneNode();
             foodDrag.ghost.className = "food-drag-ghost";
             document.body.append(foodDrag.ghost);
-            kitchenPetArea.classList.add("is-drop-target");
           }
           if (foodDrag.ghost) {
             foodDrag.ghost.style.left = `${event.clientX}px`;
             foodDrag.ghost.style.top = `${event.clientY}px`;
+            kitchenPetArea.classList.toggle(
+              "is-drop-target",
+              isOverKitchenPetArea(event.clientX, event.clientY)
+            );
           }
         });
 
@@ -1967,22 +2781,26 @@
             return;
           }
           const drag = foodDrag;
-          foodDrag = null;
-          kitchenPetArea.classList.remove("is-drop-target");
-          drag.ghost?.remove();
+          const droppedOnStewartArea = isOverKitchenPetArea(event.clientX, event.clientY);
+          clearFoodDrag();
           if (drag.moved) {
-            const target = document.elementFromPoint(event.clientX, event.clientY);
-            if (target && kitchenPetArea.contains(target)) {
+            if (droppedOnStewartArea) {
               serveFood(item);
+            } else {
+              foodMessage.textContent = "Drop the food onto Stewart to feed him!";
             }
           }
         });
 
         item.addEventListener("pointercancel", () => {
           if (foodDrag?.item === item) {
-            foodDrag.ghost?.remove();
-            foodDrag = null;
-            kitchenPetArea.classList.remove("is-drop-target");
+            clearFoodDrag();
+          }
+        });
+
+        item.addEventListener("lostpointercapture", () => {
+          if (foodDrag?.item === item) {
+            clearFoodDrag();
           }
         });
       });
