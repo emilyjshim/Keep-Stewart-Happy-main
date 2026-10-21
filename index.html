@@ -678,6 +678,13 @@
         user-select: none;
       }
 
+      .soccer-arena.is-intense {
+        background:
+          linear-gradient(90deg, transparent 49.7%, rgb(255 255 255 / 58%) 50%, transparent 50.3%),
+          repeating-linear-gradient(0deg, transparent 0 42px, rgb(255 255 255 / 7%) 42px 44px),
+          linear-gradient(rgb(31 116 55 / 30%), rgb(31 116 55 / 30%));
+      }
+
       .soccer-toast {
         position: absolute;
         z-index: 5;
@@ -906,6 +913,10 @@
         touch-action: none;
       }
 
+      .school-road.is-crashed {
+        animation: road-crash-shake 420ms ease-in-out both;
+      }
+
       .school-road::before {
         position: absolute;
         inset: 0 8%;
@@ -964,13 +975,18 @@
 
       .school-car {
         bottom: 8%;
-        width: 68px;
-        height: 88px;
-        border: 4px solid #fff;
-        border-radius: 20px 20px 14px 14px;
+        width: 88px;
+        height: 110px;
+        border: 5px solid #fff;
+        border-radius: 24px 24px 16px 16px;
         background: linear-gradient(90deg, #d5a735, #ffdc66 24%, #ffdc66 76%, #d5a735);
         box-shadow: 0 5px 14px rgb(0 0 0 / 42%);
-        transition: left 120ms ease-out;
+        will-change: left;
+        transition: none;
+      }
+
+      .school-road.is-crashed .school-car {
+        animation: car-crash-shake 420ms ease-out both;
       }
 
       .school-car::before,
@@ -995,9 +1011,9 @@
 
       .school-car img {
         z-index: 1;
-        width: 30px;
-        height: 30px;
-        border: 2px solid #fff;
+        width: 58px;
+        height: 58px;
+        border: 3px solid #fff;
         border-radius: 50%;
         object-fit: cover;
       }
@@ -1114,6 +1130,51 @@
         letter-spacing: .12em;
       }
 
+      .food-shop[hidden] {
+        display: none;
+      }
+
+      .food-shop {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .5rem;
+        width: fit-content;
+        max-width: 100%;
+        margin: .6rem auto 0;
+        padding: .55rem .7rem;
+        border: 1px solid rgb(255 255 255 / 75%);
+        border-radius: .75rem;
+        background: rgb(23 49 31 / 82%);
+        box-shadow: 0 5px 18px rgb(0 0 0 / 30%);
+      }
+
+      .food-shop label {
+        font-weight: 700;
+      }
+
+      .food-shop select,
+      .food-shop button {
+        min-height: 42px;
+        padding: .45rem .7rem;
+        border: 1px solid #8fb791;
+        border-radius: .5rem;
+        background: #fff;
+        color: #28583c;
+        font: inherit;
+      }
+
+      .food-shop button {
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .food-shop button:disabled {
+        opacity: .55;
+        cursor: not-allowed;
+      }
+
       .kitchen-layout {
         display: grid;
         grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
@@ -1151,7 +1212,7 @@
         font-size: .82rem;
         font-weight: 650;
         cursor: grab;
-        touch-action: none;
+        touch-action: pan-y;
         user-select: none;
       }
 
@@ -1223,6 +1284,18 @@
         }
       }
 
+      @keyframes road-crash-shake {
+        0%, 100% { transform: translateX(0); }
+        18%, 58% { transform: translateX(-10px); }
+        38%, 78% { transform: translateX(10px); }
+      }
+
+      @keyframes car-crash-shake {
+        0%, 100% { transform: translate(-50%, -50%) rotate(0); }
+        20%, 60% { transform: translate(-50%, -50%) rotate(-8deg); }
+        40%, 80% { transform: translate(-50%, -50%) rotate(8deg); }
+      }
+
       .urgent-feed {
         position: absolute;
         z-index: 2;
@@ -1268,6 +1341,7 @@
         background: rgb(0 0 0 / 48%);
         text-align: center;
         text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+        pointer-events: none;
       }
 
       .food-drag-ghost {
@@ -1284,6 +1358,11 @@
       .food-footer {
         display: flex;
         justify-content: center;
+        z-index: 5;
+        flex: 0 0 auto;
+        padding: .6rem 0 max(.4rem, env(safe-area-inset-bottom));
+        border-radius: .6rem;
+        background: rgb(28 47 25 / 88%);
       }
 
       .food-footer .start-button {
@@ -1715,8 +1794,13 @@
         }
 
         .school-car {
-          width: 58px;
-          height: 76px;
+          width: 74px;
+          height: 94px;
+        }
+
+        .school-car img {
+          width: 48px;
+          height: 48px;
         }
 
         .school-controls {
@@ -1775,6 +1859,7 @@
           border-radius: .5rem;
           font-size: clamp(.62rem, 2.8vw, .76rem);
           line-height: 1.05;
+          touch-action: pan-y;
         }
 
         .food-item img {
@@ -1801,6 +1886,7 @@
 
         .food-footer .start-button {
           width: min(100%, 280px);
+          min-height: 48px;
         }
 
         .bathroom-game {
@@ -1854,6 +1940,51 @@
 
         .bathroom-message {
           font-size: .88rem;
+        }
+      }
+
+      @media (min-width: 601px) and (max-height: 850px) {
+        .food-game {
+          gap: .45rem;
+          padding: .6rem;
+        }
+
+        .food-header h1 {
+          font-size: clamp(1.6rem, 4vw, 2.3rem);
+          line-height: 1.1;
+        }
+
+        .food-header p {
+          margin-top: .25rem;
+        }
+
+        .food-craving {
+          margin-top: .45rem;
+          padding: .5rem .7rem;
+        }
+
+        .kitchen-layout {
+          min-height: 0;
+        }
+
+        .food-tray {
+          align-content: stretch;
+          grid-auto-rows: minmax(0, 1fr);
+          gap: .35rem;
+          padding: .5rem;
+        }
+
+        .food-item {
+          padding: .25rem;
+        }
+
+        .food-item img {
+          width: 56px;
+          height: 48px;
+        }
+
+        .food-footer {
+          padding: .3rem 0;
         }
       }
 
@@ -2171,7 +2302,7 @@
         </div>
         <div class="school-hud">
           <span id="school-distance">Distance: 0%</span>
-          <span id="school-lives">Safety: 3</span>
+          <span id="school-lives">Bumps: 0</span>
           <span id="school-stars">Stars: 0</span>
         </div>
       </header>
@@ -2195,8 +2326,13 @@
     <section class="food-game" id="food-game" aria-labelledby="food-title" hidden>
       <header class="food-header">
         <h1 id="food-title">What should Stewart eat?</h1>
-        <p>Drag a treat from the tray onto Stewart to serve it.</p>
+        <p>Drag a treat onto Stewart, or tap a food to serve it.</p>
         <div class="food-craving" id="food-craving-prompt" aria-live="polite">Stewart is craving something sweet.</div>
+        <div class="food-shop" id="food-shop" hidden>
+          <label for="food-shop-item">Out of choices? Buy an extra serving (10 points)</label>
+          <select id="food-shop-item" aria-label="Choose an extra serving"></select>
+          <button id="buy-extra-food" type="button">Buy &amp; serve</button>
+        </div>
       </header>
       <div class="kitchen-layout">
         <div class="food-tray" aria-label="Food tray">
@@ -2310,6 +2446,9 @@
       const kitchenPetArea = document.querySelector("#kitchen-pet-area");
       const foodMessage = document.querySelector("#food-message");
       const leaveKitchenButton = document.querySelector("#leave-kitchen");
+      const foodShop = document.querySelector("#food-shop");
+      const foodShopItem = document.querySelector("#food-shop-item");
+      const buyExtraFoodButton = document.querySelector("#buy-extra-food");
       const bathroomGame = document.querySelector("#bathroom-game");
       const toothpasteTool = document.querySelector("#toothpaste-tool");
       const toothbrushTool = document.querySelector("#toothbrush-tool");
@@ -2364,6 +2503,7 @@
       let currentFoodCraving = "sweet";
       let currentFullness = 20;
       let currentCleanliness = 100;
+      const previewNeeds = { fullness: 4, energy: 8, fun: 6, cleanliness: 35 };
       let schoolFrame = 0;
       let schoolStartedAt = 0;
       let schoolLastFrameAt = 0;
@@ -2371,6 +2511,7 @@
       let schoolSpawnCount = 0;
       let schoolProgress = 0;
       let schoolLane = 1;
+      let schoolCarX = 50;
       let schoolSafety = 3;
       let schoolStarCount = 0;
       let schoolActive = false;
@@ -2659,7 +2800,7 @@
         if (lowMoodTestMode) {
           state = {
             ...state,
-            needs: { fullness: 4, energy: 8, fun: 6, cleanliness: 35 },
+            needs: { ...previewNeeds },
             food_craving: "hungry"
           };
         }
@@ -2784,6 +2925,7 @@
           item.disabled = false;
           item.classList.remove("is-used");
         });
+        updateFoodShopUI();
       }
 
       function closeKitchen() {
@@ -2959,6 +3101,7 @@
         updateBathroomTools();
         bathroomMessage.textContent = "Stewart's teeth are sparkling! Saving the clean...";
         if (lowMoodTestMode) {
+          previewNeeds.cleanliness = 100;
           currentCleanliness = 100;
           mainCleanlinessBar.style.width = "100%";
           mainCleanlinessValue.textContent = "100%";
@@ -3060,6 +3203,7 @@
               foodItem.disabled = false;
             }
           });
+          updateFoodShopUI();
           foodMessage.textContent = data.message;
           if (data.accepted) {
             document.querySelector("#care-note").textContent = `${currentPlayer} fed Stewart ${item.dataset.food}.`;
@@ -3075,6 +3219,49 @@
           });
         }
       }
+
+      async function buyAndServeExtraFood() {
+        if (buyExtraFoodButton.disabled || !currentPlayer || lowMoodTestMode) {
+          return;
+        }
+        buyExtraFoodButton.disabled = true;
+        foodShopItem.disabled = true;
+        foodMessage.textContent = `Buying an extra ${foodShopItem.selectedOptions[0]?.textContent || "serving"}...`;
+        try {
+          const { data, error } = await supabaseClient.rpc("buy_extra_food_by_player", {
+            p_player: currentPlayer,
+            p_food: foodShopItem.value
+          });
+          if (error) {
+            throw error;
+          }
+          if (data.needs) {
+            updateNeeds(data);
+          }
+          if (data.points !== undefined) {
+            document.querySelector("#points-value").textContent = String(data.points);
+          }
+          if (data.care_counts) {
+            updateCareCounts(data.care_counts);
+          }
+          if (data.accepted) {
+            document.querySelector("#care-note").textContent = data.message;
+            foodMessage.textContent = data.message;
+            updateFoodShopUI();
+          } else {
+            foodMessage.textContent = data.message || "Couldn't buy that serving.";
+          }
+        } catch (error) {
+          console.error("Could not buy an extra food serving:", error);
+          foodMessage.textContent = "Couldn't buy the extra serving. Check the connection and try again.";
+          showSyncError(error);
+        } finally {
+          foodShopItem.disabled = false;
+          updateFoodShopUI();
+        }
+      }
+
+      buyExtraFoodButton.addEventListener("click", buyAndServeExtraFood);
 
       function playStewartRefusal() {
         kitchenStewartPicture.classList.remove("is-refusing");
@@ -3146,6 +3333,14 @@
             } else {
               foodMessage.textContent = "Drop the food onto Stewart to feed him!";
             }
+          } else {
+            serveFood(item);
+          }
+        });
+
+        item.addEventListener("click", (event) => {
+          if (event.detail === 0) {
+            serveFood(item);
           }
         });
 
@@ -3174,6 +3369,41 @@
         const urgent = currentFoodCraving === "hungry" && Math.round(currentFullness) <= 5;
         careUrgentFeed.hidden = !urgent;
         kitchenUrgentFeed.hidden = !urgent;
+        updateFoodShopUI();
+      }
+
+      function updateFoodShopUI() {
+        if (lowMoodTestMode) {
+          foodShop.hidden = true;
+          return;
+        }
+        const cravingFoods = {
+          sweet: ["ice_cream", "msr", "roll", "thai_tea"],
+          thirsty: ["thai_tea", "beet_juice"],
+          hungry: ["galbi", "fish", "steak"]
+        }[currentFoodCraving] || [];
+        const eligibleItems = foodItems.filter((item) => cravingFoods.includes(item.dataset.foodKey));
+        const hasAvailableFood = eligibleItems.some((item) => !item.classList.contains("is-used"));
+        foodShop.hidden = eligibleItems.length === 0 || hasAvailableFood;
+        if (foodShop.hidden) {
+          return;
+        }
+
+        const selectedFood = foodShopItem.value;
+        foodShopItem.replaceChildren(...eligibleItems.map((item) => {
+          const option = document.createElement("option");
+          option.value = item.dataset.foodKey;
+          option.textContent = item.dataset.food;
+          return option;
+        }));
+        if (eligibleItems.some((item) => item.dataset.foodKey === selectedFood)) {
+          foodShopItem.value = selectedFood;
+        }
+        const points = Number(document.querySelector("#points-value").textContent);
+        buyExtraFoodButton.disabled = points < 10;
+        buyExtraFoodButton.textContent = points < 10
+          ? "Need 10 points"
+          : "Buy & serve (10 points)";
       }
 
       async function performCareAction(button, successMessage = "") {
@@ -3210,11 +3440,11 @@
       }
 
       function updateSchoolDisplay() {
-        schoolCar.style.left = `${[17, 50, 83][schoolLane]}%`;
+        schoolCar.style.left = `${schoolCarX}%`;
         schoolProgressFill.style.width = `${schoolProgress}%`;
         schoolProgressTrack.setAttribute("aria-valuenow", String(Math.round(schoolProgress)));
         schoolDistance.textContent = `Distance: ${Math.floor(schoolProgress)}%`;
-        schoolLives.textContent = `Safety: ${schoolSafety}`;
+        schoolLives.textContent = `Bumps: ${3 - schoolSafety}`;
         schoolStars.textContent = `Stars: ${schoolStarCount}`;
       }
 
@@ -3258,10 +3488,12 @@
         schoolSpawnCount = 0;
         schoolProgress = 0;
         schoolLane = 1;
+        schoolCarX = 50;
         schoolSafety = 3;
         schoolStarCount = 0;
         schoolActive = true;
         schoolAccelerating = false;
+        schoolRoad.classList.remove("is-crashed");
         schoolMessage.textContent = "Steer around traffic and get Stewart to school safely!";
         restartSchoolButton.hidden = true;
         setSchoolControlsDisabled(false);
@@ -3284,10 +3516,8 @@
         }
         const deltaSeconds = Math.min((now - schoolLastFrameAt) / 1000, .05);
         schoolLastFrameAt = now;
-        schoolProgress = Math.min(
-          100,
-          schoolProgress + (schoolAccelerating ? 5.2 : 3.6) * deltaSeconds
-        );
+        schoolCarX += ([17, 50, 83][schoolLane] - schoolCarX) * Math.min(1, deltaSeconds * 8);
+        schoolProgress = Math.min(100, schoolProgress + (schoolAccelerating ? 8 : 5.5) * deltaSeconds);
         schoolSpawnElapsed += deltaSeconds;
         roadMarkings.style.transform = `translateY(${(now / 1000 * 120) % 88}px)`;
         if (schoolSpawnElapsed >= 1.2) {
@@ -3299,7 +3529,8 @@
           const obstacle = schoolObstacles[index];
           obstacle.y += 23 * deltaSeconds;
           obstacle.element.style.top = `${obstacle.y}%`;
-          if (obstacle.lane === schoolLane && obstacle.y >= 75 && obstacle.y <= 87) {
+          const obstacleX = [17, 50, 83][obstacle.lane];
+          if (Math.abs(obstacleX - schoolCarX) < 12 && obstacle.y >= 75 && obstacle.y <= 87) {
             obstacle.element.remove();
             schoolObstacles.splice(index, 1);
             if (obstacle.isStar) {
@@ -3307,15 +3538,13 @@
               schoolMessage.textContent = "Nice! Stewart picked up a school-day star!";
             } else {
               schoolSafety -= 1;
-              schoolMessage.textContent = schoolSafety > 0
-                ? "Watch out! Stewart bumped a road barrier."
-                : "Too many bumps! Let's try that school run again.";
-            }
-            updateSchoolDisplay();
-            if (schoolSafety <= 0) {
+              schoolRoad.classList.add("is-crashed");
+              schoolMessage.textContent = "Crash! Stewart hit a road barrier. Try again?";
+              updateSchoolDisplay();
               endSchoolTrip(false);
               return;
             }
+            updateSchoolDisplay();
           } else if (obstacle.y > 108) {
             obstacle.element.remove();
             schoolObstacles.splice(index, 1);
@@ -3339,7 +3568,6 @@
         setSchoolControlsDisabled(true);
         if (!reachedSchool) {
           restartSchoolButton.hidden = false;
-          schoolMessage.textContent = "The car needs a quick reset. Try another route!";
           restartSchoolButton.focus();
           return;
         }
@@ -3438,6 +3666,7 @@
         soccerStage = 0;
         window.clearTimeout(soccerToastTimer);
         soccerToast.hidden = true;
+        soccerArena.classList.remove("is-intense");
         soccerActive = true;
         ballX = 76;
         ballY = 50;
@@ -3481,15 +3710,17 @@
 
         if (elapsedSeconds >= 20 && soccerStage < 2) {
           soccerStage = 2;
+          soccerArena.classList.add("is-intense");
           showSoccerToast("Stewart really wants to win!");
         } else if (elapsedSeconds >= 10 && soccerStage < 1) {
           soccerStage = 1;
+          soccerArena.classList.add("is-intense");
           showSoccerToast("Stewart is now warmed up!");
         }
 
-        const ballSpeed = soccerStage === 0 ? 32 : soccerStage === 1 ? 44 : 56;
+        const ballSpeed = soccerStage === 0 ? 40 : soccerStage === 1 ? 54 : 68;
         ballX += ballDirection * ballSpeed * deltaSeconds;
-        ballY += Math.sin(now / 420) * 10 * deltaSeconds;
+        ballY += Math.sin(now / 330) * 15 * deltaSeconds;
         ballY = Math.max(14, Math.min(86, ballY));
 
         if (ballDirection > 0 && ballX >= 86) {
@@ -3502,8 +3733,8 @@
           const arenaRect = soccerArena.getBoundingClientRect();
           const horizontalDistance = (playerX - ballX) * arenaRect.width / 100;
           const verticalDistance = (playerY - ballY) * arenaRect.height / 100;
-          const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 52;
-          if (closeEnough && now - lastPlayerHitAt > 500) {
+          const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 44;
+          if (closeEnough && now - lastPlayerHitAt > 650) {
             lastPlayerHitAt = now;
             ballDirection = 1;
             playerGoals += 1;
@@ -3549,10 +3780,28 @@
         careButtons.forEach((button) => {
           button.disabled = false;
         });
-        document.querySelector("#care-note").textContent =
+        const returnSummary =
           `${message} You returned the ball ${playerGoals} ${playerGoals === 1 ? "time" : "times"}.`;
         const playButton = careButtons.find((button) => button.dataset.care === "play");
-        await performCareAction(playButton);
+        if (lowMoodTestMode) {
+          previewNeeds.fun = Math.min(100, previewNeeds.fun + 12);
+          updateNeeds({
+            needs: previewNeeds,
+            level: Number(levelValue.textContent),
+            points: Number(pointsValue.textContent),
+            turns: Number(turnsValue.textContent),
+            goal_target: 60,
+            complete: false,
+            food_craving: currentFoodCraving
+          });
+          document.querySelector("#care-note").textContent =
+            `Preview only: ${returnSummary} Fun increased by 12%. The shared save is unchanged.`;
+        } else {
+          await performCareAction(
+            playButton,
+            `${returnSummary} Stewart's fun increased by 12%.`
+          );
+        }
         gameTitle.focus();
       }
 

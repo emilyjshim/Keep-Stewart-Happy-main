@@ -5,21 +5,28 @@ Needs gradually decrease while nobody is caring for Stewart: fullness by 12 poin
 hour, energy by 10 points per hour, and fun by 14 points per hour.
 
 The care screen shows each need as a percentage and level bar. **Food** opens the kitchen,
-where players drag food to Stewart. His shared craving determines which foods he'll
+where players can tap a food or drag it to Stewart. His shared craving determines which foods he'll
 accept; the craving cycles through sweet, thirsty, and hungry after a successful serving.
 Beet juice and ice cream are included. When Stewart is very hungry and has 5% fullness
 or less, a
 flashing **FEED ME** warning appears; at 100%, Stewart switches to his full artwork and
 refuses more food.
 
-The soccer game lasts up to 30 seconds. Stewart starts at the current ball speed, then
-gets faster at 10 seconds ("Stewart is now warmed up!") and again at 20 seconds
-("Stewart really wants to win!"); each brief message appears over the field.
+If all available foods for his current craving have been served during a kitchen visit,
+you can buy and serve an extra matching portion for 10 happy points. The purchase and
+serving happen together in the shared save; you cannot buy food when you have fewer than
+10 points.
+
+Soccer lasts up to 30 seconds. Stewart gets faster at 10 seconds ("Stewart is now
+warmed up!") and again at 20 seconds ("Stewart really wants to win!"). The faster ball
+changes direction more sharply, so time your moves to return it. Finishing soccer
+increases Stewart's fun by 12 points; the care screen confirms the increase.
 
 **School Run** opens a driving mini-game: steer between three lanes with the left and
 right arrow keys (or the on-screen buttons), and hold the up arrow to accelerate. Avoid
-road barriers and collect stars on the way to school. Completing the drive counts as a
-Play care action in the shared game; leaving early does not count.
+road barriers and collect stars on the way to school. A collision stops the drive and
+offers a retry. Completing the drive counts as a Play care action in the shared game;
+leaving early does not count.
 
 Each accepted serving lowers cleanliness by 55 points, so Stewart's teeth look dirty
 after he eats. Open the bathroom, drag toothpaste onto the toothbrush, then scrub back
@@ -30,9 +37,9 @@ and forth over his teeth until they're clean. Brushing restores cleanliness to 1
 To preview Stewart with critical needs and the **FEED ME** warning, open the page with
 `?testMood=low` appended to its URL (for example, `index.html?testMood=low`). This
 browser-only preview displays fullness at 4%, energy at 8%, fun at 6%, cleanliness at
-35%, and a hungry craving. Brushing works locally in the preview, while other care
-actions and feeding are prevented from updating Supabase. Remove the query parameter to
-return to the actual shared game state.
+35%, and a hungry craving. Brushing and soccer fun increases work locally in the
+preview, while other care actions and feeding are prevented from updating Supabase.
+Remove the query parameter to return to the actual shared game state.
 
 ## Connect the shared game
 
@@ -537,7 +544,9 @@ Run this migration after the shared food cravings migration. Existing saves star
 100% cleanliness. Each accepted food serving reduces it by 55 points, making his teeth
 look dirty; refused food does not affect cleanliness. Players can brush his teeth in the
 bathroom to restore cleanliness to 100%, and brushing counts as a care action. If you
-already ran this migration, run this same SQL again to update the food penalty.
+already ran this migration, run this same SQL again to update the food penalty and add
+the extra-food purchase function. After all matching foods are used in a kitchen visit,
+players can buy and serve one extra item from the current craving category for 10 points.
 
 ```sql
 alter table public.stewart_game
@@ -724,10 +733,60 @@ begin
 end;
 $$;
 
+create or replace function public.buy_extra_food_by_player(p_player text, p_food text)
+returns jsonb
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  v_points integer;
+  v_result jsonb;
+begin
+  if p_player is null or p_player not in ('Emily', 'Evan') then
+    raise exception 'Unknown player';
+  end if;
+
+  select points into v_points
+  from public.stewart_game
+  where id = 1
+  for update;
+
+  if not found then
+    raise exception 'Shared Stewart game is not initialized';
+  end if;
+
+  if v_points < 10 then
+    return jsonb_build_object(
+      'accepted', false,
+      'points', v_points,
+      'message', 'An extra serving costs 10 happy points.'
+    );
+  end if;
+
+  v_result := public.care_for_stewart_by_player('food', p_player, p_food);
+  if coalesce((v_result->>'accepted')::boolean, false) is not true then
+    return v_result || jsonb_build_object('points', v_points);
+  end if;
+
+  update public.stewart_game
+  set points = points - 15
+  where id = 1
+  returning points into v_points;
+
+  return v_result || jsonb_build_object(
+    'points', v_points,
+    'message', 'Extra serving purchased for 10 happy points. Stewart enjoyed it!'
+  );
+end;
+$$;
+
 revoke all on function public.get_stewart_state() from public, anon, authenticated;
 revoke all on function public.care_for_stewart_by_player(text, text, text) from public, anon, authenticated;
 revoke all on function public.clean_stewart_teeth_by_player(text) from public, anon, authenticated;
+revoke all on function public.buy_extra_food_by_player(text, text) from public, anon, authenticated;
 grant execute on function public.get_stewart_state() to anon, authenticated;
 grant execute on function public.care_for_stewart_by_player(text, text, text) to anon, authenticated;
 grant execute on function public.clean_stewart_teeth_by_player(text) to anon, authenticated;
+grant execute on function public.buy_extra_food_by_player(text, text) to anon, authenticated;
 ```
