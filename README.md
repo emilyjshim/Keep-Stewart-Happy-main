@@ -12,22 +12,27 @@ and fish are free for hunger; ice cream is the free sweet. When Stewart is very 
 5% fullness or less, a flashing **FEED ME** warning appears; at 100%, Stewart switches to his
 full artwork and refuses more food.
 
-The food shop stays visible and sells paid servings that match Stewart's current craving.
+The kitchen presents free foods and paid foods as separate card menus. The paid shop always
+shows every paid food and its point price. Cards are disabled when they do not match
+Stewart's current craving or the player cannot afford them.
 Thai tea and beet juice cost 8 happy points, cinnamon rolls 10, Galbi 12, mango sticky rice
 15, sushi 20, steak 22, Creme brulee 25, caviar 50, and wagyu 60. Each free tray item can
 be served once until the page is refreshed; closing and reopening the kitchen does not
 restore used food. A purchase and serving happen together in the shared save.
 
 Soccer lasts up to 30 seconds. Stewart gets faster at 10 seconds ("Stewart is now
-warmed up!") and again at 20 seconds ("Stewart really wants to win!"). The faster ball
-changes direction more sharply, so time your moves to return it. Finishing soccer
-increases Stewart's fun by 12 points; the care screen confirms the increase.
+warmed up!") and again at 20 seconds ("Stewart really wants to win!"). The ball moves
+faster and follows a wider, quicker vertical path as the match progresses; move the
+yellow player dot carefully to return it. Finishing soccer increases Stewart's fun by
+12 points; the care screen confirms the increase.
 
 **School Run** opens a driving mini-game: steer between three lanes with the left and
 right arrow keys (or the on-screen buttons), and hold the up arrow to accelerate. Avoid
-road barriers and collect stars on the way to school. A collision stops the drive and
-offers a retry. Completing the drive counts as a Play care action in the shared game;
-leaving early does not count.
+road barriers and collect stars on the way to school. Obstacles move faster and are spaced
+slightly farther apart; accelerating gets Stewart there sooner but gives you less time to react.
+A collision stops the drive and offers a retry. Completing the drive counts as a Play
+care action and records that Stewart went to school today. The care screen reports whether
+he still needs to go or is at school (he rides the bus home); leaving early does not count.
 
 Each accepted serving lowers cleanliness by 55 points, so Stewart's teeth look dirty
 after he eats. Open the bathroom, drag toothpaste onto the toothbrush, then scrub back
@@ -45,9 +50,10 @@ Remove the query parameter to return to the actual shared game state.
 ## Connect the shared game
 
 1. Use your existing Supabase project at [supabase.com](https://supabase.com/); no second project is needed.
-2. In the Supabase dashboard, open **SQL Editor**, create a query, paste the SQL below,
-   and run it. Then run the **Add shared cleanliness and dental care** migration at the
-   end of this document in a separate query.
+2. In the Supabase dashboard, open **SQL Editor**, create a query, paste the setup SQL below,
+   and run it. Then run the **Add shared food cravings** migration followed by the
+   **Add shared cleanliness, dental care, and school attendance** migration at the end of
+   this document, each in a separate query.
 3. In **Project Settings → API**, copy the **Project URL** and the **anon/public key**.
    Never use or publish the `service_role` key in this website.
 4. Ensure `SUPABASE_URL` and `SUPABASE_ANON_KEY` in `index.html` contain that project's
@@ -539,19 +545,23 @@ grant execute on function public.get_stewart_state() to anon, authenticated;
 grant execute on function public.care_for_stewart_by_player(text, text, text) to anon, authenticated;
 ```
 
-## Add shared cleanliness and dental care
+## Add shared cleanliness, dental care, and school attendance
 
 Run this migration after the shared food cravings migration. Existing saves start at
 100% cleanliness. Each accepted food serving reduces it by 55 points, making his teeth
 look dirty; refused food does not affect cleanliness. Players can brush his teeth in the
-bathroom to restore cleanliness to 100%, and brushing counts as a care action. If you
-already ran this migration, run this same SQL again to add the new free and paid foods,
-update which foods satisfy each craving, and install the food-shop prices.
+bathroom to restore cleanliness to 100%, and brushing counts as a care action. A successful
+School Run records the current date as Stewart's school day, and the care screen shows when
+he has gone; he rides the bus home. If you already ran this migration, run this updated SQL
+again to add school attendance, the free and paid foods, and food-shop prices.
 
 ```sql
 alter table public.stewart_game
   add column if not exists cleanliness numeric not null default 100
     check (cleanliness between 0 and 100);
+
+alter table public.stewart_game
+  add column if not exists school_date date;
 
 create or replace function public.get_stewart_state()
 returns jsonb
@@ -585,6 +595,7 @@ begin
     'points', v_game.points,
     'turns', v_game.turns,
     'food_craving', v_game.food_craving,
+    'school_today', coalesce(v_game.school_date = current_date, false),
     'goal_target', v_game.goal_target,
     'complete', v_game.is_complete
   );
@@ -662,13 +673,14 @@ begin
     end;
   end if;
 
-  v_result := public.care_for_stewart(p_action);
+  v_result := public.care_for_stewart(case when p_action = 'school' then 'play' else p_action end);
 
   update public.stewart_game
   set emily_care_count = emily_care_count + case when p_player = 'Emily' then 1 else 0 end,
       evan_care_count = evan_care_count + case when p_player = 'Evan' then 1 else 0 end,
       food_craving = coalesce(v_next_craving, food_craving),
-      cleanliness = case when p_action = 'food' then greatest(0::numeric, cleanliness - 55) else cleanliness end
+      cleanliness = case when p_action = 'food' then greatest(0::numeric, cleanliness - 55) else cleanliness end,
+      school_date = case when p_action = 'school' then current_date else school_date end
   where id = 1
   returning emily_care_count, evan_care_count, cleanliness
   into v_emily_count, v_evan_count, v_cleanliness;
@@ -677,6 +689,7 @@ begin
     'needs', (v_result->'needs') || jsonb_build_object('cleanliness', round(v_cleanliness, 1)),
     'accepted', true,
     'food_craving', (select food_craving from public.stewart_game where id = 1),
+    'school_today', coalesce((select school_date = current_date from public.stewart_game where id = 1), false),
     'care_counts', jsonb_build_object(
       'emily_care_count', v_emily_count,
       'evan_care_count', v_evan_count

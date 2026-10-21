@@ -572,6 +572,22 @@
         font-size: .95rem;
       }
 
+      .school-status {
+        margin: .75rem 0;
+        padding: .6rem .75rem;
+        border: 1px solid #c3d8bb;
+        border-radius: .65rem;
+        background: #f0f7eb;
+        color: #385d40;
+        font-size: .92rem;
+        font-weight: 700;
+      }
+
+      .school-status[data-school-today="true"] {
+        border-color: #91c18b;
+        background: #e1f3dc;
+      }
+
       .sync-status {
         margin: .75rem 0 0;
         color: #526b5a;
@@ -1132,82 +1148,56 @@
 
       .food-shop {
         display: grid;
-        grid-template-areas:
-          "label preview select button"
-          "note preview select button";
-        grid-template-columns: minmax(190px, 1fr) 64px minmax(180px, .9fr) minmax(145px, .65fr);
-        align-items: center;
-        gap: .35rem .6rem;
-        width: min(100%, 940px);
-        margin: .65rem auto 0;
-        padding: .55rem .7rem;
+        gap: .45rem;
+        min-width: 0;
+        padding: .75rem;
         border: 1px solid rgb(255 255 255 / 76%);
         border-radius: .8rem;
-        background: rgb(23 49 31 / 92%);
+        background: rgb(255 255 255 / 82%);
         box-shadow: 0 6px 20px rgb(0 0 0 / 30%);
+        color: #28583c;
+        text-align: left;
+      }
+
+      .food-shop[hidden] {
+        display: none;
+      }
+
+      .food-shop-heading {
+        margin: 0;
+        color: #23452f;
+        font-size: 1.02rem;
         text-shadow: none;
       }
 
-      .food-shop label {
-        grid-area: label;
-        color: #fff;
-        font-weight: 700;
-      }
-
       .food-shop-note {
-        grid-area: note;
         margin: 0;
-        color: #e2f2dc;
+        color: #526b5a;
         font-size: .8rem;
         line-height: 1.3;
-      }
-
-      .food-shop-preview {
-        grid-area: preview;
-        width: 64px;
-        height: 58px;
-        object-fit: contain;
-        filter: drop-shadow(0 3px 5px rgb(0 0 0 / 25%));
-      }
-
-      .food-shop select,
-      .food-shop button {
-        min-width: 0;
-        min-height: 42px;
-        padding: .45rem .7rem;
-        border: 1px solid #8fb791;
-        border-radius: .5rem;
-        background: #fff;
-        color: #28583c;
-        font: inherit;
-        width: 100%;
-      }
-
-      .food-shop select {
-        grid-area: select;
-      }
-
-      .food-shop button {
-        grid-area: button;
-        font-weight: 700;
-        cursor: pointer;
-        background: #d9efc8;
-      }
-
-      .food-shop button:disabled {
-        opacity: .55;
-        cursor: not-allowed;
+        text-shadow: none;
       }
 
       .kitchen-layout {
         display: grid;
-        grid-template-columns: minmax(190px, 250px) minmax(0, 1fr);
+        grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
         gap: clamp(1rem, 3vw, 2rem);
         width: min(100%, 1100px);
         flex: 1;
         min-height: 300px;
         margin: 0 auto;
         align-items: stretch;
+      }
+
+      .food-options {
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+        min-width: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-gutter: stable;
       }
 
       .food-tray {
@@ -1220,6 +1210,14 @@
         border-radius: .8rem;
         background: rgb(255 255 255 / 83%);
         box-shadow: 0 8px 24px rgb(0 0 0 / 16%);
+      }
+
+      .food-tray-heading {
+        grid-column: 1 / -1;
+        margin: 0;
+        color: #28583c;
+        font-size: .98rem;
+        text-align: center;
       }
 
       .food-item {
@@ -1260,6 +1258,26 @@
       .food-item.is-used {
         opacity: .42;
         cursor: default;
+      }
+
+      .food-shop-item {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .food-shop-item[hidden] {
+        display: none;
+      }
+
+      .food-shop-item:disabled {
+        opacity: .52;
+        cursor: not-allowed;
+      }
+
+      .food-shop-item .food-item-price {
+        color: #47724e;
+        font-size: .74rem;
+        font-weight: 800;
       }
 
       .kitchen-pet-area {
@@ -1863,19 +1881,11 @@
         }
 
         .food-shop {
-          grid-template-areas:
-            "label label"
-            "note note"
-            "preview select"
-            "button button";
-          grid-template-columns: 52px minmax(0, 1fr);
-          gap: .25rem .45rem;
-          width: 100%;
-          margin-top: .45rem;
-          padding: .45rem .55rem;
+          gap: .35rem;
+          padding: .55rem;
         }
 
-        .food-shop label {
+        .food-shop-heading {
           font-size: .88rem;
         }
 
@@ -1883,24 +1893,34 @@
           font-size: .72rem;
         }
 
-        .food-shop-preview {
-          width: 50px;
-          height: 44px;
+        .food-shop .food-tray {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: .25rem;
+          padding: .3rem;
         }
 
-        .food-shop select,
-        .food-shop button {
-          min-height: 38px;
-          padding: .35rem .5rem;
-          font-size: .82rem;
+        .food-shop .food-item {
+          min-height: 68px;
+          padding: .15rem .05rem;
+          font-size: clamp(.58rem, 2.6vw, .7rem);
+        }
+
+        .food-shop .food-item img {
+          width: min(100%, 38px);
+          height: 34px;
         }
 
         .kitchen-layout {
           grid-template-columns: 1fr;
-          grid-template-rows: auto clamp(200px, 30dvh, 290px);
+          grid-template-rows: auto clamp(180px, 28dvh, 260px);
           gap: .5rem;
           flex: 0 0 auto;
           min-height: 0;
+        }
+
+        .food-options {
+          max-height: none;
+          overflow: visible;
         }
 
         .food-tray {
@@ -1917,6 +1937,11 @@
           font-size: clamp(.62rem, 2.8vw, .76rem);
           line-height: 1.05;
           touch-action: pan-y;
+        }
+
+        .food-shop .food-item {
+          min-height: 68px;
+          font-size: clamp(.58rem, 2.6vw, .7rem);
         }
 
         .food-item img {
@@ -2046,18 +2071,6 @@
       }
 
       @media (min-width: 601px) and (max-width: 760px) {
-        .food-shop {
-          grid-template-areas:
-            "label label label"
-            "note note note"
-            "preview select button";
-          grid-template-columns: 50px minmax(0, 1fr) minmax(120px, .7fr);
-        }
-
-        .food-shop-preview {
-          width: 50px;
-          height: 46px;
-        }
       }
 
       @media (max-width: 380px) {
@@ -2290,6 +2303,9 @@
         </div>
         <span id="goal-count">0 of 3 needs ready</span>
       </div>
+      <p class="school-status" id="school-status" role="status" aria-live="polite" data-school-today="false">
+        Stewart still needs to go to school today.
+      </p>
       <div class="game-layout">
         <div class="pet-display">
           <p class="urgent-feed" id="care-urgent-feed" hidden>FEED ME!!!</p>
@@ -2398,26 +2414,27 @@
     <section class="food-game" id="food-game" aria-labelledby="food-title" hidden>
       <header class="food-header">
         <h1 id="food-title">What should Stewart eat?</h1>
-        <p>Drag or tap a free meal, or shop with happy points for more choices.</p>
+        <p>Drag or tap a food card onto Stewart. Shop cards cost happy points.</p>
         <div class="food-craving" id="food-craving-prompt" aria-live="polite">Stewart is craving something sweet.</div>
-        <div class="food-shop" id="food-shop">
-          <label for="food-shop-item">Happy-points food shop</label>
-          <p class="food-shop-note" id="food-shop-note">Need more food? Shop for an extra serving that matches Stewart's craving.</p>
-          <img class="food-shop-preview" id="food-shop-preview" src="pictrues/cremebrulee.webp" alt="Creme brulee">
-          <select id="food-shop-item" aria-label="Choose food to buy"></select>
-          <button id="buy-extra-food" type="button">Buy &amp; serve</button>
-        </div>
       </header>
       <div class="kitchen-layout">
-        <div class="food-tray" aria-label="Free food tray">
-          <button class="food-item" type="button" data-food="Water" data-food-key="water"><img src="pictrues/water.jpg" alt="">Water</button>
-          <button class="food-item" type="button" data-food="Milk" data-food-key="milk"><img src="pictrues/milk.webp" alt="">Milk</button>
-          <button class="food-item" type="button" data-food="School lunch" data-food-key="school"><img src="pictrues/school.webp" alt="">School lunch</button>
-          <button class="food-item" type="button" data-food="Protein" data-food-key="protein"><img src="pictrues/protein.png" alt="">Protein</button>
-          <button class="food-item" type="button" data-food="Yogurt" data-food-key="yogurt"><img src="pictrues/yogurt.webp" alt="">Yogurt</button>
-          <button class="food-item" type="button" data-food="DTR" data-food-key="dtr"><img src="pictrues/chickennrice.webp" alt="">DTR</button>
-          <button class="food-item" type="button" data-food="Fish" data-food-key="fish"><img src="pictrues/fish.png" alt="">Fish</button>
-          <button class="food-item" type="button" data-food="Ice cream" data-food-key="ice_cream"><img src="pictrues/ice cream.webp" alt="">Ice cream</button>
+        <div class="food-options">
+          <div class="food-tray" aria-label="Free food menu">
+            <h2 class="food-tray-heading">Free food menu</h2>
+            <button class="food-item" type="button" data-food="Water" data-food-key="water"><img src="pictrues/water.jpg" alt="">Water</button>
+            <button class="food-item" type="button" data-food="Milk" data-food-key="milk"><img src="pictrues/milk.webp" alt="">Milk</button>
+            <button class="food-item" type="button" data-food="School lunch" data-food-key="school"><img src="pictrues/school.webp" alt="">School lunch</button>
+            <button class="food-item" type="button" data-food="Protein" data-food-key="protein"><img src="pictrues/protein.png" alt="">Protein</button>
+            <button class="food-item" type="button" data-food="Yogurt" data-food-key="yogurt"><img src="pictrues/yogurt.webp" alt="">Yogurt</button>
+            <button class="food-item" type="button" data-food="DTR" data-food-key="dtr"><img src="pictrues/chickennrice.webp" alt="">DTR</button>
+            <button class="food-item" type="button" data-food="Fish" data-food-key="fish"><img src="pictrues/fish.png" alt="">Fish</button>
+            <button class="food-item" type="button" data-food="Ice cream" data-food-key="ice_cream"><img src="pictrues/ice cream.webp" alt="">Ice cream</button>
+          </div>
+          <section class="food-shop" id="food-shop" aria-labelledby="food-shop-heading">
+            <h2 class="food-tray-heading food-shop-heading" id="food-shop-heading">Happy-points shop</h2>
+            <p class="food-shop-note" id="food-shop-note">Paid food options that match Stewart's craving.</p>
+            <div class="food-tray food-shop-grid" id="food-shop-grid" aria-label="Paid food menu"></div>
+          </section>
         </div>
         <div class="kitchen-pet-area" id="kitchen-pet-area" aria-label="Drop food here to feed Stewart">
           <p class="urgent-feed" id="kitchen-urgent-feed" hidden>FEED ME!!!</p>
@@ -2516,15 +2533,14 @@
       const restartSchoolButton = document.querySelector("#restart-school");
       const leaveSchoolButton = document.querySelector("#leave-school");
       const foodGame = document.querySelector("#food-game");
-      const foodItems = [...document.querySelectorAll(".food-item")];
+      const foodItems = [...document.querySelectorAll(".food-tray:not(.food-shop-grid) .food-item")];
       const kitchenPetArea = document.querySelector("#kitchen-pet-area");
       const foodMessage = document.querySelector("#food-message");
       const leaveKitchenButton = document.querySelector("#leave-kitchen");
       const foodShop = document.querySelector("#food-shop");
-      const foodShopItem = document.querySelector("#food-shop-item");
+      const foodShopGrid = document.querySelector("#food-shop-grid");
       const foodShopNote = document.querySelector("#food-shop-note");
-      const foodShopPreview = document.querySelector("#food-shop-preview");
-      const buyExtraFoodButton = document.querySelector("#buy-extra-food");
+      const foodShopItems = [];
       const foodProducts = {
         water: { name: "Water", cravings: ["thirsty"], free: true, image: "pictrues/water.jpg" },
         milk: { name: "Milk", cravings: ["thirsty"], free: true, image: "pictrues/milk.webp" },
@@ -2545,6 +2561,28 @@
         caviar: { name: "Caviar", cravings: ["hungry"], price: 50, image: "pictrues/caviar.png" },
         wagyu: { name: "Wagyu", cravings: ["hungry"], price: 60, image: "pictrues/wagyu.webp" }
       };
+      Object.entries(foodProducts).forEach(([key, product]) => {
+        if (product.free) {
+          return;
+        }
+        const item = document.createElement("button");
+        item.className = "food-item food-shop-item";
+        item.type = "button";
+        item.dataset.foodKey = key;
+        item.setAttribute("aria-label", `${product.name}, ${product.price} happy points`);
+        const image = document.createElement("img");
+        image.src = product.image;
+        image.alt = "";
+        const name = document.createElement("span");
+        name.textContent = product.name;
+        const price = document.createElement("span");
+        price.className = "food-item-price";
+        price.textContent = `${product.price} points`;
+        item.append(image, name, price);
+        item.addEventListener("click", () => buyAndServeExtraFood(key));
+        foodShopGrid.append(item);
+        foodShopItems.push(item);
+      });
       const bathroomGame = document.querySelector("#bathroom-game");
       const toothpasteTool = document.querySelector("#toothpaste-tool");
       const toothbrushTool = document.querySelector("#toothbrush-tool");
@@ -2565,6 +2603,7 @@
       const foodCravingPrompt = document.querySelector("#food-craving-prompt");
       const testModeBanner = document.querySelector("#test-mode-banner");
       const playerName = document.querySelector("#player-name");
+      const schoolStatus = document.querySelector("#school-status");
       const careCountStatus = document.querySelector("#care-count-status");
       const playerSignInButtons = [...document.querySelectorAll("[data-player]")];
       const lowMoodTestMode = new URLSearchParams(window.location.search).get("testMood") === "low";
@@ -2904,6 +2943,7 @@
         currentFullness = Number(needs.fullness);
         currentCleanliness = Number(needs.cleanliness ?? currentCleanliness);
         currentFoodCraving = state.food_craving || currentFoodCraving;
+        updateSchoolStatus(state.school_today === true);
         for (const [need, value] of Object.entries(needs)) {
           const bar = document.querySelector(`#${need}-bar`);
           const label = document.querySelector(`#${need}-value`);
@@ -2953,9 +2993,17 @@
         levelValue.textContent = String(state.level);
         pointsValue.textContent = String(state.points);
         turnsValue.textContent = String(state.turns);
+        updateFoodShopUI();
         goalLabel.textContent = state.complete
           ? "Amazing! Stewart is thriving — you completed every care goal!"
           : `Level ${state.level} goal: get every need to ${state.goal_target}%`;
+      }
+
+      function updateSchoolStatus(isAtSchool) {
+        schoolStatus.dataset.schoolToday = String(isAtSchool);
+        schoolStatus.textContent = isAtSchool
+          ? "Stewart is at school today — he'll ride the bus home."
+          : "Stewart still needs to go to school today.";
       }
 
       function updatePetArtwork(isOverfull = Math.round(currentFullness) >= 100) {
@@ -3315,17 +3363,20 @@
         }
       }
 
-      async function buyAndServeExtraFood() {
-        if (buyExtraFoodButton.disabled || !currentPlayer || lowMoodTestMode) {
+      async function buyAndServeExtraFood(foodKey) {
+        const item = foodShopItems.find((shopItem) => shopItem.dataset.foodKey === foodKey);
+        const product = foodProducts[foodKey];
+        if (!item || !product || item.disabled || !currentPlayer || lowMoodTestMode) {
           return;
         }
-        buyExtraFoodButton.disabled = true;
-        foodShopItem.disabled = true;
-        foodMessage.textContent = `Buying an extra ${foodShopItem.selectedOptions[0]?.textContent || "serving"}...`;
+        foodShopItems.forEach((shopItem) => {
+          shopItem.disabled = true;
+        });
+        foodMessage.textContent = `Buying ${product.name} for ${product.price} points...`;
         try {
           const { data, error } = await supabaseClient.rpc("buy_extra_food_by_player", {
             p_player: currentPlayer,
-            p_food: foodShopItem.value
+            p_food: foodKey
           });
           if (error) {
             throw error;
@@ -3351,13 +3402,12 @@
           foodMessage.textContent = "Couldn't buy the extra serving. Check the connection and try again.";
           showSyncError(error);
         } finally {
-          foodShopItem.disabled = false;
+          foodShopItems.forEach((shopItem) => {
+            shopItem.disabled = false;
+          });
           updateFoodShopUI();
         }
       }
-
-      buyExtraFoodButton.addEventListener("click", buyAndServeExtraFood);
-      foodShopItem.addEventListener("change", updateFoodShopUI);
 
       function playStewartRefusal() {
         kitchenStewartPicture.classList.remove("is-refusing");
@@ -3471,28 +3521,18 @@
       function updateFoodShopUI() {
         const eligibleProducts = Object.entries(foodProducts)
           .filter(([, product]) => !product.free && product.cravings.includes(currentFoodCraving));
-        foodShop.hidden = eligibleProducts.length === 0;
-        if (foodShop.hidden) {
-          return;
-        }
-
-        const selectedFood = foodShopItem.value;
-        foodShopItem.replaceChildren(...eligibleProducts.map(([key, product]) => {
-          const option = document.createElement("option");
-          option.value = key;
-          option.textContent = `${product.name} — ${product.price} points`;
-          return option;
-        }));
-        if (eligibleProducts.some(([key]) => key === selectedFood)) {
-          foodShopItem.value = selectedFood;
-        }
-        const product = foodProducts[foodShopItem.value];
-        if (!product) {
-          throw new Error(`No shop details found for ${foodShopItem.value || "the selected food"}.`);
-        }
-        foodShopPreview.src = product.image;
-        foodShopPreview.alt = product.name;
+        const eligibleKeys = new Set(eligibleProducts.map(([key]) => key));
         const points = Number(document.querySelector("#points-value").textContent);
+        foodShopItems.forEach((item) => {
+          const product = foodProducts[item.dataset.foodKey];
+          const matchesCraving = eligibleKeys.has(item.dataset.foodKey);
+          const canAfford = points >= product.price;
+          item.disabled = lowMoodTestMode || !matchesCraving || !canAfford;
+          item.setAttribute(
+            "aria-label",
+            `${product.name}, ${product.price} happy points${!matchesCraving ? `, for ${product.cravings.join(" or ")} cravings` : ""}${!canAfford ? ", not enough points" : ""}${lowMoodTestMode ? ", purchases disabled in preview mode" : ""}`
+          );
+        });
         const freeFoodCount = foodItems.filter((item) =>
           foodProducts[item.dataset.foodKey]?.cravings.includes(currentFoodCraving)
           && !item.classList.contains("is-used")
@@ -3504,17 +3544,14 @@
         } else if (freeFoodCount === 1) {
           foodShopNote.textContent = "Only one free option is left for this craving — shopping adds more choices.";
         } else {
-          foodShopNote.textContent = "Free options are available below. Shop for a different meal or premium treat.";
+          foodShopNote.textContent = "All paid foods are listed below. Choices that don't match Stewart's craving or your points are disabled.";
         }
-        buyExtraFoodButton.disabled = lowMoodTestMode || points < product.price;
-        buyExtraFoodButton.textContent = lowMoodTestMode
-          ? "Preview only"
-          : points < product.price
-            ? `Need ${product.price} points`
-            : `Buy & serve (${product.price} points)`;
+        if (!lowMoodTestMode && points === 0) {
+          foodShopNote.textContent += " Earn happy points by caring for Stewart.";
+        }
       }
 
-      async function performCareAction(button, successMessage = "") {
+      async function performCareAction(button, successMessage = "", actionOverride = null) {
         if (!button) {
           return false;
         }
@@ -3526,7 +3563,7 @@
         button.disabled = true;
         try {
           const { data, error } = await supabaseClient.rpc("care_for_stewart_by_player", {
-            p_action: button.dataset.care,
+            p_action: actionOverride || button.dataset.care,
             p_player: currentPlayer,
             p_food: null
           });
@@ -3625,17 +3662,17 @@
         const deltaSeconds = Math.min((now - schoolLastFrameAt) / 1000, .05);
         schoolLastFrameAt = now;
         schoolCarX += ([17, 50, 83][schoolLane] - schoolCarX) * Math.min(1, deltaSeconds * 8);
-        schoolProgress = Math.min(100, schoolProgress + (schoolAccelerating ? 8 : 5.5) * deltaSeconds);
+        schoolProgress = Math.min(100, schoolProgress + (schoolAccelerating ? 7.5 : 5.2) * deltaSeconds);
         schoolSpawnElapsed += deltaSeconds;
         roadMarkings.style.transform = `translateY(${(now / 1000 * 120) % 88}px)`;
-        if (schoolSpawnElapsed >= 1.2) {
-          schoolSpawnElapsed -= 1.2;
+        if (schoolSpawnElapsed >= 1.1) {
+          schoolSpawnElapsed -= 1.1;
           spawnSchoolObstacle();
         }
 
         for (let index = schoolObstacles.length - 1; index >= 0; index -= 1) {
           const obstacle = schoolObstacles[index];
-          obstacle.y += 23 * deltaSeconds;
+          obstacle.y += 33 * deltaSeconds;
           obstacle.element.style.top = `${obstacle.y}%`;
           const obstacleX = [17, 50, 83][obstacle.lane];
           if (Math.abs(obstacleX - schoolCarX) < 12 && obstacle.y >= 75 && obstacle.y <= 87) {
@@ -3693,7 +3730,8 @@
         } else {
           await performCareAction(
             playButton,
-            `School run complete! Stewart made it to school safely and found ${schoolStarCount} ${schoolStarCount === 1 ? "star" : "stars"}.`
+            `School run complete! Stewart made it to school safely and found ${schoolStarCount} ${schoolStarCount === 1 ? "star" : "stars"}.`,
+            "school"
           );
         }
         gameTitle.focus();
@@ -3826,10 +3864,9 @@
           showSoccerToast("Stewart is now warmed up!");
         }
 
-        const ballSpeed = soccerStage === 0 ? 40 : soccerStage === 1 ? 54 : 68;
+        const ballSpeed = soccerStage === 0 ? 46 : soccerStage === 1 ? 65 : 84;
         ballX += ballDirection * ballSpeed * deltaSeconds;
-        ballY += Math.sin(now / 330) * 15 * deltaSeconds;
-        ballY = Math.max(14, Math.min(86, ballY));
+        ballY = 50 + Math.sin(now / 250) * (24 + soccerStage * 6);
 
         if (ballDirection > 0 && ballX >= 86) {
           ballDirection = -1;
@@ -3841,7 +3878,7 @@
           const arenaRect = soccerArena.getBoundingClientRect();
           const horizontalDistance = (playerX - ballX) * arenaRect.width / 100;
           const verticalDistance = (playerY - ballY) * arenaRect.height / 100;
-          const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 44;
+          const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 38;
           if (closeEnough && now - lastPlayerHitAt > 650) {
             lastPlayerHitAt = now;
             ballDirection = 1;
