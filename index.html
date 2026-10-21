@@ -1130,32 +1130,49 @@
         letter-spacing: .12em;
       }
 
-      .food-shop[hidden] {
-        display: none;
-      }
-
       .food-shop {
-        display: flex;
+        display: grid;
+        grid-template-areas:
+          "label preview select button"
+          "note preview select button";
+        grid-template-columns: minmax(190px, 1fr) 64px minmax(180px, .9fr) minmax(145px, .65fr);
         align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: .5rem;
-        width: fit-content;
-        max-width: 100%;
-        margin: .6rem auto 0;
+        gap: .35rem .6rem;
+        width: min(100%, 940px);
+        margin: .65rem auto 0;
         padding: .55rem .7rem;
-        border: 1px solid rgb(255 255 255 / 75%);
-        border-radius: .75rem;
-        background: rgb(23 49 31 / 82%);
-        box-shadow: 0 5px 18px rgb(0 0 0 / 30%);
+        border: 1px solid rgb(255 255 255 / 76%);
+        border-radius: .8rem;
+        background: rgb(23 49 31 / 92%);
+        box-shadow: 0 6px 20px rgb(0 0 0 / 30%);
+        text-shadow: none;
       }
 
       .food-shop label {
+        grid-area: label;
+        color: #fff;
         font-weight: 700;
+      }
+
+      .food-shop-note {
+        grid-area: note;
+        margin: 0;
+        color: #e2f2dc;
+        font-size: .8rem;
+        line-height: 1.3;
+      }
+
+      .food-shop-preview {
+        grid-area: preview;
+        width: 64px;
+        height: 58px;
+        object-fit: contain;
+        filter: drop-shadow(0 3px 5px rgb(0 0 0 / 25%));
       }
 
       .food-shop select,
       .food-shop button {
+        min-width: 0;
         min-height: 42px;
         padding: .45rem .7rem;
         border: 1px solid #8fb791;
@@ -1163,11 +1180,18 @@
         background: #fff;
         color: #28583c;
         font: inherit;
+        width: 100%;
+      }
+
+      .food-shop select {
+        grid-area: select;
       }
 
       .food-shop button {
+        grid-area: button;
         font-weight: 700;
         cursor: pointer;
+        background: #d9efc8;
       }
 
       .food-shop button:disabled {
@@ -1177,7 +1201,7 @@
 
       .kitchen-layout {
         display: grid;
-        grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+        grid-template-columns: minmax(190px, 250px) minmax(0, 1fr);
         gap: clamp(1rem, 3vw, 2rem);
         width: min(100%, 1100px);
         flex: 1;
@@ -1838,6 +1862,39 @@
           line-height: 1.3;
         }
 
+        .food-shop {
+          grid-template-areas:
+            "label label"
+            "note note"
+            "preview select"
+            "button button";
+          grid-template-columns: 52px minmax(0, 1fr);
+          gap: .25rem .45rem;
+          width: 100%;
+          margin-top: .45rem;
+          padding: .45rem .55rem;
+        }
+
+        .food-shop label {
+          font-size: .88rem;
+        }
+
+        .food-shop-note {
+          font-size: .72rem;
+        }
+
+        .food-shop-preview {
+          width: 50px;
+          height: 44px;
+        }
+
+        .food-shop select,
+        .food-shop button {
+          min-height: 38px;
+          padding: .35rem .5rem;
+          font-size: .82rem;
+        }
+
         .kitchen-layout {
           grid-template-columns: 1fr;
           grid-template-rows: auto clamp(200px, 30dvh, 290px);
@@ -1985,6 +2042,21 @@
 
         .food-footer {
           padding: .3rem 0;
+        }
+      }
+
+      @media (min-width: 601px) and (max-width: 760px) {
+        .food-shop {
+          grid-template-areas:
+            "label label label"
+            "note note note"
+            "preview select button";
+          grid-template-columns: 50px minmax(0, 1fr) minmax(120px, .7fr);
+        }
+
+        .food-shop-preview {
+          width: 50px;
+          height: 46px;
         }
       }
 
@@ -2326,23 +2398,25 @@
     <section class="food-game" id="food-game" aria-labelledby="food-title" hidden>
       <header class="food-header">
         <h1 id="food-title">What should Stewart eat?</h1>
-        <p>Drag a treat onto Stewart, or tap a food to serve it.</p>
+        <p>Drag or tap a free meal, or shop with happy points for more choices.</p>
         <div class="food-craving" id="food-craving-prompt" aria-live="polite">Stewart is craving something sweet.</div>
-        <div class="food-shop" id="food-shop" hidden>
-          <label for="food-shop-item">Out of choices? Buy an extra serving (10 points)</label>
-          <select id="food-shop-item" aria-label="Choose an extra serving"></select>
+        <div class="food-shop" id="food-shop">
+          <label for="food-shop-item">Happy-points food shop</label>
+          <p class="food-shop-note" id="food-shop-note">Need more food? Shop for an extra serving that matches Stewart's craving.</p>
+          <img class="food-shop-preview" id="food-shop-preview" src="pictrues/cremebrulee.webp" alt="Creme brulee">
+          <select id="food-shop-item" aria-label="Choose food to buy"></select>
           <button id="buy-extra-food" type="button">Buy &amp; serve</button>
         </div>
       </header>
       <div class="kitchen-layout">
-        <div class="food-tray" aria-label="Food tray">
-          <button class="food-item" type="button" data-food="Galbi" data-food-key="galbi"><img src="pictrues/galbi.webp" alt="">Galbi</button>
+        <div class="food-tray" aria-label="Free food tray">
+          <button class="food-item" type="button" data-food="Water" data-food-key="water"><img src="pictrues/water.jpg" alt="">Water</button>
+          <button class="food-item" type="button" data-food="Milk" data-food-key="milk"><img src="pictrues/milk.webp" alt="">Milk</button>
+          <button class="food-item" type="button" data-food="School lunch" data-food-key="school"><img src="pictrues/school.webp" alt="">School lunch</button>
+          <button class="food-item" type="button" data-food="Protein" data-food-key="protein"><img src="pictrues/protein.png" alt="">Protein</button>
+          <button class="food-item" type="button" data-food="Yogurt" data-food-key="yogurt"><img src="pictrues/yogurt.webp" alt="">Yogurt</button>
+          <button class="food-item" type="button" data-food="DTR" data-food-key="dtr"><img src="pictrues/chickennrice.webp" alt="">DTR</button>
           <button class="food-item" type="button" data-food="Fish" data-food-key="fish"><img src="pictrues/fish.png" alt="">Fish</button>
-          <button class="food-item" type="button" data-food="Steak" data-food-key="steak"><img src="pictrues/meat.webp" alt="">Steak</button>
-          <button class="food-item" type="button" data-food="Mango sticky rice" data-food-key="msr"><img src="pictrues/msr.png" alt="">Mango sticky rice</button>
-          <button class="food-item" type="button" data-food="Thai tea" data-food-key="thai_tea"><img src="pictrues/thaitea.png" alt="">Thai tea</button>
-          <button class="food-item" type="button" data-food="Cinnamon roll" data-food-key="roll"><img src="pictrues/roll.png" alt="">Cinnamon roll</button>
-          <button class="food-item" type="button" data-food="Beet juice" data-food-key="beet_juice"><img src="pictrues/beet.png" alt="">Beet juice</button>
           <button class="food-item" type="button" data-food="Ice cream" data-food-key="ice_cream"><img src="pictrues/ice cream.webp" alt="">Ice cream</button>
         </div>
         <div class="kitchen-pet-area" id="kitchen-pet-area" aria-label="Drop food here to feed Stewart">
@@ -2448,7 +2522,29 @@
       const leaveKitchenButton = document.querySelector("#leave-kitchen");
       const foodShop = document.querySelector("#food-shop");
       const foodShopItem = document.querySelector("#food-shop-item");
+      const foodShopNote = document.querySelector("#food-shop-note");
+      const foodShopPreview = document.querySelector("#food-shop-preview");
       const buyExtraFoodButton = document.querySelector("#buy-extra-food");
+      const foodProducts = {
+        water: { name: "Water", cravings: ["thirsty"], free: true, image: "pictrues/water.jpg" },
+        milk: { name: "Milk", cravings: ["thirsty"], free: true, image: "pictrues/milk.webp" },
+        school: { name: "School lunch", cravings: ["hungry"], free: true, image: "pictrues/school.webp" },
+        protein: { name: "Protein", cravings: ["hungry"], free: true, image: "pictrues/protein.png" },
+        yogurt: { name: "Yogurt", cravings: ["hungry"], free: true, image: "pictrues/yogurt.webp" },
+        dtr: { name: "DTR", cravings: ["hungry"], free: true, image: "pictrues/chickennrice.webp" },
+        fish: { name: "Fish", cravings: ["hungry"], free: true, image: "pictrues/fish.png" },
+        ice_cream: { name: "Ice cream", cravings: ["sweet"], free: true, image: "pictrues/ice cream.webp" },
+        thai_tea: { name: "Thai tea", cravings: ["sweet", "thirsty"], price: 8, image: "pictrues/thaitea.png" },
+        beet_juice: { name: "Beet juice", cravings: ["thirsty"], price: 8, image: "pictrues/beet.png" },
+        roll: { name: "Cinnamon roll", cravings: ["sweet"], price: 10, image: "pictrues/roll.png" },
+        galbi: { name: "Galbi", cravings: ["hungry"], price: 12, image: "pictrues/galbi.webp" },
+        msr: { name: "Mango sticky rice", cravings: ["sweet"], price: 15, image: "pictrues/msr.png" },
+        sushi: { name: "Sushi", cravings: ["hungry"], price: 20, image: "pictrues/sushi.webp" },
+        steak: { name: "Steak", cravings: ["hungry"], price: 22, image: "pictrues/meat.webp" },
+        creme_brulee: { name: "Creme brulee", cravings: ["sweet"], price: 25, image: "pictrues/cremebrulee.webp" },
+        caviar: { name: "Caviar", cravings: ["hungry"], price: 50, image: "pictrues/caviar.png" },
+        wagyu: { name: "Wagyu", cravings: ["hungry"], price: 60, image: "pictrues/wagyu.webp" }
+      };
       const bathroomGame = document.querySelector("#bathroom-game");
       const toothpasteTool = document.querySelector("#toothpaste-tool");
       const toothbrushTool = document.querySelector("#toothbrush-tool");
@@ -2922,8 +3018,7 @@
         foodMessage.textContent = "Drag something tasty onto Stewart!";
         updateFoodCravingUI();
         foodItems.forEach((item) => {
-          item.disabled = false;
-          item.classList.remove("is-used");
+          item.disabled = item.classList.contains("is-used");
         });
         updateFoodShopUI();
       }
@@ -3262,6 +3357,7 @@
       }
 
       buyExtraFoodButton.addEventListener("click", buyAndServeExtraFood);
+      foodShopItem.addEventListener("change", updateFoodShopUI);
 
       function playStewartRefusal() {
         kitchenStewartPicture.classList.remove("is-refusing");
@@ -3361,9 +3457,9 @@
 
       function updateFoodCravingUI() {
         const cravingCopy = {
-          sweet: "Stewart is craving something sweet. Drag over ice cream, mango sticky rice, a cinnamon roll, or Thai tea.",
-          thirsty: "Stewart is thirsty. Drag over beet juice or Thai tea.",
-          hungry: "Stewart is so hungry! Drag over Galbi, fish, or steak."
+          sweet: "Stewart is craving something sweet! Ice cream is free, or shop for cinnamon rolls, mango sticky rice, or Creme brulee.",
+          thirsty: "Stewart is thirsty! Water or milk is free, or shop for Thai tea or beet juice.",
+          hungry: "Stewart is so hungry! School lunch, protein, yogurt, DTR, and fish are free; shop for more."
         };
         foodCravingPrompt.textContent = cravingCopy[currentFoodCraving] || cravingCopy.sweet;
         const urgent = currentFoodCraving === "hungry" && Math.round(currentFullness) <= 5;
@@ -3373,37 +3469,49 @@
       }
 
       function updateFoodShopUI() {
-        if (lowMoodTestMode) {
-          foodShop.hidden = true;
-          return;
-        }
-        const cravingFoods = {
-          sweet: ["ice_cream", "msr", "roll", "thai_tea"],
-          thirsty: ["thai_tea", "beet_juice"],
-          hungry: ["galbi", "fish", "steak"]
-        }[currentFoodCraving] || [];
-        const eligibleItems = foodItems.filter((item) => cravingFoods.includes(item.dataset.foodKey));
-        const hasAvailableFood = eligibleItems.some((item) => !item.classList.contains("is-used"));
-        foodShop.hidden = eligibleItems.length === 0 || hasAvailableFood;
+        const eligibleProducts = Object.entries(foodProducts)
+          .filter(([, product]) => !product.free && product.cravings.includes(currentFoodCraving));
+        foodShop.hidden = eligibleProducts.length === 0;
         if (foodShop.hidden) {
           return;
         }
 
         const selectedFood = foodShopItem.value;
-        foodShopItem.replaceChildren(...eligibleItems.map((item) => {
+        foodShopItem.replaceChildren(...eligibleProducts.map(([key, product]) => {
           const option = document.createElement("option");
-          option.value = item.dataset.foodKey;
-          option.textContent = item.dataset.food;
+          option.value = key;
+          option.textContent = `${product.name} — ${product.price} points`;
           return option;
         }));
-        if (eligibleItems.some((item) => item.dataset.foodKey === selectedFood)) {
+        if (eligibleProducts.some(([key]) => key === selectedFood)) {
           foodShopItem.value = selectedFood;
         }
+        const product = foodProducts[foodShopItem.value];
+        if (!product) {
+          throw new Error(`No shop details found for ${foodShopItem.value || "the selected food"}.`);
+        }
+        foodShopPreview.src = product.image;
+        foodShopPreview.alt = product.name;
         const points = Number(document.querySelector("#points-value").textContent);
-        buyExtraFoodButton.disabled = points < 10;
-        buyExtraFoodButton.textContent = points < 10
-          ? "Need 10 points"
-          : "Buy & serve (10 points)";
+        const freeFoodCount = foodItems.filter((item) =>
+          foodProducts[item.dataset.foodKey]?.cravings.includes(currentFoodCraving)
+          && !item.classList.contains("is-used")
+        ).length;
+        if (lowMoodTestMode) {
+          foodShopNote.textContent = "Preview mode: point purchases are disabled and won't change the shared save.";
+        } else if (freeFoodCount === 0) {
+          foodShopNote.textContent = "All free options for this craving are gone — choose a meal below.";
+        } else if (freeFoodCount === 1) {
+          foodShopNote.textContent = "Only one free option is left for this craving — shopping adds more choices.";
+        } else {
+          foodShopNote.textContent = "Free options are available below. Shop for a different meal or premium treat.";
+        }
+        buyExtraFoodButton.disabled = lowMoodTestMode || points < product.price;
+        buyExtraFoodButton.textContent = lowMoodTestMode
+          ? "Preview only"
+          : points < product.price
+            ? `Need ${product.price} points`
+            : `Buy & serve (${product.price} points)`;
       }
 
       async function performCareAction(button, successMessage = "") {

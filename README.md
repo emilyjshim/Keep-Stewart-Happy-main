@@ -7,15 +7,16 @@ hour, energy by 10 points per hour, and fun by 14 points per hour.
 The care screen shows each need as a percentage and level bar. **Food** opens the kitchen,
 where players can tap a food or drag it to Stewart. His shared craving determines which foods he'll
 accept; the craving cycles through sweet, thirsty, and hungry after a successful serving.
-Beet juice and ice cream are included. When Stewart is very hungry and has 5% fullness
-or less, a
-flashing **FEED ME** warning appears; at 100%, Stewart switches to his full artwork and
-refuses more food.
+Water and milk are free for thirst; school lunch, protein, yogurt, DTR (chicken and rice),
+and fish are free for hunger; ice cream is the free sweet. When Stewart is very hungry and has
+5% fullness or less, a flashing **FEED ME** warning appears; at 100%, Stewart switches to his
+full artwork and refuses more food.
 
-If all available foods for his current craving have been served during a kitchen visit,
-you can buy and serve an extra matching portion for 10 happy points. The purchase and
-serving happen together in the shared save; you cannot buy food when you have fewer than
-10 points.
+The food shop stays visible and sells paid servings that match Stewart's current craving.
+Thai tea and beet juice cost 8 happy points, cinnamon rolls 10, Galbi 12, mango sticky rice
+15, sushi 20, steak 22, Creme brulee 25, caviar 50, and wagyu 60. Each free tray item can
+be served once until the page is refreshed; closing and reopening the kitchen does not
+restore used food. A purchase and serving happen together in the shared save.
 
 Soccer lasts up to 30 seconds. Stewart gets faster at 10 seconds ("Stewart is now
 warmed up!") and again at 20 seconds ("Stewart really wants to win!"). The faster ball
@@ -544,9 +545,8 @@ Run this migration after the shared food cravings migration. Existing saves star
 100% cleanliness. Each accepted food serving reduces it by 55 points, making his teeth
 look dirty; refused food does not affect cleanliness. Players can brush his teeth in the
 bathroom to restore cleanliness to 100%, and brushing counts as a care action. If you
-already ran this migration, run this same SQL again to update the food penalty and add
-the extra-food purchase function. After all matching foods are used in a kitchen visit,
-players can buy and serve one extra item from the current craving category for 10 points.
+already ran this migration, run this same SQL again to add the new free and paid foods,
+update which foods satisfy each craving, and install the food-shop prices.
 
 ```sql
 alter table public.stewart_game
@@ -631,20 +631,26 @@ begin
       );
     end if;
 
-    if p_food is null or p_food not in ('galbi', 'fish', 'steak', 'msr', 'thai_tea', 'roll', 'beet_juice', 'ice_cream') then
+    if p_food is null or p_food not in (
+      'water', 'milk', 'school', 'protein', 'yogurt', 'dtr', 'fish', 'ice_cream',
+      'thai_tea', 'beet_juice', 'roll', 'galbi', 'msr', 'sushi', 'steak',
+      'creme_brulee', 'caviar', 'wagyu'
+    ) then
       raise exception 'Unknown food item';
     end if;
 
-    if (v_game.food_craving = 'sweet' and p_food not in ('ice_cream', 'msr', 'roll', 'thai_tea'))
-      or (v_game.food_craving = 'thirsty' and p_food not in ('thai_tea', 'beet_juice'))
-      or (v_game.food_craving = 'hungry' and p_food not in ('galbi', 'fish', 'steak')) then
+    if (v_game.food_craving = 'sweet' and p_food not in ('ice_cream', 'thai_tea', 'roll', 'msr', 'creme_brulee'))
+      or (v_game.food_craving = 'thirsty' and p_food not in ('water', 'milk', 'thai_tea', 'beet_juice'))
+      or (v_game.food_craving = 'hungry' and p_food not in (
+        'school', 'protein', 'yogurt', 'dtr', 'fish', 'galbi', 'sushi', 'steak', 'caviar', 'wagyu'
+      )) then
       return jsonb_build_object(
         'accepted', false,
         'food_craving', v_game.food_craving,
         'message', case v_game.food_craving
-          when 'sweet' then 'Stewart wants something sweet. Try ice cream, mango sticky rice, a cinnamon roll, or Thai tea.'
-          when 'thirsty' then 'Stewart is thirsty. Try beet juice or Thai tea.'
-          else 'Stewart is hungry. Try Galbi, fish, or steak.'
+          when 'sweet' then 'Stewart wants something sweet. Try ice cream, Thai tea, a cinnamon roll, mango sticky rice, or Creme brulee.'
+          when 'thirsty' then 'Stewart is thirsty. Try water, milk, Thai tea, or beet juice.'
+          else 'Stewart is hungry. Try school lunch, protein, yogurt, DTR, fish, Galbi, sushi, steak, caviar, or wagyu.'
         end
       );
     end if;
@@ -741,6 +747,8 @@ set search_path = public, pg_temp
 as $$
 declare
   v_points integer;
+  v_cost integer;
+  v_food_name text;
   v_result jsonb;
 begin
   if p_player is null or p_player not in ('Emily', 'Evan') then
@@ -756,11 +764,37 @@ begin
     raise exception 'Shared Stewart game is not initialized';
   end if;
 
-  if v_points < 10 then
+  v_cost := case p_food
+    when 'thai_tea' then 8
+    when 'beet_juice' then 8
+    when 'roll' then 10
+    when 'galbi' then 12
+    when 'msr' then 15
+    when 'sushi' then 20
+    when 'steak' then 22
+    when 'creme_brulee' then 25
+    when 'caviar' then 50
+    when 'wagyu' then 60
+    else null
+  end;
+
+  if p_food in ('water', 'milk', 'school', 'protein', 'yogurt', 'dtr', 'fish', 'ice_cream') then
     return jsonb_build_object(
       'accepted', false,
       'points', v_points,
-      'message', 'An extra serving costs 10 happy points.'
+      'message', 'That item is free. Choose it from the free food tray.'
+    );
+  end if;
+
+  if v_cost is null then
+    raise exception 'Unknown food item';
+  end if;
+
+  if v_points < v_cost then
+    return jsonb_build_object(
+      'accepted', false,
+      'points', v_points,
+      'message', 'That serving costs ' || v_cost || ' happy points.'
     );
   end if;
 
@@ -770,13 +804,22 @@ begin
   end if;
 
   update public.stewart_game
-  set points = points - 15
+  set points = points - (v_cost + 5)
   where id = 1
   returning points into v_points;
 
+  v_food_name := case p_food
+    when 'msr' then 'Mango sticky rice'
+    when 'thai_tea' then 'Thai tea'
+    when 'beet_juice' then 'Beet juice'
+    when 'ice_cream' then 'Ice cream'
+    when 'creme_brulee' then 'Creme brulee'
+    else initcap(p_food)
+  end;
+
   return v_result || jsonb_build_object(
     'points', v_points,
-    'message', 'Extra serving purchased for 10 happy points. Stewart enjoyed it!'
+    'message', v_food_name || ' purchased for ' || v_cost || ' happy points. Stewart enjoyed it!'
   );
 end;
 $$;
