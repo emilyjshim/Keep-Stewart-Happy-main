@@ -21,10 +21,10 @@ be served once until the page is refreshed; closing and reopening the kitchen do
 restore used food. A purchase and serving happen together in the shared save.
 
 Soccer lasts up to 30 seconds. Stewart gets faster at 10 seconds ("Stewart is now
-warmed up!") and again at 20 seconds ("Stewart really wants to win!"). The ball moves
-faster and follows a wider, quicker vertical path as the match progresses; move the
-yellow player dot carefully to return it. Finishing soccer increases Stewart's fun by
-12 points; the care screen confirms the increase.
+warmed up!") and again at 20 seconds ("Stewart really wants to win!"). Each shot has its
+own path: some fly straight, while others curve gently. Return shots by moving the yellow
+dot into the ball's path; vary the shot to catch Stewart out of position and score. Finishing
+soccer increases Stewart's fun by 12 points; the care screen confirms returns and goals.
 
 **School Run** opens a driving mini-game: steer between three lanes with the left and
 right arrow keys (or the on-screen buttons), and hold the up arrow to accelerate. Avoid

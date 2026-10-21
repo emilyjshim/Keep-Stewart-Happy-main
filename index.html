@@ -2356,7 +2356,7 @@
     <section class="soccer-game" id="soccer-game" aria-labelledby="soccer-title" hidden>
       <header class="soccer-header">
         <h1 id="soccer-title">Play soccer with Stewart!</h1>
-        <p>Drag the dot to kick the ball. Don't let him score!</p>
+        <p>Drag the dot to return shots, then try to score past Stewart!</p>
         <div class="playtime-track" role="progressbar" aria-label="Playtime" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0">
           <div class="playtime-fill" id="playtime-fill"></div>
         </div>
@@ -2618,11 +2618,18 @@
       let ballX = 76;
       let ballY = 50;
       let ballDirection = -1;
+      let ballShotOriginY = 50;
+      let ballShotAmplitude = 0;
+      let ballShotFrequency = 0;
+      let ballShotPhase = 0;
+      let ballShotStartedAt = 0;
       let playerX = 18;
       let playerY = 50;
       let stewartX = 84;
+      let stewartY = 50;
       let playerGoals = 0;
       let stewartGoals = 0;
+      let playerReturns = 0;
       let lastPlayerHitAt = 0;
       let foodDrag = null;
       let dentalDrag = null;
@@ -3800,8 +3807,27 @@
         soccerPlayer.style.top = `${playerY}%`;
         soccerPlayer.setAttribute("aria-valuenow", String(Math.round(playerX)));
         soccerStewart.style.left = `${stewartX}%`;
-        soccerStewart.style.top = `${ballDirection > 0 ? ballY : 50}%`;
+        soccerStewart.style.top = `${stewartY}%`;
         soccerScore.textContent = `You ${playerGoals} - ${stewartGoals} Stewart`;
+      }
+
+      function startSoccerShot(direction, now) {
+        ballDirection = direction;
+        ballShotOriginY = ballY;
+        ballShotStartedAt = now;
+        ballShotPhase = Math.random() * Math.PI * 2;
+        const shotStyle = Math.random();
+        if (shotStyle < .35) {
+          ballShotAmplitude = 0;
+          ballShotFrequency = 0;
+        } else if (shotStyle < .75) {
+          ballShotAmplitude = 2 + Math.random() * 3.5;
+          ballShotFrequency = .8 + Math.random();
+        } else {
+          const curveRange = soccerStage >= 2 ? 7 : 5;
+          ballShotAmplitude = 6 + Math.random() * curveRange;
+          ballShotFrequency = 1.4 + Math.random() * 1.2;
+        }
       }
 
       function startSoccerGame() {
@@ -3818,8 +3844,10 @@
         playerX = 18;
         playerY = 50;
         stewartX = 84;
+        stewartY = 50;
         playerGoals = 0;
         stewartGoals = 0;
+        playerReturns = 0;
         lastPlayerHitAt = 0;
         playtimeFill.style.width = "0%";
         playtimeTrack.setAttribute("aria-valuenow", "0");
@@ -3833,6 +3861,7 @@
         careButtons.forEach((button) => {
           button.disabled = true;
         });
+        startSoccerShot(-1, soccerStartedAt);
         placeSoccerPieces();
         soccerFrame = requestAnimationFrame(updateSoccerGame);
         finishSoccerButton.focus();
@@ -3864,12 +3893,30 @@
 
         const ballSpeed = soccerStage === 0 ? 54 : soccerStage === 1 ? 76 : 96;
         ballX += ballDirection * ballSpeed * deltaSeconds;
-        ballY = 50 + Math.sin(now / 250) * (24 + soccerStage * 6);
+        const shotElapsed = (now - ballShotStartedAt) / 1000;
+        ballY = Math.max(
+          8,
+          Math.min(
+            92,
+            ballShotOriginY
+              + ballShotAmplitude
+                * (Math.sin(shotElapsed * ballShotFrequency + ballShotPhase) - Math.sin(ballShotPhase))
+          )
+        );
 
         if (ballDirection > 0 && ballX >= 86) {
-          ballDirection = -1;
           ballX = 86;
-          soccerMessage.textContent = "Stewart blocks the shot and kicks it back!";
+          const saveChance = ballShotAmplitude === 0 ? .85 : .6;
+          const stewartSaves = Math.abs(ballY - stewartY) <= 10 && Math.random() < saveChance;
+          if (stewartSaves) {
+            startSoccerShot(-1, now);
+            soccerMessage.textContent = "Stewart blocks the shot and kicks it back!";
+          } else {
+            playerGoals += 1;
+            ballX = 16;
+            startSoccerShot(1, now);
+            soccerMessage.textContent = "Goal! You got it past Stewart!";
+          }
         }
 
         if (ballDirection < 0) {
@@ -3879,8 +3926,8 @@
           const closeEnough = Math.hypot(horizontalDistance, verticalDistance) < 38;
           if (closeEnough && now - lastPlayerHitAt > 650) {
             lastPlayerHitAt = now;
-            ballDirection = 1;
-            playerGoals += 1;
+            playerReturns += 1;
+            startSoccerShot(1, now);
             soccerMessage.textContent = "Nice kick! Stewart is chasing the ball!";
           }
         }
@@ -3889,13 +3936,17 @@
           stewartGoals += 1;
           ballX = 76;
           ballY = 28 + Math.random() * 44;
-          ballDirection = -1;
+          startSoccerShot(-1, now);
           soccerMessage.textContent = "Stewart scored! Drag the dot to block the next shot!";
         }
 
         const stewartTarget = Math.max(60, Math.min(84, ballX + 7));
         stewartX += (stewartTarget - stewartX) * Math.min(1, deltaSeconds * 5);
         stewartX = Math.min(88, stewartX);
+        if (ballDirection > 0) {
+          stewartY += (ballY - stewartY) * Math.min(1, deltaSeconds * 1.8);
+          stewartY = Math.max(22, Math.min(78, stewartY));
+        }
         placeSoccerPieces();
         soccerFrame = requestAnimationFrame(updateSoccerGame);
       }
@@ -3924,7 +3975,7 @@
           button.disabled = false;
         });
         const returnSummary =
-          `${message} You returned the ball ${playerGoals} ${playerGoals === 1 ? "time" : "times"}.`;
+          `${message} You returned the ball ${playerReturns} ${playerReturns === 1 ? "time" : "times"} and scored ${playerGoals} ${playerGoals === 1 ? "goal" : "goals"}.`;
         const playButton = careButtons.find((button) => button.dataset.care === "play");
         if (lowMoodTestMode) {
           previewNeeds.fun = Math.min(100, previewNeeds.fun + 12);
