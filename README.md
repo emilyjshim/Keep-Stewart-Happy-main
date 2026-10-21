@@ -16,6 +16,11 @@ The soccer game lasts up to 30 seconds. Stewart starts at the current ball speed
 gets faster at 10 seconds ("Stewart is now warmed up!") and again at 20 seconds
 ("Stewart really wants to win!"); each brief message appears over the field.
 
+**School Run** opens a driving mini-game: steer between three lanes with the left and
+right arrow keys (or the on-screen buttons), and hold the up arrow to accelerate. Avoid
+road barriers and collect stars on the way to school. Completing the drive counts as a
+Play care action in the shared game; leaving early does not count.
+
 Each accepted serving lowers cleanliness by 55 points, so Stewart's teeth look dirty
 after he eats. Open the bathroom, drag toothpaste onto the toothbrush, then scrub back
 and forth over his teeth until they're clean. Brushing restores cleanliness to 100%.

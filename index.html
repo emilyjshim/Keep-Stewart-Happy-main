@@ -825,6 +825,231 @@
         background: #edf5e9;
       }
 
+      .school-game[hidden] {
+        display: none;
+      }
+
+      .school-game {
+        position: fixed;
+        z-index: 20;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
+        padding: clamp(1rem, 3vw, 2rem);
+        background:
+          linear-gradient(rgb(21 47 31 / 40%), rgb(21 47 31 / 58%)),
+          url("pictrues/background2.jpg") center / cover no-repeat;
+        color: #fff;
+      }
+
+      .school-game.is-entering {
+        animation: arcade-overlay-in 760ms cubic-bezier(.16, 1, .3, 1) both;
+      }
+
+      .school-header {
+        width: min(100%, 820px);
+        margin: 0 auto;
+        text-align: center;
+        text-shadow: 0 2px 8px rgb(0 0 0 / 50%);
+      }
+
+      .school-header h1 {
+        color: #fff;
+        font-size: clamp(1.7rem, 4vw, 2.8rem);
+      }
+
+      .school-header p {
+        margin: .4rem 0;
+      }
+
+      .school-hud {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: .5rem auto;
+        font-weight: 700;
+      }
+
+      .school-progress-track {
+        width: min(100%, 560px);
+        height: 16px;
+        margin: .4rem auto;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 85%);
+        border-radius: .6rem;
+        background: rgb(0 0 0 / 38%);
+      }
+
+      .school-progress-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #a9e46c, #fff080);
+      }
+
+      .school-road {
+        position: relative;
+        width: min(100%, 620px);
+        min-height: min(55vh, 520px);
+        flex: 1 0 300px;
+        margin: 0 auto;
+        overflow: hidden;
+        border: 3px solid rgb(255 255 255 / 85%);
+        border-radius: 1rem;
+        background: linear-gradient(90deg, #3c5945, #3c5945 8%, #55595a 8%, #55595a 92%, #3c5945 92%);
+        box-shadow: 0 16px 40px rgb(0 0 0 / 32%);
+        touch-action: none;
+      }
+
+      .school-road::before {
+        position: absolute;
+        inset: 0 8%;
+        background:
+          linear-gradient(90deg, transparent 32.8%, rgb(255 255 255 / 80%) 33%, rgb(255 255 255 / 80%) 33.4%, transparent 33.6%),
+          linear-gradient(90deg, transparent 66.4%, rgb(255 255 255 / 80%) 66.6%, rgb(255 255 255 / 80%) 67%, transparent 67.2%);
+        content: "";
+        pointer-events: none;
+      }
+
+      .road-markings {
+        position: absolute;
+        inset: -100px 8%;
+        pointer-events: none;
+      }
+
+      .road-markings::before,
+      .road-markings::after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: repeating-linear-gradient(to bottom, transparent 0 28px, rgb(255 255 255 / 82%) 28px 72px);
+        content: "";
+      }
+
+      .road-markings::before {
+        left: 33.1%;
+      }
+
+      .road-markings::after {
+        left: 66.5%;
+      }
+
+      .school-sign {
+        position: absolute;
+        z-index: 2;
+        top: .7rem;
+        left: 1rem;
+        padding: .35rem .7rem;
+        border: 2px solid #fff;
+        border-radius: .55rem;
+        background: #347c45;
+        font-weight: 800;
+      }
+
+      .school-car,
+      .school-obstacle {
+        position: absolute;
+        z-index: 3;
+        left: 50%;
+        display: grid;
+        place-items: center;
+        transform: translate(-50%, -50%);
+      }
+
+      .school-car {
+        bottom: 8%;
+        width: 68px;
+        height: 88px;
+        border: 4px solid #fff;
+        border-radius: 20px 20px 14px 14px;
+        background: linear-gradient(90deg, #d5a735, #ffdc66 24%, #ffdc66 76%, #d5a735);
+        box-shadow: 0 5px 14px rgb(0 0 0 / 42%);
+        transition: left 120ms ease-out;
+      }
+
+      .school-car::before,
+      .school-car::after {
+        position: absolute;
+        left: 8px;
+        right: 8px;
+        height: 12px;
+        border-radius: .3rem;
+        background: #416b75;
+        content: "";
+      }
+
+      .school-car::before {
+        top: 10px;
+      }
+
+      .school-car::after {
+        bottom: 10px;
+        background: #405c63;
+      }
+
+      .school-car img {
+        z-index: 1;
+        width: 30px;
+        height: 30px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .school-obstacle {
+        width: 48px;
+        height: 52px;
+        font-family: sans-serif;
+        font-size: 2.5rem;
+        filter: drop-shadow(0 4px 5px rgb(0 0 0 / 45%));
+      }
+
+      .school-obstacle.is-star {
+        font-size: 2.2rem;
+      }
+
+      .school-controls {
+        display: flex;
+        justify-content: center;
+        gap: .75rem;
+      }
+
+      .school-controls button {
+        width: 62px;
+        min-height: 52px;
+        border: 2px solid rgb(255 255 255 / 85%);
+        border-radius: .8rem;
+        background: rgb(255 255 255 / 90%);
+        color: #28583c;
+        font: inherit;
+        font-size: 1.5rem;
+        font-weight: 800;
+        touch-action: manipulation;
+      }
+
+      .school-controls button:active {
+        background: #d7efc7;
+        transform: translateY(2px);
+      }
+
+      .school-footer {
+        display: flex;
+        justify-content: center;
+        gap: .75rem;
+      }
+
+      .school-footer .start-button {
+        margin-top: 0;
+        background: #fff;
+        color: #28583c;
+      }
+
       .food-game[hidden] {
         display: none;
       }
@@ -1461,6 +1686,52 @@
           font-size: .9rem;
         }
 
+        .school-game {
+          gap: .5rem;
+          padding: max(.6rem, env(safe-area-inset-top)) max(.6rem, env(safe-area-inset-right))
+            max(.6rem, env(safe-area-inset-bottom)) max(.6rem, env(safe-area-inset-left));
+        }
+
+        .school-header h1 {
+          font-size: clamp(1.5rem, 7vw, 2.2rem);
+          line-height: 1.1;
+        }
+
+        .school-header p,
+        .school-message {
+          font-size: .88rem;
+        }
+
+        .school-hud {
+          gap: .45rem;
+          flex-wrap: wrap;
+          font-size: .85rem;
+        }
+
+        .school-road {
+          min-height: clamp(210px, 38dvh, 360px);
+          flex-basis: clamp(210px, 38dvh, 360px);
+          border-width: 2px;
+        }
+
+        .school-car {
+          width: 58px;
+          height: 76px;
+        }
+
+        .school-controls {
+          gap: .55rem;
+        }
+
+        .school-controls button {
+          width: 72px;
+          min-height: 50px;
+        }
+
+        .school-footer {
+          gap: .45rem;
+        }
+
         .food-game {
           gap: .55rem;
           padding: max(.6rem, env(safe-area-inset-top)) max(.6rem, env(safe-area-inset-right))
@@ -1600,6 +1871,11 @@
         .soccer-arena {
           min-height: 38dvh;
           flex-basis: 38dvh;
+        }
+
+        .school-road {
+          min-height: 30dvh;
+          flex-basis: 30dvh;
         }
 
         .kitchen-pet-area {
@@ -1850,6 +2126,7 @@
           <div class="care-actions" aria-label="Care for Stewart">
             <button class="start-button" type="button" data-care="food" disabled>Food</button>
             <button class="start-button" type="button" data-care="play" disabled>Play</button>
+            <button class="start-button" type="button" data-care="school" disabled>School Run</button>
             <button class="start-button" type="button" data-care="poppo" disabled>Poppo</button>
             <button class="start-button" type="button" data-care="bathroom" disabled>Bathroom</button>
           </div>
@@ -1883,6 +2160,36 @@
       <footer class="soccer-footer">
         <p id="soccer-message" aria-live="polite">Drag the yellow dot around the left side to kick the ball back!</p>
         <button class="start-button" id="finish-soccer" type="button">Back to Stewart</button>
+      </footer>
+    </section>
+    <section class="school-game" id="school-game" aria-labelledby="school-title" hidden>
+      <header class="school-header">
+        <h1 id="school-title">Drive Stewart to school!</h1>
+        <p>Use ← and → to dodge traffic. Hold ↑ to speed up. Grab stars on the way!</p>
+        <div class="school-progress-track" role="progressbar" aria-label="Distance to school" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="school-progress-fill" id="school-progress-fill"></div>
+        </div>
+        <div class="school-hud">
+          <span id="school-distance">Distance: 0%</span>
+          <span id="school-lives">Safety: 3</span>
+          <span id="school-stars">Stars: 0</span>
+        </div>
+      </header>
+      <div class="school-road" id="school-road" role="img" aria-label="Road to school. Steer Stewart's car between three lanes to avoid traffic and collect stars.">
+        <div class="road-markings" id="road-markings" aria-hidden="true"></div>
+        <div class="school-sign" aria-hidden="true">SCHOOL ↑</div>
+        <div class="school-car" id="school-car" aria-hidden="true"><img src="pictrues/stewart.png" alt=""></div>
+        <div id="school-traffic" aria-hidden="true"></div>
+      </div>
+      <p class="school-message" id="school-message" role="status" aria-live="polite">Steer around traffic and get Stewart to school safely!</p>
+      <div class="school-controls" aria-label="Driving controls">
+        <button id="school-left" type="button" aria-label="Steer left">←</button>
+        <button id="school-accelerate" type="button" aria-label="Accelerate">↑</button>
+        <button id="school-right" type="button" aria-label="Steer right">→</button>
+      </div>
+      <footer class="school-footer">
+        <button class="start-button" id="restart-school" type="button" hidden>Try again</button>
+        <button class="start-button" id="leave-school" type="button">Back to Stewart</button>
       </footer>
     </section>
     <section class="food-game" id="food-game" aria-labelledby="food-title" hidden>
@@ -1982,6 +2289,22 @@
       const playtimeTrack = playtimeFill.parentElement;
       const playtimeLabel = document.querySelector("#playtime-label");
       const finishSoccerButton = document.querySelector("#finish-soccer");
+      const schoolGame = document.querySelector("#school-game");
+      const schoolRoad = document.querySelector("#school-road");
+      const roadMarkings = document.querySelector("#road-markings");
+      const schoolTraffic = document.querySelector("#school-traffic");
+      const schoolCar = document.querySelector("#school-car");
+      const schoolProgressFill = document.querySelector("#school-progress-fill");
+      const schoolProgressTrack = schoolProgressFill.parentElement;
+      const schoolDistance = document.querySelector("#school-distance");
+      const schoolLives = document.querySelector("#school-lives");
+      const schoolStars = document.querySelector("#school-stars");
+      const schoolMessage = document.querySelector("#school-message");
+      const schoolLeftButton = document.querySelector("#school-left");
+      const schoolRightButton = document.querySelector("#school-right");
+      const schoolAccelerateButton = document.querySelector("#school-accelerate");
+      const restartSchoolButton = document.querySelector("#restart-school");
+      const leaveSchoolButton = document.querySelector("#leave-school");
       const foodGame = document.querySelector("#food-game");
       const foodItems = [...document.querySelectorAll(".food-item")];
       const kitchenPetArea = document.querySelector("#kitchen-pet-area");
@@ -2041,6 +2364,18 @@
       let currentFoodCraving = "sweet";
       let currentFullness = 20;
       let currentCleanliness = 100;
+      let schoolFrame = 0;
+      let schoolStartedAt = 0;
+      let schoolLastFrameAt = 0;
+      let schoolSpawnElapsed = 0;
+      let schoolSpawnCount = 0;
+      let schoolProgress = 0;
+      let schoolLane = 1;
+      let schoolSafety = 3;
+      let schoolStarCount = 0;
+      let schoolActive = false;
+      let schoolAccelerating = false;
+      let schoolObstacles = [];
 
       playerSignInButtons.forEach((button) => {
         button.addEventListener("click", async () => {
@@ -2419,6 +2754,10 @@
         button.addEventListener("click", async () => {
           if (button.dataset.care === "play") {
             startSoccerGame();
+            return;
+          }
+          if (button.dataset.care === "school") {
+            startSchoolTrip();
             return;
           }
           if (button.dataset.care === "food") {
@@ -2837,36 +3176,250 @@
         kitchenUrgentFeed.hidden = !urgent;
       }
 
-      async function performCareAction(button) {
+      async function performCareAction(button, successMessage = "") {
         if (!button) {
-          return;
+          return false;
         }
         if (lowMoodTestMode) {
           document.querySelector("#care-note").textContent =
             "Low-mood preview only: care actions won't change the shared save.";
+          return false;
+        }
+        button.disabled = true;
+        try {
+          const { data, error } = await supabaseClient.rpc("care_for_stewart_by_player", {
+            p_action: button.dataset.care,
+            p_player: currentPlayer,
+            p_food: null
+          });
+          if (error) {
+            throw error;
+          }
+          updateNeeds(data);
+          if (data.care_counts) {
+            updateCareCounts(data.care_counts);
+          }
+          document.querySelector("#care-note").textContent = successMessage || data.message;
+          return true;
+        } catch (error) {
+          showSyncError(error);
+          return false;
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      function updateSchoolDisplay() {
+        schoolCar.style.left = `${[17, 50, 83][schoolLane]}%`;
+        schoolProgressFill.style.width = `${schoolProgress}%`;
+        schoolProgressTrack.setAttribute("aria-valuenow", String(Math.round(schoolProgress)));
+        schoolDistance.textContent = `Distance: ${Math.floor(schoolProgress)}%`;
+        schoolLives.textContent = `Safety: ${schoolSafety}`;
+        schoolStars.textContent = `Stars: ${schoolStarCount}`;
+      }
+
+      function moveSchoolLane(direction) {
+        if (!schoolActive) {
           return;
         }
-          button.disabled = true;
-          try {
-            const { data, error } = await supabaseClient.rpc("care_for_stewart_by_player", {
-              p_action: button.dataset.care,
-              p_player: currentPlayer,
-              p_food: null
-            });
-            if (error) {
-              throw error;
-            }
-            updateNeeds(data);
-            if (data.care_counts) {
-              updateCareCounts(data.care_counts);
-            }
-            document.querySelector("#care-note").textContent = data.message;
-          } catch (error) {
-            showSyncError(error);
-          } finally {
-            button.disabled = false;
-          }
+        schoolLane = Math.max(0, Math.min(2, schoolLane + direction));
+        updateSchoolDisplay();
       }
+
+      function spawnSchoolObstacle() {
+        schoolSpawnCount += 1;
+        const isStar = schoolSpawnCount % 4 === 0;
+        const lane = Math.floor(Math.random() * 3);
+        const element = document.createElement("span");
+        element.className = `school-obstacle${isStar ? " is-star" : ""}`;
+        element.textContent = isStar ? "⭐" : "🚧";
+        schoolTraffic.append(element);
+        schoolObstacles.push({ element, lane, y: -8, isStar });
+        element.style.left = `${[17, 50, 83][lane]}%`;
+        element.style.top = "-8%";
+      }
+
+      function setSchoolControlsDisabled(disabled) {
+        [schoolLeftButton, schoolRightButton, schoolAccelerateButton].forEach((button) => {
+          button.disabled = disabled;
+        });
+        if (disabled) {
+          schoolAccelerating = false;
+        }
+      }
+
+      function startSchoolTrip() {
+        cancelAnimationFrame(schoolFrame);
+        schoolTraffic.replaceChildren();
+        schoolObstacles = [];
+        schoolStartedAt = performance.now();
+        schoolLastFrameAt = schoolStartedAt;
+        schoolSpawnElapsed = 0;
+        schoolSpawnCount = 0;
+        schoolProgress = 0;
+        schoolLane = 1;
+        schoolSafety = 3;
+        schoolStarCount = 0;
+        schoolActive = true;
+        schoolAccelerating = false;
+        schoolMessage.textContent = "Steer around traffic and get Stewart to school safely!";
+        restartSchoolButton.hidden = true;
+        setSchoolControlsDisabled(false);
+        updateSchoolDisplay();
+        schoolGame.hidden = false;
+        schoolGame.inert = false;
+        schoolGame.classList.add("is-entering");
+        window.setTimeout(() => schoolGame.classList.remove("is-entering"), 800);
+        gameScreen.inert = true;
+        careButtons.forEach((button) => {
+          button.disabled = true;
+        });
+        schoolFrame = requestAnimationFrame(updateSchoolTrip);
+        schoolLeftButton.focus();
+      }
+
+      function updateSchoolTrip(now) {
+        if (!schoolActive) {
+          return;
+        }
+        const deltaSeconds = Math.min((now - schoolLastFrameAt) / 1000, .05);
+        schoolLastFrameAt = now;
+        schoolProgress = Math.min(
+          100,
+          schoolProgress + (schoolAccelerating ? 5.2 : 3.6) * deltaSeconds
+        );
+        schoolSpawnElapsed += deltaSeconds;
+        roadMarkings.style.transform = `translateY(${(now / 1000 * 120) % 88}px)`;
+        if (schoolSpawnElapsed >= 1.2) {
+          schoolSpawnElapsed -= 1.2;
+          spawnSchoolObstacle();
+        }
+
+        for (let index = schoolObstacles.length - 1; index >= 0; index -= 1) {
+          const obstacle = schoolObstacles[index];
+          obstacle.y += 23 * deltaSeconds;
+          obstacle.element.style.top = `${obstacle.y}%`;
+          if (obstacle.lane === schoolLane && obstacle.y >= 75 && obstacle.y <= 87) {
+            obstacle.element.remove();
+            schoolObstacles.splice(index, 1);
+            if (obstacle.isStar) {
+              schoolStarCount += 1;
+              schoolMessage.textContent = "Nice! Stewart picked up a school-day star!";
+            } else {
+              schoolSafety -= 1;
+              schoolMessage.textContent = schoolSafety > 0
+                ? "Watch out! Stewart bumped a road barrier."
+                : "Too many bumps! Let's try that school run again.";
+            }
+            updateSchoolDisplay();
+            if (schoolSafety <= 0) {
+              endSchoolTrip(false);
+              return;
+            }
+          } else if (obstacle.y > 108) {
+            obstacle.element.remove();
+            schoolObstacles.splice(index, 1);
+          }
+        }
+
+        updateSchoolDisplay();
+        if (schoolProgress >= 100) {
+          endSchoolTrip(true);
+          return;
+        }
+        schoolFrame = requestAnimationFrame(updateSchoolTrip);
+      }
+
+      async function endSchoolTrip(reachedSchool) {
+        if (!schoolActive) {
+          return;
+        }
+        schoolActive = false;
+        cancelAnimationFrame(schoolFrame);
+        setSchoolControlsDisabled(true);
+        if (!reachedSchool) {
+          restartSchoolButton.hidden = false;
+          schoolMessage.textContent = "The car needs a quick reset. Try another route!";
+          restartSchoolButton.focus();
+          return;
+        }
+
+        schoolGame.hidden = true;
+        schoolGame.inert = true;
+        gameScreen.inert = false;
+        careButtons.forEach((button) => {
+          button.disabled = false;
+        });
+        const playButton = careButtons.find((button) => button.dataset.care === "play");
+        if (lowMoodTestMode) {
+          document.querySelector("#care-note").textContent =
+            "Low-mood preview only: Stewart made it to school. The shared save is unchanged.";
+        } else {
+          await performCareAction(
+            playButton,
+            `School run complete! Stewart made it to school safely and found ${schoolStarCount} ${schoolStarCount === 1 ? "star" : "stars"}.`
+          );
+        }
+        gameTitle.focus();
+      }
+
+      function leaveSchoolTrip() {
+        schoolActive = false;
+        cancelAnimationFrame(schoolFrame);
+        schoolGame.hidden = true;
+        schoolGame.inert = true;
+        gameScreen.inert = false;
+        careButtons.forEach((button) => {
+          button.disabled = false;
+        });
+        schoolAccelerating = false;
+        schoolKeys.clear();
+        gameTitle.focus();
+      }
+
+      const schoolKeys = new Set();
+      window.addEventListener("keydown", (event) => {
+        if (!schoolActive || !["ArrowLeft", "ArrowRight", "ArrowUp"].includes(event.key)) {
+          return;
+        }
+        event.preventDefault();
+        if (event.key === "ArrowUp") {
+          schoolKeys.add(event.key);
+          schoolAccelerating = true;
+        } else if (!event.repeat) {
+          moveSchoolLane(event.key === "ArrowLeft" ? -1 : 1);
+        }
+      });
+
+      window.addEventListener("keyup", (event) => {
+        if (event.key === "ArrowUp") {
+          schoolKeys.delete(event.key);
+          schoolAccelerating = false;
+        }
+      });
+
+      window.addEventListener("blur", () => {
+        schoolKeys.clear();
+        schoolAccelerating = false;
+      });
+
+      schoolLeftButton.addEventListener("click", () => moveSchoolLane(-1));
+      schoolRightButton.addEventListener("click", () => moveSchoolLane(1));
+      schoolAccelerateButton.addEventListener("pointerdown", (event) => {
+        if (!schoolActive) {
+          return;
+        }
+        event.preventDefault();
+        schoolAccelerating = true;
+        schoolAccelerateButton.setPointerCapture(event.pointerId);
+      });
+      ["pointerup", "pointercancel", "lostpointercapture"].forEach((eventName) => {
+        schoolAccelerateButton.addEventListener(eventName, () => {
+          schoolAccelerating = schoolKeys.has("ArrowUp");
+        });
+      });
+      restartSchoolButton.addEventListener("click", startSchoolTrip);
+      leaveSchoolButton.addEventListener("click", leaveSchoolTrip);
 
       function placeSoccerPieces() {
         soccerBall.style.left = `${ballX}%`;
