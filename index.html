@@ -46,7 +46,7 @@
       body.playing {
         background-image:
           linear-gradient(rgb(225 240 216 / 18%), rgb(225 240 216 / 18%)),
-          url("pictrues/background2.jpg");
+          url("pictrues/updatedforestbg.jpg");
       }
 
       body.transition-impact::after {
@@ -866,7 +866,7 @@
         padding: clamp(1rem, 3vw, 2rem);
         background:
           linear-gradient(rgb(21 47 31 / 40%), rgb(21 47 31 / 58%)),
-          url("pictrues/background2.jpg") center / cover no-repeat;
+          url("pictrues/updatedforestbg.jpg") center / cover no-repeat;
         color: #fff;
       }
 
@@ -933,16 +933,6 @@
         animation: road-crash-shake 420ms ease-in-out both;
       }
 
-      .school-road::before {
-        position: absolute;
-        inset: 0 8%;
-        background:
-          linear-gradient(90deg, transparent 32.8%, rgb(255 255 255 / 80%) 33%, rgb(255 255 255 / 80%) 33.4%, transparent 33.6%),
-          linear-gradient(90deg, transparent 66.4%, rgb(255 255 255 / 80%) 66.6%, rgb(255 255 255 / 80%) 67%, transparent 67.2%);
-        content: "";
-        pointer-events: none;
-      }
-
       .road-markings {
         position: absolute;
         inset: -100px 8%;
@@ -954,8 +944,12 @@
         position: absolute;
         top: 0;
         bottom: 0;
-        width: 4px;
-        background: repeating-linear-gradient(to bottom, transparent 0 28px, rgb(255 255 255 / 82%) 28px 72px);
+        width: 3px;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgb(255 255 255 / 88%) 0 30px,
+          transparent 30px 56px
+        );
         content: "";
       }
 
@@ -1383,6 +1377,7 @@
         background: rgb(0 0 0 / 48%);
         text-align: center;
         text-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+        overflow-wrap: anywhere;
         pointer-events: none;
       }
 
@@ -3353,7 +3348,10 @@
           }
         } catch (error) {
           console.error("Could not feed Stewart:", error);
-          foodMessage.textContent = "Couldn't feed Stewart. Check the connection and try again.";
+          const errorMessage = error && typeof error === "object" && "message" in error
+            ? error.message
+            : String(error);
+          foodMessage.textContent = `Couldn't feed Stewart: ${errorMessage}. If the error mentions an unknown food item or function, rerun the latest Supabase food migration.`;
           showSyncError(error);
           foodItems.forEach((foodItem) => {
             if (!foodItem.classList.contains("is-used")) {

@@ -39,6 +39,12 @@ Each accepted serving lowers cleanliness by 55 points, so Stewart's teeth look d
 after he eats. Open the bathroom, drag toothpaste onto the toothbrush, then scrub back
 and forth over his teeth until they're clean. Brushing restores cleanliness to 100%.
 
+If feeding shows a Supabase error such as `Unknown food item` or a missing-function error,
+rerun the **Add shared food cravings** migration and then the latest **Add shared
+cleanliness, dental care, and school attendance** migration in the SQL Editor. The kitchen
+now shows the exact feed error to help distinguish a database migration issue from a
+connection problem.
+
 ## Preview low moods without changing the shared save
 
 To preview Stewart with critical needs and the **FEED ME** warning, open the page with
