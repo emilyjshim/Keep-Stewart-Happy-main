@@ -3662,17 +3662,17 @@
         const deltaSeconds = Math.min((now - schoolLastFrameAt) / 1000, .05);
         schoolLastFrameAt = now;
         schoolCarX += ([17, 50, 83][schoolLane] - schoolCarX) * Math.min(1, deltaSeconds * 8);
-        schoolProgress = Math.min(100, schoolProgress + (schoolAccelerating ? 7.5 : 5.2) * deltaSeconds);
+        schoolProgress = Math.min(100, schoolProgress + (schoolAccelerating ? 9 : 6.5) * deltaSeconds);
         schoolSpawnElapsed += deltaSeconds;
         roadMarkings.style.transform = `translateY(${(now / 1000 * 120) % 88}px)`;
-        if (schoolSpawnElapsed >= 1.1) {
-          schoolSpawnElapsed -= 1.1;
+        if (schoolSpawnElapsed >= 1.2) {
+          schoolSpawnElapsed -= 1.2;
           spawnSchoolObstacle();
         }
 
         for (let index = schoolObstacles.length - 1; index >= 0; index -= 1) {
           const obstacle = schoolObstacles[index];
-          obstacle.y += 33 * deltaSeconds;
+          obstacle.y += 38 * deltaSeconds;
           obstacle.element.style.top = `${obstacle.y}%`;
           const obstacleX = [17, 50, 83][obstacle.lane];
           if (Math.abs(obstacleX - schoolCarX) < 12 && obstacle.y >= 75 && obstacle.y <= 87) {
@@ -3864,7 +3864,7 @@
           showSoccerToast("Stewart is now warmed up!");
         }
 
-        const ballSpeed = soccerStage === 0 ? 46 : soccerStage === 1 ? 65 : 84;
+        const ballSpeed = soccerStage === 0 ? 54 : soccerStage === 1 ? 76 : 96;
         ballX += ballDirection * ballSpeed * deltaSeconds;
         ballY = 50 + Math.sin(now / 250) * (24 + soccerStage * 6);
 

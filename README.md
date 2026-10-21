@@ -28,8 +28,9 @@ yellow player dot carefully to return it. Finishing soccer increases Stewart's f
 
 **School Run** opens a driving mini-game: steer between three lanes with the left and
 right arrow keys (or the on-screen buttons), and hold the up arrow to accelerate. Avoid
-road barriers and collect stars on the way to school. Obstacles move faster and are spaced
-slightly farther apart; accelerating gets Stewart there sooner but gives you less time to react.
+road barriers and collect stars on the way to school. The road moves at a brisk, racing-like
+pace, and obstacles move quickly but appear slightly farther apart to keep the challenge fair.
+Accelerating gets Stewart there sooner but gives you less time to react.
 A collision stops the drive and offers a retry. Completing the drive counts as a Play
 care action and records that Stewart went to school today. The care screen reports whether
 he still needs to go or is at school (he rides the bus home); leaving early does not count.
