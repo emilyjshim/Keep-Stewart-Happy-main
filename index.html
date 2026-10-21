@@ -33,7 +33,8 @@
         position: relative;
         display: grid;
         place-items: center;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         background-image:
           linear-gradient(rgb(225 240 216 / 25%), rgb(225 240 216 / 25%)),
           url("pictrues/background.jpg");
@@ -290,7 +291,10 @@
 
       .game-screen {
         width: min(94vw, 900px);
+        max-height: 100svh;
         padding: clamp(1.25rem, 3vw, 2rem);
+        overflow-x: hidden;
+        overflow-y: auto;
         animation: none;
       }
 
@@ -605,7 +609,10 @@
         display: flex;
         flex-direction: column;
         gap: .75rem;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
         padding: clamp(1rem, 3vw, 2rem);
         background:
           linear-gradient(rgb(13 49 29 / 34%), rgb(13 49 29 / 50%)),
@@ -829,7 +836,10 @@
         display: flex;
         flex-direction: column;
         gap: .8rem;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
         padding: clamp(1rem, 3vw, 2rem);
         background:
           linear-gradient(rgb(28 47 25 / 38%), rgb(28 47 25 / 46%)),
@@ -1068,7 +1078,10 @@
         display: flex;
         flex-direction: column;
         gap: .8rem;
-        overflow: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior-y: contain;
+        -webkit-overflow-scrolling: touch;
         padding: clamp(1rem, 3vw, 2rem);
         background:
           linear-gradient(rgb(28 47 25 / 34%), rgb(28 47 25 / 44%)),
@@ -2322,6 +2335,11 @@
         for (const [need, value] of Object.entries(needs)) {
           const bar = document.querySelector(`#${need}-bar`);
           const label = document.querySelector(`#${need}-value`);
+          if (!bar || !label || !bar.parentElement) {
+            throw new Error(
+              `This page is missing the ${need} need display. Reload the latest index.html so it matches the Supabase migration.`
+            );
+          }
           const progress = bar.parentElement;
           const roundedValue = Math.round(Number(value));
           bar.style.width = `${roundedValue}%`;

@@ -16,9 +16,9 @@ The soccer game lasts up to 30 seconds. Stewart starts at the current ball speed
 gets faster at 10 seconds ("Stewart is now warmed up!") and again at 20 seconds
 ("Stewart really wants to win!"); each brief message appears over the field.
 
-Accepted food lowers cleanliness by 15 points. Below 50%, Stewart's teeth become dirty;
-open the bathroom, drag toothpaste onto the toothbrush, then scrub back and forth over
-his teeth until they're clean. Brushing restores cleanliness to 100%.
+Each accepted serving lowers cleanliness by 55 points, so Stewart's teeth look dirty
+after he eats. Open the bathroom, drag toothpaste onto the toothbrush, then scrub back
+and forth over his teeth until they're clean. Brushing restores cleanliness to 100%.
 
 ## Preview low moods without changing the shared save
 
@@ -529,9 +529,10 @@ grant execute on function public.care_for_stewart_by_player(text, text, text) to
 ## Add shared cleanliness and dental care
 
 Run this migration after the shared food cravings migration. Existing saves start at
-100% cleanliness. Each accepted food serving reduces it by 15 points; refused food does
-not affect cleanliness. When cleanliness falls below 50%, players can brush Stewart's
-teeth in the bathroom. Cleaning restores it to 100% and counts as a care action.
+100% cleanliness. Each accepted food serving reduces it by 55 points, making his teeth
+look dirty; refused food does not affect cleanliness. Players can brush his teeth in the
+bathroom to restore cleanliness to 100%, and brushing counts as a care action. If you
+already ran this migration, run this same SQL again to update the food penalty.
 
 ```sql
 alter table public.stewart_game
@@ -647,7 +648,7 @@ begin
   set emily_care_count = emily_care_count + case when p_player = 'Emily' then 1 else 0 end,
       evan_care_count = evan_care_count + case when p_player = 'Evan' then 1 else 0 end,
       food_craving = coalesce(v_next_craving, food_craving),
-      cleanliness = case when p_action = 'food' then greatest(0::numeric, cleanliness - 15) else cleanliness end
+      cleanliness = case when p_action = 'food' then greatest(0::numeric, cleanliness - 55) else cleanliness end
   where id = 1
   returning emily_care_count, evan_care_count, cleanliness
   into v_emily_count, v_evan_count, v_cleanliness;
